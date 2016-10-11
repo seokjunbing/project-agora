@@ -9,7 +9,7 @@
 *~
 \#*
 
-venv/
+virtualenv/
 htmlcov/
 src/static_dist/
 src/static_root/
@@ -24,7 +24,7 @@ src/static_root/
 node_modules/
 npm-debug.log
 
-# Coverage 
+# Coverage
 coverage/
 .coverage
 .cache
