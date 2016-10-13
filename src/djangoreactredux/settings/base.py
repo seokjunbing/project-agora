@@ -26,7 +26,8 @@ INSTALLED_APPS = (
     'rest_framework_jwt',
 
     'accounts',
-    'base'
+    'base',
+    'agora'
 )
 
 MIDDLEWARE_CLASSES = (
