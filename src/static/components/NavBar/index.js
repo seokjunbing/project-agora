@@ -11,8 +11,9 @@ class NavBar extends React.Component {
                   <div className="item">
                     <h2>AGORA</h2>
                   </div>
-                  <a className="item">Listings</a>
+                  <a className="item" href="/listing">Listings</a>
                   <a className="item">About</a>
+                  <a className="item" href="/account">Account</a>
                   <div className="item">
                     <div className="ui category search item">
                       <div className="ui transparent icon input">

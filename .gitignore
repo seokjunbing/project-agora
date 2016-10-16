@@ -10,9 +10,11 @@
 \#*
 
 virtualenv/
+virtualenv2/
 htmlcov/
 src/static_dist/
 src/static_root/
+.DS_Store
 
 # Python compiled byte code
 *.pyc
