@@ -45,7 +45,7 @@ class Listing(models.Model):
         ('OT', 'Other'),
     )
 
-    author = models.ForeignKey('auth.User',on_delete=models.CASCADE)
+    # author = models.ForeignKey('auth.User',on_delete=models.CASCADE)
 
     price = models.DecimalField
     priceType = models.CharField(max_length=1, choices=PRICE_TYPES)
