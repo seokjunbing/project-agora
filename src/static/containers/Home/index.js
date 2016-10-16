@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ReactDom from 'react-dom';
-
+import NavBar from '../../components/NavBar';
+import WelcomeBanner from '../../components/WelcomeBanner';
 
 class HomeView extends React.Component {
 
@@ -19,16 +20,9 @@ class HomeView extends React.Component {
 
     render() {
         return (
-            <div className="ui container">
-                <div className="ui selection dropdown" ref="dropdown">
-                    <input type="hidden" name="gender"/>
-                    <i className="dropdown icon"></i>
-                    <div className="default text">Gender</div>
-                    <div className="menu">
-                        <div className="item" data-value="1">Male</div>
-                        <div className="item" data-value="0">Female</div>
-                    </div>
-                </div>
+            <div>
+                <NavBar/>
+                <WelcomeBanner/>
             </div>
         );
     }

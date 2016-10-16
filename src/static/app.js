@@ -44,56 +44,17 @@ class App extends React.Component {
         });
     };
 
-    logout = () => {
-        this.props.dispatch(authLogoutAndRedirect());
-    };
-
     render() {
         // only show the sidebar for authenticated users
         let bodyContent = null;
-        if (this.props.isAuthenticated) {
-            bodyContent = (
-                <div className="app">
-                    <div className="app__sidebar">
-                        <SideMenu pathName={this.props.pathName} dispatch={this.props.dispatch}/>
-                    </div>
-                    <div className="app__content"
-                         style={{ width: this.state.containerWidth }}
-                    >
-                        <div className="app__content__container">
-                            {this.props.children}
-                        </div>
-                    </div>
-                </div>
-            );
-        } else {
-            bodyContent = (
-                <div>
-                    {this.props.children}
-                </div>
-            );
-        }
+        bodyContent = (
+            <div>
+                {this.props.children}
+            </div>
+        );
 
         return (
             <div className="app">
-                <nav className="app__navbar">
-                    <Link className="app__navbar__title float-left" to="/">
-                        Django React Redux Demo
-                    </Link>
-                    <ul className="float-right">
-                        <li>
-                            {this.props.isAuthenticated ?
-                                <a href="#" className="js-logout-button"
-                                   onClick={this.logout}
-                                >
-                                    Logout
-                                </a>
-                                :
-                                <Link className="js-login-button" to="/login">Login</Link>
-                            }
-                        </li>
-                    </ul>
-                </nav>
                 {bodyContent}
             </div>
         );
