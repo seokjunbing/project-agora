@@ -52,6 +52,8 @@ class Listing(models.Model):
 
     saleType = models.CharField(max_length=1, choices=SALE_TYPES)
 
+    category = models.CharField(max_length=1, choices=CATEGORIES)
+
     description = models.CharField(max_length=5000)
 
     title = models.CharField(max_length=100)
