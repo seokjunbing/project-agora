@@ -22,29 +22,51 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from enum import Enum
+
+
 class Listing(models.Model):
 
     SALE_TYPES = (
-        "SA", "Sale",
-        "RE", "Rental"
+        ('SA', 'Sale'),
+        ('RE', 'Rent'),
     )
 
     PRICE_TYPES = (
-        "MO", "Monthly",
-        "WE", "Weekly",
-        "DA", "Daily"
+        ('MO', 'Monthly'),
+        ('WE', 'Weekly'),
+        ('DA', 'Daily'),
     )
 
-    # author = models.ForeignKey('auth.User')
-    # price = models.DecimalField
-    # priceType(monthly, weekly, etc.)
-    # saleType(sale, rental)
-    # description
-    # title
-    # pictures
-    # flags
-    # listing
-    # date
-    # views(internal for popularity filtering)
-    # numberOfInquiries(internal for filtering)
+    CATEGORIES = (
+        ('EL', 'Electronics'),
+        ('BO', 'Books'),
+        ('FU', 'Furniture'),
+        ('OT', 'Other'),
+    )
 
+    author = models.ForeignKey('auth.User',on_delete=models.CASCADE)
+
+    price = models.DecimalField
+    priceType = models.CharField(max_length=1, choices=PRICE_TYPES)
+
+    saleType = models.CharField(max_length=1, choices=SALE_TYPES)
+
+    description = models.CharField(max_length=5000)
+
+    title = models.CharField(max_length=100)
+
+    pictures = models.ImageField()
+
+    flags = models.BooleanField()
+
+    listingDate = models.DateField(auto_now_add=True)
+
+    # views(internal for popularity filtering)
+    views = models.PositiveIntegerField(default=0)
+
+    # numberOfInquiries(internal for filtering)
+    numberOfInquiries = models.PositiveIntegerField(default=0)
+
+
+# TODO unsure about subcategories
