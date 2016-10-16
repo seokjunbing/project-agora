@@ -23,4 +23,28 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Listing(models.Model):
-    author = models.ForeignKey('auth.User')
+
+    SALE_TYPES = (
+        "SA", "Sale",
+        "RE", "Rental"
+    )
+
+    PRICE_TYPES = (
+        "MO", "Monthly",
+        "WE", "Weekly",
+        "DA", "Daily"
+    )
+
+    # author = models.ForeignKey('auth.User')
+    # price = models.DecimalField
+    # priceType(monthly, weekly, etc.)
+    # saleType(sale, rental)
+    # description
+    # title
+    # pictures
+    # flags
+    # listing
+    # date
+    # views(internal for popularity filtering)
+    # numberOfInquiries(internal for filtering)
+
