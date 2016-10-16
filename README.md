@@ -28,6 +28,16 @@ heroku config:set DJANGO_SETTINGS_MODULE=djangoreactredux.settings.prod
 
 Hope it helps.
 
+## Architecture
+
+## Setup
+Use setup instructions found on [django-react-redux-jwt-base boilerplate project](https://github.com/Seedstars/django-react-redux-jwt-base)
+
+## Deployment
+
+## Authors
+Seok Jun Bing, Jasper Bingham, Elizabeth Brissie, Audyn Curless, Odon Orzsik, Juan Torres
+
 ## Note
 
 For some reason, Heroku doesn't like the node & npm versions set on the first commit. The `postinstall` command will fail. So on the first commit, comment those out. Put them back in (and make sure they match the versions on your dev environment) from the second commit onwards.
