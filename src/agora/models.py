@@ -116,6 +116,7 @@ class Message(models.Model):
 
     read = models.BooleanField(default=False)
 
+
 """
 Conversation
 """
