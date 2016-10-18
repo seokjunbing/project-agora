@@ -76,7 +76,7 @@ class Listing(models.Model):
         default='OT',
     )
 
-    saletype = models.CharField(
+    saleType = models.CharField(
         max_length=2,
         choices=SALE_TYPES,
         default='SA',
