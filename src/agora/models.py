@@ -5,14 +5,14 @@ from enum import Enum
 
 # TODO unsure about subcategories
 
-class Pricetype(models.Model):
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        verbose_name_plural = "pricetypes"
-
-    def __unicode__(self):
-        return self.name
+# class Pricetype(models.Model):
+#     name = models.CharField(max_length=50)
+#
+#     class Meta:
+#         verbose_name_plural = "pricetypes"
+#
+#     def __unicode__(self):
+#         return self.name
 
 
 class Category(models.Model):
@@ -35,28 +35,30 @@ class Subcategory(models.Model):
         return self.name
 
 
-class Saletype(models.Model):
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        verbose_name_plural = "saletypes"
-
-    def __unicode__(self):
-        return self.name
+# class Saletype(models.Model):
+#     name = models.CharField(max_length=50)
+#
+#     class Meta:
+#         verbose_name_plural = "saletypes"
+#
+#     def __unicode__(self):
+#         return self.name
 
 
 class Listing(models.Model):
-    # SALE_TYPES = (
-    #     ('SA', 'Sale'),
-    #     ('RE', 'Rent'),
-    # )
-    #
-    # PRICE_TYPES = (
-    #     ('MO', 'Monthly'),
-    #     ('WE', 'Weekly'),
-    #     ('DA', 'Daily'),
-    # )
-    #
+    SALE_TYPES = (
+        ('SA', 'Sale'),
+        ('RE', 'Rent'),
+    )
+
+    PRICE_TYPES = (
+        ('PT', 'Per term'),
+        ('MO', 'Monthly'),
+        ('WE', 'Weekly'),
+        ('DA', 'Daily'),
+        ('OT', 'One time'),
+    )
+
     # CATEGORIES = (
     #     ('EL', 'Electronics'),
     #     ('BO', 'Books'),
@@ -68,15 +70,17 @@ class Listing(models.Model):
 
     price = models.DecimalField(decimal_places=2, max_digits=7)
 
-    priceType = models.ForeignKey(
-        Pricetype,
-        default=1,
-        on_delete=models.CASCADE)
+    priceType = models.CharField(
+        max_length=2,
+        choices=PRICE_TYPES,
+        default='OT',
+    )
 
-    saletype = models.ForeignKey(
-        Saletype,
-        default=1,
-        on_delete=models.CASCADE)
+    saletype = models.CharField(
+        max_length=2,
+        choices=SALE_TYPES,
+        default='SA',
+    )
 
     category = models.ForeignKey(
         Category,
@@ -111,6 +115,7 @@ class Message(models.Model):
     author = models.ForeignKey('accounts.User')
 
     read = models.BooleanField(default=False)
+
 
 """
 Conversation
