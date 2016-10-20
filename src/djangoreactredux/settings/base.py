@@ -18,6 +18,8 @@ ALLOWED_HOSTS = ['']
 
 INSTALLED_APPS = (
     'django.contrib.auth',
+    'django.contrib.sessions',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
 
@@ -25,12 +27,12 @@ INSTALLED_APPS = (
     'django_extensions',
     'rest_framework_jwt',
 
-    'accounts',
-    'base',
-    'agora'
+    'agora',
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -50,8 +52,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-AUTH_USER_MODEL = 'accounts.User'
 
 ACCOUNT_ACTIVATION_DAYS = 7  # days
 
