@@ -10,6 +10,5 @@ export default(
         <Route path="listing" component={ListingView}/>
         <Route path="account" component={AccountView}/>
         <Route path="protected" component={requireAuthentication(ProtectedView)}/>
-        <Route path="*" component={NotFoundView}/>
     </Route>
 );
