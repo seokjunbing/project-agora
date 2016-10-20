@@ -66,7 +66,7 @@ class Listing(models.Model):
     #     ('OT', 'Other'),
     # )
 
-    author = models.ForeignKey('accounts.User')
+    #author = models.ForeignKey('accounts.User')
 
     price = models.DecimalField(decimal_places=2, max_digits=7)
 
@@ -112,7 +112,7 @@ class Message(models.Model):
 
     date = models.DateField(auto_now_add=True)
 
-    author = models.ForeignKey('accounts.User')
+    #author = models.ForeignKey('accounts.User')
 
     read = models.BooleanField(default=False)
 
@@ -121,9 +121,9 @@ class Message(models.Model):
 Conversation
 """
 class Conversation(models.Model):
-    users = [
-        models.ForeignKey('accounts.User'),
-    ]
+    # users = [
+    #     models.ForeignKey('accounts.User'),
+    # ]
 
     listing = models.ForeignKey(Listing)
 
