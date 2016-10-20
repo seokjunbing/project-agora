@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Listing
-
+from .models import Listing, Category
 
 # test123
 class ListSerializer(serializers.ModelSerializer):
@@ -10,3 +9,7 @@ class ListSerializer(serializers.ModelSerializer):
         fields = ('author', 'price', 'priceType', 'saleType',
                   'category', 'description', 'title', 'pictures',
                   'flags', 'listingDate', 'views', 'numberOfInquiries')
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
