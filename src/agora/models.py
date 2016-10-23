@@ -51,6 +51,7 @@ class Subcategory(models.Model):
 class Listing(models.Model):
     def create(self, validated_data):
         return Listing.objects.create(**validated_data)
+        # return Listing(**validated_data)
 
     SALE_TYPES = (
         ('SA', 'Sale'),
@@ -72,7 +73,7 @@ class Listing(models.Model):
     #     ('OT', 'Other'),
     # )
 
-    author = UserProfile()
+    author = models.ForeignKey(User)
 
     price = models.DecimalField(decimal_places=2, max_digits=7)
 
@@ -97,9 +98,9 @@ class Listing(models.Model):
 
     title = models.CharField(max_length=100)
 
-    pictures = models.ImageField()
+    pictures = models.ImageField(blank=True, null=True)
 
-    flags = models.BooleanField()
+    flags = models.BooleanField(default=False)
 
     listingDate = models.DateField(auto_now_add=True)
 

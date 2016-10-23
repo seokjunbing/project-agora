@@ -7,7 +7,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'categories/?', CategoryViewSet)
-router.register(r'listing/?', ListingViewSet)
+router.register(r'listings/?', ListingViewSet)
 
 urlpatterns = [
     url(r'^admin/?', admin.site.urls),
