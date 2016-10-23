@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from rest_framework import viewsets
 from .models import Category
-from .serializers import CategorySerializer
+from .serializers import CategorySerializer, ListSerializer
 
 class IndexView(View):
     """Render main page."""
@@ -22,3 +22,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     """
     queryset = Category.objects.all().order_by('name')
     serializer_class = CategorySerializer
+
+class ListingViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all().order_by('name')
+    serializer_class = ListSerializer

@@ -1,9 +1,8 @@
 from rest_framework import serializers
-from .models import Listing, Category
+from .models import Listing, Category, UserProfile
 
 # test123
 class ListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Listing
         fields = ('author', 'price', 'priceType', 'saleType',
@@ -13,3 +12,12 @@ class ListSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+
+
+class UserSerializer(serializers.ModelSerializer):
+    user = ProfileSerializer()
