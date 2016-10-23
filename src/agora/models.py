@@ -14,6 +14,13 @@ from enum import Enum
 #     def __unicode__(self):
 #         return self.name
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    class Meta:
+        verbose_name_plural = "user profiles"
+    # def create(self, validated_data):
+    #     return Listing.objects.create(**validated_data)
+        # return Listing(**validated_data)
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -47,6 +54,10 @@ class Subcategory(models.Model):
 
 
 class Listing(models.Model):
+    def create(self, validated_data):
+        return Listing.objects.create(**validated_data)
+        # return Listing(**validated_data)
+
     SALE_TYPES = (
         ('SA', 'Sale'),
         ('RE', 'Rent'),
@@ -67,7 +78,7 @@ class Listing(models.Model):
     #     ('OT', 'Other'),
     # )
 
-    #author = models.ForeignKey('accounts.User')
+    # author = models.ForeignKey(User)
 
     price = models.DecimalField(decimal_places=2, max_digits=7)
 
@@ -92,9 +103,9 @@ class Listing(models.Model):
 
     title = models.CharField(max_length=100)
 
-    pictures = models.ImageField()
+    pictures = models.ImageField(blank=True, null=True)
 
-    flags = models.BooleanField()
+    flags = models.BooleanField(default=False)
 
     listingDate = models.DateField(auto_now_add=True)
 
@@ -131,3 +142,4 @@ class Conversation(models.Model):
     messages = [
         models.ForeignKey(Message),
     ]
+
