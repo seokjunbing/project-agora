@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic import View
 from rest_framework import viewsets
-from .models import Category
+from .models import Category, Listing
 from .serializers import CategorySerializer, ListSerializer
 
 class IndexView(View):
@@ -24,5 +24,5 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
 class ListingViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all().order_by('name')
+    queryset = Listing.objects.all().order_by('price')
     serializer_class = ListSerializer
