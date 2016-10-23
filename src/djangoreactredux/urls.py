@@ -9,8 +9,8 @@ router = routers.DefaultRouter()
 router.register(r'categories', CategoryViewSet)
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls)),
+    url(r'^admin/?', admin.site.urls),
+    url(r'^api/?', include(router.urls)),
     # catch all others because of how history is handled by react router - cache this page because it will never change
 
     # comment this out to test the API (Backend team)
