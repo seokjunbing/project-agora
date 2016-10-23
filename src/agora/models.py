@@ -131,3 +131,6 @@ class Conversation(models.Model):
     messages = [
         models.ForeignKey(Message),
     ]
+
+class UserProfile(models.Model):
+    something = models
