@@ -16,6 +16,11 @@ from enum import Enum
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    class Meta:
+        verbose_name_plural = "user profiles"
+    # def create(self, validated_data):
+    #     return Listing.objects.create(**validated_data)
+        # return Listing(**validated_data)
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -73,7 +78,7 @@ class Listing(models.Model):
     #     ('OT', 'Other'),
     # )
 
-    author = models.ForeignKey(User)
+    # author = models.ForeignKey(User)
 
     price = models.DecimalField(decimal_places=2, max_digits=7)
 
