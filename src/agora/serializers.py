@@ -3,6 +3,7 @@ from .models import Listing, Category, UserProfile
 
 # test123
 class ListSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField()
     class Meta:
         model = Listing
         # fields = ('author', 'price', 'priceType', 'saleType',
