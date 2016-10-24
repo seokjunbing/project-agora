@@ -6,7 +6,9 @@ from enum import Enum
 def user_string(self):
     return "%s %s" % (self.first_name, self.last_name)
 
+
 User.__str__ = user_string
+
 
 # TODO unsure about subcategories
 
@@ -89,13 +91,13 @@ class Listing(models.Model):
 
     price = models.DecimalField(decimal_places=2, max_digits=7)
 
-    priceType = models.CharField(
+    price_type = models.CharField(
         max_length=2,
         choices=PRICE_TYPES,
         default='OT',
     )
 
-    saleType = models.CharField(
+    sale_type = models.CharField(
         max_length=2,
         choices=SALE_TYPES,
         default='SA',
@@ -114,36 +116,33 @@ class Listing(models.Model):
 
     flags = models.BooleanField(default=False)
 
-    listingDate = models.DateField(auto_now_add=True)
+    listing_date = models.DateField(auto_now_add=True)
 
     # views(internal for popularity filtering)
     views = models.PositiveIntegerField(default=0)
 
     # numberOfInquiries(internal for filtering)
-    numberOfInquiries = models.PositiveIntegerField(default=0)
-
-
-"""
-A single message in a conversation thread.
-"""
+    number_of_inquiries = models.PositiveIntegerField(default=0)
 
 
 class Message(models.Model):
+    """
+    A single message in a conversation thread.
+    """
     text = models.TextField(max_length=5000)
 
     date = models.DateField(auto_now_add=True)
 
     # author = models.ForeignKey('accounts.User')
+    # author = models.ForeignKey(User)
 
     read = models.BooleanField(default=False)
 
 
-"""
-Conversation
-"""
-
-
 class Conversation(models.Model):
+    """
+    Conversation
+    """
     # users = [
     #     models.ForeignKey('accounts.User'),
     # ]

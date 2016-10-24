@@ -4,7 +4,8 @@ from .models import Listing, Category, UserProfile
 
 # test123
 class ListSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField()
+    # Useful for visualization; breaks browsable API.
+    # author = serializers.StringRelatedField()
 
     class Meta:
         model = Listing
