@@ -7,6 +7,7 @@ from rest_framework import viewsets
 from .models import Category, Listing
 from .serializers import CategorySerializer, ListSerializer
 
+
 class IndexView(View):
     """Render main page."""
 
@@ -16,12 +17,14 @@ class IndexView(View):
         abspath = open(os.path.join(settings.BASE_DIR, 'static_dist/index.html'), 'r')
         return HttpResponse(content=abspath.read())
 
+
 class CategoryViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
     queryset = Category.objects.all().order_by('name')
     serializer_class = CategorySerializer
+
 
 class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all().order_by('price')

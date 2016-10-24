@@ -1,14 +1,18 @@
 from rest_framework import serializers
 from .models import Listing, Category, UserProfile
 
+
 # test123
 class ListSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField()
+    # Useful for visualization; breaks browsable API.
+    # author = serializers.StringRelatedField()
+
     class Meta:
         model = Listing
-        # fields = ('author', 'price', 'priceType', 'saleType',
-        #           'category', 'description', 'title', 'pictures',
-        #           'flags', 'listingDate', 'views', 'numberOfInquiries')
+        fields = ('author', 'price', 'priceType', 'saleType',
+                  'category', 'description', 'title', 'pictures',
+                  'flags', 'listingDate', 'views', 'numberOfInquiries')
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
