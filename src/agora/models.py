@@ -3,6 +3,11 @@ from django.contrib.auth.models import User
 from enum import Enum
 
 
+def user_string(self):
+    return "%s %s" % (self.first_name, self.last_name)
+
+User.__str__ = user_string
+
 # TODO unsure about subcategories
 
 # class Pricetype(models.Model):
@@ -16,11 +21,13 @@ from enum import Enum
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+
     class Meta:
         verbose_name_plural = "user profiles"
-    # def create(self, validated_data):
-    #     return Listing.objects.create(**validated_data)
+        # def create(self, validated_data):
+        #     return Listing.objects.create(**validated_data)
         # return Listing(**validated_data)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -78,7 +85,7 @@ class Listing(models.Model):
     #     ('OT', 'Other'),
     # )
 
-    # author = models.ForeignKey(User)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     price = models.DecimalField(decimal_places=2, max_digits=7)
 
@@ -119,12 +126,14 @@ class Listing(models.Model):
 """
 A single message in a conversation thread.
 """
+
+
 class Message(models.Model):
     text = models.TextField(max_length=5000)
 
     date = models.DateField(auto_now_add=True)
 
-    #author = models.ForeignKey('accounts.User')
+    # author = models.ForeignKey('accounts.User')
 
     read = models.BooleanField(default=False)
 
@@ -132,6 +141,8 @@ class Message(models.Model):
 """
 Conversation
 """
+
+
 class Conversation(models.Model):
     # users = [
     #     models.ForeignKey('accounts.User'),
@@ -142,4 +153,3 @@ class Conversation(models.Model):
     messages = [
         models.ForeignKey(Message),
     ]
-
