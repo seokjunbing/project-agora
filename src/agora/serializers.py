@@ -3,7 +3,7 @@ from .models import Listing, Category, UserProfile
 
 
 # test123
-class ListSerializer(serializers.ModelSerializer):
+class ListingSerializer(serializers.ModelSerializer):
     # Useful for visualization; breaks browsable API.
     # author = serializers.StringRelatedField()
 

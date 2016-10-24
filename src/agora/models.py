@@ -25,6 +25,8 @@ User.__str__ = user_str
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
+    # messages = models.ManyToOneRel(Message)
+
     class Meta:
         verbose_name_plural = "user profiles"
         # def create(self, validated_data):
@@ -134,7 +136,7 @@ class Message(models.Model):
 
     date = models.DateField(auto_now_add=True)
 
-    # author = models.ForeignKey('accounts.User')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     # author = models.ForeignKey(User)
 
     read = models.BooleanField(default=False)
