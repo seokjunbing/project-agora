@@ -90,7 +90,7 @@ class Listing(models.Model):
     #     ('OT', 'Other'),
     # )
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    # author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     price = models.DecimalField(decimal_places=2, max_digits=7)
 
@@ -117,7 +117,7 @@ class Listing(models.Model):
 
     pictures = models.ImageField(blank=True, null=True)
 
-    flags = models.BooleanField(default=False)
+    flags = models.PositiveIntegerField(default=0)
 
     listing_date = models.DateField(auto_now_add=True)
 
