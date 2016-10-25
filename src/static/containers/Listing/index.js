@@ -5,15 +5,20 @@ import * as actionCreators from '../../actions/auth';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
 import ListingTile from '../../components/ListingTile';
-
+import ListingWrapper from '../../components/ListingWrapper';
 
 class ListingView extends React.Component {
 
     render() {
+        var style = {
+            display: 'block',
+            margin: 'auto',
+            width: '82.5%',
+        }
         return (
-          <div>
-            <ListingTile/>
-          </div>
+            <div style={style}>
+                <ListingWrapper/>
+            </div>
         );
     }
 }
