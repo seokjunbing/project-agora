@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Listing, Category, UserProfile
+from .models import Listing, Category, UserProfile, Message, Conversation
 
 
 # test123
@@ -23,3 +23,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     user = ProfileSerializer()
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+
+
+class ConversationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Conversation

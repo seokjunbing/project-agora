@@ -4,8 +4,8 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic import View
 from rest_framework import viewsets
-from .models import Category, Listing
-from .serializers import CategorySerializer, ListingSerializer
+from .models import Category, Listing, Message, Conversation
+from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer
 
 
 class IndexView(View):
@@ -29,3 +29,13 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all().order_by('price')
     serializer_class = ListingSerializer
+
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all().order_by('date')
+    serializer_class = MessageSerializer
+
+
+class ConversationViewSet(viewsets.ModelViewSet):
+    queryset = Conversation.objects.all().order_by('listing')
+    serializer_class = ConversationSerializer

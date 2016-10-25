@@ -128,6 +128,17 @@ class Listing(models.Model):
     number_of_inquiries = models.PositiveIntegerField(default=0)
 
 
+class Conversation(models.Model):
+    """
+    Conversation
+    """
+
+    listing = models.ForeignKey(Listing)
+
+    # TODO Change?
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+
 class Message(models.Model):
     """
     A single message in a conversation thread.
@@ -136,22 +147,8 @@ class Message(models.Model):
 
     date = models.DateField(auto_now_add=True)
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    # author = models.ForeignKey(User)
-
     read = models.BooleanField(default=False)
 
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
-class Conversation(models.Model):
-    """
-    Conversation
-    """
-    # users = [
-    #     models.ForeignKey('accounts.User'),
-    # ]
-
-    listing = models.ForeignKey(Listing)
-
-    messages = [
-        models.ForeignKey(Message),
-    ]
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, null=True)
