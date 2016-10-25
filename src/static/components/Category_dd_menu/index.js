@@ -15,12 +15,9 @@ class category_dd_menu extends React.Component {
 
     componentDidMount() {
       $('.ui.dropdown').dropdown();
-
-      fetch("localhost:8000/api/categories/")
-      .then(res=> {
-        const categories = res.data.data.children.map(obj => obj.data);
-        this.setState({categories});
-      });
+      var _this = this;
+      var apiString = window.location.protocol + '//' + window.location.host + '/api/categories/';
+      $.get(apiString, function(data) { _this.setState({categories: data.results}); });
     }
 
 
@@ -33,10 +30,11 @@ class category_dd_menu extends React.Component {
               <i className="dropdown icon"></i>
               <div className="default text">Categories</div>
               <div className="menu">
-                <div className="item" data-value="0">this.state.categories[0]</div>
-                <div className="item" data-value="1">this.state.categories[1]</div>
-                <div className="item" data-value="2">this.state.categories[2]</div>
-
+                  {this.state.categories.map(function(category) {
+                    return (
+                      <div className="item" key={category.id}>{category.name}</div>
+                    );
+                  })}
               </div>
             </div>
 
