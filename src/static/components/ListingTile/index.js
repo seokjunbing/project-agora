@@ -13,14 +13,14 @@ class ListingTile extends React.Component {
             margin: 'auto',
             width: '70%',
         }
-        var myImage = require("../../images/agora_icon.png");
+        var myImage = require("../../images/tv.jpg");
         return (
             <div className="ui card" style={style1}>
                 <div className="image">
                     <img src={myImage}/>
                 </div>
                 <div className="content">
-                  <h2 style={style2}>Greek Temple</h2>
+                  <h2 style={style2}>My Brand New TV</h2>
                 </div>
                 <div className="extra content">
                     <div className="ui buttons" style={style3}>
