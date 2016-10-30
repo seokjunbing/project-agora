@@ -5,7 +5,7 @@ import * as actionCreators from '../../actions/auth';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
 import Account from '../../components/Account';
-import Category_dd_menu from '../../components/Category_dd_menu';
+import CategoryDropdown from '../../components/CategoryDropdown';
 
 
 class AccountView extends React.Component {
@@ -14,7 +14,7 @@ class AccountView extends React.Component {
         return (
           <div>
             <Account/>
-            <Category_dd_menu/>
+            <CategoryDropdown/>
           </div>
         );
     }

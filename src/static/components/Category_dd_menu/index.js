@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-class category_dd_menu extends React.Component {
+class CategoryDropdown extends React.Component {
 
     constructor(props) {
       $('.ui.dropdown').dropdown();
@@ -18,7 +18,7 @@ class category_dd_menu extends React.Component {
       var apiString = window.location.protocol + '//' + window.location.host + '/api/categories/';
       fetch(apiString)
         .then(data => data.json())
-        .then((data) => { this.setState({categories: data.results}); });
+        .then(data => { this.setState({categories: data.results}); });
     }
 
 
@@ -44,4 +44,4 @@ class category_dd_menu extends React.Component {
       }
     }
 
-export default(category_dd_menu);
+export default(CategoryDropdown);

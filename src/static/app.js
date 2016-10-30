@@ -7,8 +7,6 @@ import NavBar from './components/NavBar';
 
 // More needed here
 import './styles/semantic/dist/semantic.min.css';
-import './styles/semantic/dist/components/transition';
-import './styles/semantic/dist/components/dropdown';
 
 class App extends React.Component {
 
