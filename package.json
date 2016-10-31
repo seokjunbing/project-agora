@@ -13,8 +13,8 @@
     "lintscss": "sass-lint --verbose --no-exit || true"
   },
   "engines": {
-      "node": "6.2.1",
-      "npm": "3.9.3"
+    "node": "6.2.1",
+    "npm": "3.9.3"
   },
   "repository": {
     "type": "git",
@@ -61,7 +61,7 @@
     "node-sass": "3.7.0",
     "postcss-import": "8.1.0",
     "postcss-loader": "0.9.1",
-    "react": "15.0.2",
+    "react": "^15.3.2",
     "react-dom": "15.0.2",
     "react-mixin": "3.0.5",
     "react-redux": "4.4.5",
@@ -72,10 +72,11 @@
     "resolve-url-loader": "1.4.3",
     "sass-loader": "3.2.0",
     "semantic-ui-popup": "^2.2.1",
+    "semantic-ui-react": "^0.58.0",
     "semantic-ui-transition": "^2.2.1",
     "style-loader": "0.13.1",
     "url-loader": "0.5.7",
-    "webpack": "2.1.0-beta.8",
+    "webpack": "^2.1.0-beta.8",
     "webpack-merge": "0.12.0",
     "whatwg-fetch": "1.0.0",
     "yargs": "4.7.1"
