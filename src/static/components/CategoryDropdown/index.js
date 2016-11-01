@@ -1,7 +1,9 @@
 import React from 'react';
 import { Dropdown } from 'semantic-ui-react';
-
-var options = [];
+import { fetchCategories } from '../../actions/listings';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actionCreators from '../../actions/listings';
 
 class CategoryDropdown extends React.Component {
 
@@ -9,28 +11,45 @@ class CategoryDropdown extends React.Component {
       super(props);
 
       this.state = {
-        categories: []
+          isFetching : false,
+          categories : null,
+          statusText : ''
       };
     }
 
     componentDidMount() {
-      var apiString = window.location.protocol + '//' + window.location.host + '/api/categories/';
-      fetch(apiString)
-        .then(data => data.json())
-        .then(data => {
-            this.setState({categories: data.results});
-            data.results.map(category => {
-                var option = {text: category.name, value: category.id};
-                options.push(option);
-            })
-        });
+        this.props.actions.fetchCategories();
     }
 
+    processCategories() {
+        if (!this.props.categories) {
+            return [];
+        } else {
+            return this.props.categories.map(category => {
+                return { text: category.name, value: category.id };
+            });
+        }
+    }
     render() {
         return (
-            <Dropdown placeholder='Categories' fluid selection options={options}/>
+            <Dropdown placeholder='Categories' fluid selection options={this.processCategories()}/>
         )
       }
     }
 
-export default(CategoryDropdown);
+const mapStateToProps = (state) => {
+    return {
+        isFetching : state.listings.isFetching,
+        categories : state.listings.categories,
+        statusText : state.listings.statusText,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch,
+        actions: bindActionCreators(actionCreators, dispatch)
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryDropdown);
