@@ -1,9 +1,8 @@
 import React from 'react';
 import { Dropdown } from 'semantic-ui-react';
-import { fetchCategories } from '../../actions/listings';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actionCreators from '../../actions/listings';
+import * as actionCreators from '../../actions/categories';
 
 class CategoryDropdown extends React.Component {
 
@@ -39,9 +38,9 @@ class CategoryDropdown extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        isFetching : state.listings.isFetching,
-        categories : state.listings.categories,
-        statusText : state.listings.statusText,
+        isFetching : state.categories.isFetching,
+        categories : state.categories.categories,
+        statusText : state.categories.statusText,
     };
 };
 
