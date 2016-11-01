@@ -8,12 +8,6 @@ class CategoryDropdown extends React.Component {
 
     constructor(props) {
       super(props);
-
-      this.state = {
-          isFetching : false,
-          categories : null,
-          statusText : ''
-      };
     }
 
     componentDidMount() {
