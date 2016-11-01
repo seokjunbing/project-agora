@@ -14,6 +14,7 @@ class NavBar extends React.Component {
                   <a className="item" href="/listing">Listings</a>
                   <a className="item">About</a>
                   <a className="item" href="/account">Account</a>
+                  <a className="item" href="/createlisting">Create Listing</a>
                   <div className="item">
                     <div className="ui category search item">
                       <div className="ui transparent icon input">
