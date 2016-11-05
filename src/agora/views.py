@@ -48,14 +48,14 @@ class ListingViewSet(viewsets.ModelViewSet):
     serializer_class = ListingSerializer
     queryset = Listing.objects.all()
 
-    def get_queryset(self):
-        """
-        This view should return a list of all the purchases for
-        the user as determined by the username portion of the URL.
-        """
-        title = self.kwargs['title']
-        # print("hahaha" + str(title))
-        return Listing.objects.filter(title=title)
+    # def get_queryset(self):
+    #     """
+    #     This view should return a list of all the purchases for
+    #     the user as determined by the username portion of the URL.
+    #     """
+    #     title = self.kwargs['title']
+    #     # print("hahaha" + str(title))
+    #     return Listing.objects.filter(title=title)
 
     # queryset =
 
