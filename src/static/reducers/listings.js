@@ -2,7 +2,8 @@ import { createReducer } from '../utils';
 import {
     FETCH_LISTINGS_REQUEST,
     FETCH_LISTINGS_SUCCESS,
-    FETCH_LISTINGS_FAILURE
+    FETCH_LISTINGS_FAILURE,
+    SET_SELECTED_LISTING
 } from '../constants';
 
 const initialState = {
@@ -30,6 +31,11 @@ export default createReducer(initialState, {
             isFetching: false,
             listings: null,
             statusText: `Listings Fetch Error: ${payload.statusText}`
+        });
+    },
+    [SET_SELECTED_LISTING]: (state, payload) => {
+        return Object.assign({}, state, {
+            selectedListing: payload.listing
         });
     }
 });
