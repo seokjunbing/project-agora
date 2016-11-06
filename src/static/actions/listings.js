@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import { SERVER_URL } from '../utils/config';
 import { checkHttpStatus, parseJSON } from '../utils';
-import { FETCH_LISTINGS_REQUEST, FETCH_LISTINGS_SUCCESS, FETCH_LISTINGS_FAILURE } from '../constants';
+import { FETCH_LISTINGS_REQUEST, FETCH_LISTINGS_SUCCESS, FETCH_LISTINGS_FAILURE, SET_SELECTED_LISTING } from '../constants';
 
 export function fetchListingsSuccess(listings) {
     return {
@@ -25,6 +25,15 @@ export function fetchListingsFailure(error) {
 export function fetchListingsRequest() {
     return {
         type: FETCH_LISTINGS_REQUEST
+    };
+}
+
+export function setSelectedListing(listing) {
+    return {
+        type: SET_SELECTED_LISTING,
+        payload: {
+            listing: listing,
+        }
     };
 }
 

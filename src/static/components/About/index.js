@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown, Segment, List } from 'semantic-ui-react';
 import { Container, Header } from 'semantic-ui-react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -24,9 +24,28 @@ class About extends React.Component {
             });
         }
     }
+
+    selectListing(event, selection) {
+        var id = selection.value;
+        var selected = this.props.listings.find(x => x.id === id);
+        this.props.actions.setSelectedListing(selected);
+    }
+
     render() {
         return (
-          <Dropdown placeholder='All Listings' fluid selection options={this.processListings()}/>
+            <div>
+              <Dropdown placeholder='All Listings' fluid selection onChange={this.selectListing.bind(this)} options={this.processListings()}/>
+              {this.props.selectedListing &&
+                  <Segment>
+                      <List>
+                        <List.Item>{this.props.selectedListing.title}</List.Item>
+                        <List.Item>{this.props.selectedListing.description}</List.Item>
+                        <List.Item>${this.props.selectedListing.price}</List.Item>
+                      </List>
+                  </Segment>
+              }
+            </div>
+
         )
       }
     }
@@ -36,6 +55,7 @@ const mapStateToProps = (state) => {
         isFetching : state.listings.isFetching,
         listings : state.listings.listings,
         statusText : state.listings.statusText,
+        selectedListing : state.listings.selectedListing,
     };
 };
 
