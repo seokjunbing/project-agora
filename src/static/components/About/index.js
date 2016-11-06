@@ -20,7 +20,7 @@ class About extends React.Component {
             return [];
         } else {
             return this.props.listings.map(listing => {
-                return { text: listing.title};
+                return {text: listing.title, value: listing.id};
             });
         }
     }
