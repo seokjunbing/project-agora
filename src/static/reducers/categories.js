@@ -1,35 +1,35 @@
 import { createReducer } from '../utils';
 import {
-    FETCH_LISTINGS_REQUEST,
-    FETCH_LISTINGS_SUCCESS,
-    FETCH_LISTINGS_FAILURE
+    FETCH_CATEGORIES_REQUEST,
+    FETCH_CATEGORIES_SUCCESS,
+    FETCH_CATEGORIES_FAILURE
 } from '../constants';
 
 const initialState = {
     isFetching : false,
-    listings : null,
+    categories : null,
     statusText : ''
 };
 
 export default createReducer(initialState, {
-    [FETCH_LISTINGS_REQUEST]: (state, payload) => {
+    [FETCH_CATEGORIES_REQUEST]: (state, payload) => {
         return Object.assign({}, state, {
             isFetching: true,
             statusText: null
         });
     },
-    [FETCH_LISTINGS_SUCCESS]: (state, payload) => {
+    [FETCH_CATEGORIES_SUCCESS]: (state, payload) => {
         return Object.assign({}, state, {
             isFetching: false,
-            listings: payload.listings,
-            statusText: 'Successfully fetched listings.'
+            categories: payload.categories,
+            statusText: 'Successfully fetched categories.'
         });
     },
-    [FETCH_LISTINGS_FAILURE]: (state, payload) => {
+    [FETCH_CATEGORIES_FAILURE]: (state, payload) => {
         return Object.assign({}, state, {
             isFetching: false,
-            listings: null,
-            statusText: `Listings Fetch Error: ${payload.statusText}`
+            categories: null,
+            statusText: `Category Fetch Error: ${payload.statusText}`
         });
     }
 });

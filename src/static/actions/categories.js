@@ -1,20 +1,20 @@
 import fetch from 'isomorphic-fetch';
 import { SERVER_URL } from '../utils/config';
 import { checkHttpStatus, parseJSON } from '../utils';
-import { FETCH_LISTINGS_REQUEST, FETCH_LISTINGS_SUCCESS, FETCH_LISTINGS_FAILURE } from '../constants';
+import { FETCH_CATEGORIES_REQUEST, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_FAILURE } from '../constants';
 
-export function fetchListingsSuccess(listings) {
+export function fetchCategoriesSuccess(categories) {
     return {
-        type: FETCH_LISTINGS_SUCCESS,
+        type: FETCH_CATEGORIES_SUCCESS,
         payload: {
-            listings: listings,
+            categories: categories,
         }
     };
 }
 
-export function fetchListingsFailure(error) {
+export function fetchCategoriesFailure(error) {
     return {
-        type: FETCH_LISTINGS_FAILURE,
+        type: FETCH_CATEGORIES_FAILURE,
         payload: {
             status: error.response.status,
             statusText: error.response.statusText
@@ -22,16 +22,16 @@ export function fetchListingsFailure(error) {
     };
 }
 
-export function fetchListingsRequest() {
+export function fetchCategoriesRequest() {
     return {
-        type: FETCH_LISTINGS_REQUEST
+        type: FETCH_CATEGORIES_REQUEST
     };
 }
 
-export function fetchListings() {
+export function fetchCategories() {
     return (dispatch) => {
-        dispatch(fetchListingsRequest());
-        return fetch(`${SERVER_URL}/api/listings/`, {
+        dispatch(fetchCategoriesRequest());
+        return fetch(`${SERVER_URL}/api/categories/`, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
@@ -42,11 +42,11 @@ export function fetchListings() {
             .then(parseJSON)
             .then(response => {
                 if(typeof response.results !== 'undefined' && response.results.length > 0){
-                    dispatch(fetchListingsSuccess(response.results));
+                    dispatch(fetchCategoriesSuccess(response.results));
                 }
             })
             .catch(error => {
-                dispatch(fetchListingsFailure(error));
+                dispatch(fetchCategoriesFailure(error));
             });
     };
 }

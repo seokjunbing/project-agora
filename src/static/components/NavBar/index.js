@@ -12,7 +12,7 @@ class NavBar extends React.Component {
                     <h2><a href="/">AGORA</a></h2>
                   </div>
                   <a className="item" href="/listing">Listings</a>
-                  <a className="item">About</a>
+                  <a className="item" href="/about">About</a>
                   <a className="item" href="/account">Account</a>
                   <a className="item" href="/createlisting">Create Listing</a>
                   <div className="item">
