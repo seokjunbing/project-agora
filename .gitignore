@@ -8,6 +8,7 @@
 # Random files
 *~
 \#*
+src/agora/migrations/
 
 virtualenv/
 virtualenv2/
