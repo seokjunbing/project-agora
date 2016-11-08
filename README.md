@@ -42,8 +42,36 @@ Seok Jun Bing, Jasper Bingham, Elizabeth Brissie, Audyn Curless, Odon Orzsik, Ju
 
 For some reason, Heroku doesn't like the node & npm versions set on the first commit. The `postinstall` command will fail. So on the first commit, comment those out. Put them back in (and make sure they match the versions on your dev environment) from the second commit onwards.
 
-## TODO
+## Current progress and TODO
 
-s3
-cloudfront
+### Backend
 
+#### API endpoints
+
+At this moment, the following API endpoints are accepting either GET or POST requests. They are still in a provisional
+state and are likely to change somewhat. We strive to not rename fields in our responses as to maintain
+some backwards compatibility, but this is not guaranteed.
+
+```
+{
+    "listings": "http://[ site_url ]/api/listings/",
+    "categories": "http://[ site_url ]/api/categories/",
+    "messages": "http://[ site_url ]/api/messages/",
+    "conversations": "http://[ site_url ]/api/conversations/",
+    "users": "http://[ site_url ]/api/users/"
+}
+```
+
+### Models
+
+We have so far focused on creating working models for `Listing` and `User` so as to implement core functionality in our
+ site. We have removed some fields provisionally so as to make development and front-end integration easier.
+ 
+
+
+Though the URLs are probably
+### TODO
+
+- s3
+- cloudfront
+- Figure out image storing: db? store in s3 and store file url? 

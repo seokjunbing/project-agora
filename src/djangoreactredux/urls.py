@@ -2,21 +2,27 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.views.decorators.cache import cache_page
 from django.contrib import admin
-from agora.views import IndexView, CategoryViewSet, ListingViewSet, MessageViewSet, ConversationViewSet, ListingList
+from agora.views import IndexView, CategoryViewSet, ListingViewSet, MessageViewSet, ConversationViewSet, UserViewSet
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'^categories/(?P<cate>.+)', CategoryViewSet, base_name='1')
+
 router.register(r'^listings/c/(?P<cate>.+)', ListingViewSet, base_name='1')
 router.register(r'^listings/t/(?P<title>.+)', ListingViewSet, base_name='1')
-router.register(r'categories', CategoryViewSet)
+router.register(r'^listings/p/low=(?P<low>\d+)&high=(?P<high>\d+)', ListingViewSet, base_name='1')
 router.register(r'listings', ListingViewSet)
+
+router.register(r'^categories/(?P<cate>.+)', CategoryViewSet, base_name='1')
+
+router.register(r'categories', CategoryViewSet)
+
 router.register(r'messages', MessageViewSet)
+
 router.register(r'conversations', ConversationViewSet)
+
+router.register(r'users', UserViewSet)
+
 # router.register(r'^listing/(?P<title>.+)/$', ListingViewSet)
-
-
-
 
 
 urlpatterns = [

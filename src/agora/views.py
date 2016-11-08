@@ -3,11 +3,11 @@ import os
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic import View
+from django.contrib.auth.models import User
 from rest_framework import viewsets
-from .models import Category, Listing, Message, Conversation
-from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer
+from .models import Category, Listing, Message, Conversation, UserProfile
+from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, UserSerializer
 from rest_framework import generics
-
 
 
 class IndexView(View):
@@ -60,27 +60,36 @@ class ListingViewSet(viewsets.ModelViewSet):
             return Listing.objects.filter(category__name=cate)
         elif 'title' in self.kwargs:
             title = self.kwargs['title']
-            return Listing.objects.filter(title = title)
+            return Listing.objects.filter(title=title)
+        elif 'low' in self.kwargs or 'high' in self.kwargs:
+            low = 0
+            high = 20000
+            if 'low' in self.kwargs:
+                low = self.kwargs['low']
+            if 'high' in self.kwargs:
+                high = self.kwargs['high']
+
+            return Listing.objects.filter(price__gte=low).filter(price__lte=high)
+
         else:
             return Listing.objects.all()
 
-        # try:
-        #
-        # except KeyError:
-        #     try:
-        #         search = self.kwargs['title']
-        #     except KeyError:
-        #         print('in KEYERROR\n')
-        #         return Listing.objects.all()
-        #
-        #
-        #
-        # print('SEARCHING....\n')
-        # # cate = self.kwargs['cate']
-        # return Listing.objects.filter(category__name=cate)
+            # try:
+            #
+            # except KeyError:
+            #     try:
+            #         search = self.kwargs['title']
+            #     except KeyError:
+            #         print('in KEYERROR\n')
+            #         return Listing.objects.all()
+            #
+            #
+            #
+            # print('SEARCHING....\n')
+            # # cate = self.kwargs['cate']
+            # return Listing.objects.filter(category__name=cate)
 
-    # queryset =
-
+            # queryset =
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -91,6 +100,11 @@ class MessageViewSet(viewsets.ModelViewSet):
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all().order_by('listing')
     serializer_class = ConversationSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 class ListingList(generics.ListAPIView):
     serializer_class = ListingSerializer
