@@ -1,5 +1,7 @@
 import os
 
+import django_filters.rest_framework
+from django_filters.rest_framework import DjangoFilterBackend
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic import View
@@ -43,53 +45,58 @@ class CategoryViewSet(viewsets.ModelViewSet):
         # cate = self.kwargs['cate']
         return Category.objects.filter(name=cate)
 
+class ListFilter(django_filters.rest_framework.FilterSet):
+    print("IN LISTFILTER start")
+    min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')
+    max_price = django_filters.NumberFilter(name="price", lookup_expr='lte')
+    # views = django_filters.NumberFilter(name="views", lookup_expr='exact')
+    # title = django_filters.CharFilter(name='title')
+    # category = django_filters.CharFilter(name='category__name')
 
+    print("IN LISTFILTER after")
+
+    class Meta:
+        model = Listing
+        fields = ['price_type', 'sale_type', 'category__name','min_price', 'max_price', 'description', 'title', 'listing_date', 'views', 'number_of_inquiries']
+
+
+# class ListingViewSet(generics.ListAPIView):
 class ListingViewSet(viewsets.ModelViewSet):
-    serializer_class = ListingSerializer
+    print("IN LISTINGVIEWSET")
     queryset = Listing.objects.all()
+    serializer_class = ListingSerializer
+    filter_backends = (DjangoFilterBackend,)
+    # filter_fields = ('title', 'views', 'category__name')
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_class = ListFilter
 
-    def get_queryset(self):
-        # print("hello\n")
-        """
-        This view should return a list of all the purchases for
-        the user as determined by the username portion of the URL.
-        """
+    # return Listing.objects.all()
 
-        if 'cate' in self.kwargs:
-            cate = self.kwargs['cate']
-            return Listing.objects.filter(category__name=cate)
-        elif 'title' in self.kwargs:
-            title = self.kwargs['title']
-            return Listing.objects.filter(title=title)
-        elif 'low' in self.kwargs or 'high' in self.kwargs:
-            low = 0
-            high = 20000
-            if 'low' in self.kwargs:
-                low = self.kwargs['low']
-            if 'high' in self.kwargs:
-                high = self.kwargs['high']
-
-            return Listing.objects.filter(price__gte=low).filter(price__lte=high)
-
-        else:
-            return Listing.objects.all()
-
-            # try:
-            #
-            # except KeyError:
-            #     try:
-            #         search = self.kwargs['title']
-            #     except KeyError:
-            #         print('in KEYERROR\n')
-            #         return Listing.objects.all()
-            #
-            #
-            #
-            # print('SEARCHING....\n')
-            # # cate = self.kwargs['cate']
-            # return Listing.objects.filter(category__name=cate)
-
-            # queryset =
+    # def get_queryset(self):
+    #     # print("hello\n")
+    #     """
+    #     This view should return a list of all the purchases for
+    #     the user as determined by the username portion of the URL.
+    #     """
+    #
+    #     if 'cate' in self.kwargs:
+    #         cate = self.kwargs['cate']
+    #         return Listing.objects.filter(category__name=cate)
+    #     elif 'title' in self.kwargs:
+    #         title = self.kwargs['title']
+    #         return Listing.objects.filter(title=title)
+    #     elif 'low' in self.kwargs or 'high' in self.kwargs:
+    #         low = 0
+    #         high = 20000
+    #         if 'low' in self.kwargs:
+    #             low = self.kwargs['low']
+    #         if 'high' in self.kwargs:
+    #             high = self.kwargs['high']
+    #
+    #         return Listing.objects.filter(price__gte=low).filter(price__lte=high)
+    #
+    #     else:
+    #         return Listing.objects.all()
 
 
 class MessageViewSet(viewsets.ModelViewSet):
