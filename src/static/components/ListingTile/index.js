@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, Button, Header} from 'semantic-ui-react';
+import { Card, Modal, Button, Header, Image, Divider } from 'semantic-ui-react';
 
 class ListingTile extends React.Component {
     constructor(props) {
@@ -16,30 +16,36 @@ class ListingTile extends React.Component {
         var style3 = {
             display: 'block',
             margin: 'auto',
-            width: '70%',
+            textAlign: 'center',
         }
         var myImage = require("../../images/tv.jpg");
         return (
-            <div className="ui card" style={style1}>
-                <div className="image">
-                    <img src={myImage}/>
-                </div>
+            <Card style={style1}>
+                <Image src={myImage}/>
                 <Modal trigger={<Button><h2>{this.props.title}</h2></Button>}>
-                    <Modal.Header>{this.props.title}</Modal.Header>
+                    <Modal.Header>
+                        <Image wrapped size='medium' src='http://semantic-ui.com/images/wireframe/image.png'/>
+                    </Modal.Header>
                     <Modal.Content>
                       <Modal.Description>
+                        <Header as='h2'>{this.props.title}</Header>
+                        <Header sub>Price</Header>
+                        <span>${this.props.price}</span>
+                        <Divider/>
                         <p>{this.props.description}</p>
-                        <p>{this.props.price}</p>
                       </Modal.Description>
                     </Modal.Content>
+                    <Modal.Actions>
+                        <Button positive icon='mail outline' labelPosition='right' content='Contact Seller' />
+                      </Modal.Actions>
                   </Modal>
-                <div className="extra content">
-                    <div className="ui buttons" style={style3}>
-                        <button className="ui button">${this.props.price}</button>
-                        <button className="ui primary button">Contact</button>
-                    </div>
-                </div>
-              </div>
+                <Card.Content extra>
+                    <Button.Group style={style3}>
+                        <Button>${this.props.price}</Button>
+                        <Button primary>Contact</Button>
+                    </Button.Group>
+                </Card.Content>
+              </Card>
         );
     }
 }

@@ -2,7 +2,8 @@ import React from 'react';
 import { Dropdown } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actionCreators from '../../actions/categories';
+import * as catActionCreators from '../../actions/categories';
+import * as lisActionCreators from '../../actions/listings';
 
 class CategoryDropdown extends React.Component {
 
@@ -11,7 +12,7 @@ class CategoryDropdown extends React.Component {
     }
 
     componentDidMount() {
-        this.props.actions.fetchCategories();
+        this.props.catActions.fetchCategories();
     }
 
     processCategories() {
@@ -23,9 +24,17 @@ class CategoryDropdown extends React.Component {
             });
         }
     }
+
+    filterListings(event, selection) {
+        var id = selection.value;
+        var selected = this.props.categories.find(x => x.id === id);
+        this.props.lisActions.fetchListingsByCategory(selected.name);
+    }
+
+
     render() {
         return (
-            <Dropdown placeholder='Categories' fluid selection options={this.processCategories()}/>
+            <Dropdown placeholder='Categories' fluid selection onChange={this.filterListings.bind(this)} options={this.processCategories()}/>
         )
       }
     }
@@ -41,7 +50,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         dispatch,
-        actions: bindActionCreators(actionCreators, dispatch)
+        catActions: bindActionCreators(catActionCreators, dispatch),
+        lisActions: bindActionCreators(lisActionCreators, dispatch),
     };
 };
 
