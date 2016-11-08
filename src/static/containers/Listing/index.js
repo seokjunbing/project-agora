@@ -12,15 +12,16 @@ class ListingView extends React.Component {
     componentDidMount() {
         this.props.actions.fetchListings();
     }
-    
+
     render() {
-        var style = {
+        var style1 = {
             display: 'block',
             margin: 'auto',
             width: '82.5%',
         }
+
         return (
-            <div style={style}>
+            <div style={style1}>
                 <ListingsMenu/>
                 {this.props.listings && <ListingWrapper listings={this.props.listings}/>}
             </div>

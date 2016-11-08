@@ -11,7 +11,7 @@ class ListingWrapper extends React.Component {
             <div>
                 <div className="ui link cards">
                     {this.props.listings.map(listing => {
-                        return <ListingTile title={listing.title} description={listing.description} price={listing.price}/>;
+                        return <ListingTile key={listing.id} title={listing.title} category={listing.category} description={listing.description} price={listing.price}/>;
                     })}
                 </div>
             </div>
