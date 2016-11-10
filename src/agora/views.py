@@ -123,4 +123,6 @@ class ListingList(generics.ListAPIView):
         """
         title = self.kwargs['title']
         # print("hahaha" + str(title))
-        return Listing.objects.filter(title=title)
+
+        # a hyphen "-" in front of "check_in" indicates descending order; ascending order is implied
+        return Listing.objects.filter(title=title).order_by('-check_in')
