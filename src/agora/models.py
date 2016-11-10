@@ -11,17 +11,6 @@ def user_str(self):
 User.__str__ = user_str
 
 
-# TODO unsure about subcategories
-
-# class Pricetype(models.Model):
-#     name = models.CharField(max_length=50)
-#
-#     class Meta:
-#         verbose_name_plural = "pricetypes"
-#
-#     def __unicode__(self):
-#         return self.name
-
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
@@ -54,21 +43,12 @@ class Subcategory(models.Model):
     def __unicode__(self):
         return self.name
 
-
-# class Saletype(models.Model):
-#     name = models.CharField(max_length=50)
-#
-#     class Meta:
-#         verbose_name_plural = "saletypes"
-#
-#     def __unicode__(self):
-#         return self.name
-
-
 class Listing(models.Model):
     def create(self, validated_data):
         return Listing.objects.create(**validated_data)
         # return Listing(**validated_data)
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     SALE_TYPES = (
         ('SA', 'Sale'),
@@ -82,15 +62,6 @@ class Listing(models.Model):
         ('DA', 'Daily'),
         ('OT', 'One time'),
     )
-
-    # CATEGORIES = (
-    #     ('EL', 'Electronics'),
-    #     ('BO', 'Books'),
-    #     ('FU', 'Furniture'),
-    #     ('OT', 'Other'),
-    # )
-
-    # author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     price = models.DecimalField(decimal_places=2, max_digits=7)
 
