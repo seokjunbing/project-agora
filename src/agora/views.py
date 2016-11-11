@@ -48,14 +48,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class ListFilter(django_filters.rest_framework.FilterSet):
-    print("IN LISTFILTER start")
     min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')
     max_price = django_filters.NumberFilter(name="price", lookup_expr='lte')
+
     # views = django_filters.NumberFilter(name="views", lookup_expr='exact')
     # title = django_filters.CharFilter(name='title')
     # category = django_filters.CharFilter(name='category__name')
-
-    print("IN LISTFILTER after")
 
     class Meta:
         model = Listing
