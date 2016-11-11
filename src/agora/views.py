@@ -8,7 +8,8 @@ from django.views.generic import View
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from .models import Category, Listing, Message, Conversation, UserProfile
-from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, UserSerializer
+from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
+    UserSerializer
 from rest_framework import generics
 
 
@@ -45,19 +46,19 @@ class CategoryViewSet(viewsets.ModelViewSet):
         # cate = self.kwargs['cate']
         return Category.objects.filter(name=cate)
 
+
 class ListFilter(django_filters.rest_framework.FilterSet):
-    print("IN LISTFILTER start")
     min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')
     max_price = django_filters.NumberFilter(name="price", lookup_expr='lte')
+
     # views = django_filters.NumberFilter(name="views", lookup_expr='exact')
     # title = django_filters.CharFilter(name='title')
     # category = django_filters.CharFilter(name='category__name')
 
-    print("IN LISTFILTER after")
-
     class Meta:
         model = Listing
-        fields = ['price_type', 'sale_type', 'category__name','min_price', 'max_price', 'description', 'title', 'listing_date', 'views', 'number_of_inquiries']
+        fields = ['price_type', 'sale_type', 'category__name', 'min_price', 'max_price', 'description', 'title',
+                  'listing_date', 'views', 'number_of_inquiries']
 
 
 # class ListingViewSet(generics.ListAPIView):
@@ -112,6 +113,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 
 class ListingList(generics.ListAPIView):
     serializer_class = ListingSerializer

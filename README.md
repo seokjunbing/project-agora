@@ -67,9 +67,13 @@ some backwards compatibility, but this is not guaranteed.
 We have so far focused on creating working models for `Listing` and `User` so as to implement core functionality in our
  site. We have removed some fields provisionally so as to make development and front-end integration easier.
  
+### Upgrading to Django 1.10
 
+1. Update your python packages: run `pip install -r requirements.txt` in the repository's root folder.
+2. You _might_ have to migrate: `python manage.py makemigrations && python manage.py migrate` 
+If that doesn't work, run `python manage.py makemigrations agora` and `python manage.py migrate agora`.
+3. 
 
-Though the URLs are probably
 ### TODO
 
 - s3
