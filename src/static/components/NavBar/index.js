@@ -24,7 +24,7 @@ class NavBar extends React.Component {
                     </div>
                   </div>
                   <div className="right item">
-                    <div className="ui primary button">Log In</div>
+                    <a className="ui primary button" href="/verify">Log In</a>
                   </div>
                 </div>
             </div>
