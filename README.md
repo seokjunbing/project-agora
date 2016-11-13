@@ -59,6 +59,7 @@ some backwards compatibility, but this is not guaranteed.
     "messages": "http://[ site_url ]/api/messages/",
     "conversations": "http://[ site_url ]/api/conversations/",
     "users": "http://[ site_url ]/api/users/"
+    "auth-token": "http://[ site_url ]/api/auth-token/"
 }
 ```
 
@@ -72,7 +73,17 @@ We have so far focused on creating working models for `Listing` and `User` so as
 1. Update your python packages: run `pip install -r requirements.txt` in the repository's root folder.
 2. You _might_ have to migrate: `python manage.py makemigrations && python manage.py migrate` 
 If that doesn't work, run `python manage.py makemigrations agora` and `python manage.py migrate agora`.
-3. 
+
+### Changelog
+
+1. Added user sign-in endpoint: `[ site_url ]/api/auth-token` that returns a token if the username and password combination
+are valid. To make a request, send a `POST` request with `username` and `password` fields to the url. With `curl`,
+ for instance, do 
+ ```curl --data "username=value1&username=value2" https://[ site_url ]/api/auth-token```. 
+ For now this sends the password in plain text, but it should work for the demo.
+2. Modified user creation endpoint. Now, you need a @dartmouth.edu email to sign up and it no longer requires a username, 
+which is instead derived from the Dartmouth email. If you need a user's username (for authentication, for instance), for
+now use `get_username()` in `serializers.py`.
 
 ### TODO
 
