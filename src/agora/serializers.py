@@ -24,8 +24,11 @@ def get_username(validated_email):
     :return:
     """
     validated_email = validated_email.lower()
-    username_tokens = validated_email.rstrip(EMAIL_SUFFIX).split('.')
-    return '_'.join(username_tokens)
+    try:
+        index = validated_email.rindex(EMAIL_SUFFIX)
+    except ValueError:
+        index = len(validated_email)
+    return '_'.join(validated_email[:index].split('.'))
 
 
 class ListingSerializer(serializers.ModelSerializer):
