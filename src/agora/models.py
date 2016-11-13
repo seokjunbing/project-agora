@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
-from enum import Enum
+from django.dispatch import receiver
+from django.conf import settings
+from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
 
 
 # String representation for user
@@ -9,6 +12,12 @@ def user_str(self):
 
 
 User.__str__ = user_str
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
 
 class UserProfile(models.Model):
@@ -42,6 +51,7 @@ class Subcategory(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class Listing(models.Model):
     def create(self, validated_data):

@@ -1,7 +1,7 @@
 import os
 
 import django_filters.rest_framework
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic import View
@@ -70,6 +70,13 @@ class ListingViewSet(viewsets.ModelViewSet):
     # filter_fields = ('title', 'views', 'category__name')
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_class = ListFilter
+    # ordering_filter = OrderingFilter()
+    # ordering_fields = ('price', 'views')
+    # ordering = ('price',)
+    #
+    # def filter_queryset(self, queryset):
+    #     queryset = super(ListingViewSet, self).filter_queryset(queryset)
+    #     return self.ordering_filter.filter(self.request, queryset)
 
     # return Listing.objects.all()
 
