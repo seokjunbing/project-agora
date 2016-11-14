@@ -9,6 +9,13 @@ EMAIL_SUFFIX = '@dartmouth.edu'
 
 UserModel = get_user_model()
 
+#@api_view(['GET'])
+def current_user(request):
+    user = request.user
+    return Response({
+        'username': user.username,
+        'email': user.email
+    })
 
 def validate_email(email):
     try:
@@ -74,7 +81,7 @@ class UserSerializer(serializers.ModelSerializer):
 
             # token = create_auth_token(instance=user)
             token = Token.objects.get_or_create(user=user)
-            print(token)
+            #print(token)
 
             user_profile = UserProfile(user=user)
             user_profile.save()
