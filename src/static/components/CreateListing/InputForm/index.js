@@ -2,31 +2,25 @@ import React, { Component } from 'react';
 import * as actionCreators from '../../../actions/postlisting';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import CategoryDropdown from '../../CategoryDropdown';
 
 import { Button, Checkbox, Form, Input, Message, Radio, Select, TextArea } from 'semantic-ui-react';
 
 const price_units = [
-  { text: 'fixed', value: 'f' },
-  { text: '/hr', value: 'h' },
-  { text: '/week', value: 'w' },
-  { text: '/term', value: 't' },
+  { text: 'fixed', value: 'OT' },
+  { text: '/month', value: 'MO' },
+  { text: '/week', value: 'WE' },
+  { text: '/day', value: 'DA' },
+  { text: '/term', value: 'PT' },
 ];
 
-const products = [
-  { text: 'Hat', value: 'hat' },
-  { text: 'Scarf', value: 'scarf' },
-  { text: 'Jacket', value: 'jacket' },
-  { text: 'T-Shirt', value: 't_shirt' },
-  { text: 'Gloves', value: 'gloves' },
-  { text: 'Watch', value: 'watch' },
-  { text: 'Belt', value: 'belt' },
-  { text: 'Pants', value: 'pants' },
-  { text: 'Shoes', value: 'shoes' },
-  { text: 'Socks', value: 'socks' },
+const categories = [
+  { text: 'Electronics', value: '1' },
+  { text: 'Furniture', value: '2' },
+  { text: 'Services', value: '3' },
 ];
 
 class InputForm extends Component {
-
 
   state = { serializedForm: {
     "price" : "0",
@@ -48,7 +42,8 @@ class InputForm extends Component {
 
     e.preventDefault();
     this.props.actions.postListing(serializedForm);
-    console.log("hey there");
+
+    window.location = '/listing';
   }
 
   render() {
@@ -56,18 +51,16 @@ class InputForm extends Component {
     return (
 
       <Form onSubmit={this.handleSubmit.bind(this)}>
+        <Form.Input label='Title' name='title' placeholder='e.g. 42 inch LG TV' />
         <Form.Group widths='equal'>
           <Form.Input label='Price' name='price' placeholder='$50' />
-          <Form.Input label='Price Type' name='price_type' placeholder='OT' />
+          <Form.Field control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' />
         </Form.Group>
-        <Form.TextArea name='description' label='description' placeholder='Anything else we should know?' rows='3' />
-        <Form.Group widths='equal'>
-          <Form.Input label='Title' name='title' placeholder='e.g. 42 inch LG TV' />
-        </Form.Group>
-
-        <Form.Input label='Category' name='category' placeholder='1' />
+        <Form.Field control={Select} label='Category' name='category' options={categories} placeholder='select' />
+        <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' />
 
         <Button primary type='submit'>Submit</Button>
+
       </Form>
     )
   }
