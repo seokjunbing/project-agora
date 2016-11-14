@@ -1,7 +1,8 @@
 import os
 
 import django_filters.rest_framework
-from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic import View
@@ -66,19 +67,12 @@ class ListingViewSet(viewsets.ModelViewSet):
     print("IN LISTINGVIEWSET")
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     # filter_fields = ('title', 'views', 'category__name')
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_class = ListFilter
-    # ordering_filter = OrderingFilter()
-    # ordering_fields = ('price', 'views')
+    ordering_filter = OrderingFilter()
+    ordering_fields = ('price', 'views')
     # ordering = ('price',)
-    #
-    # def filter_queryset(self, queryset):
-    #     queryset = super(ListingViewSet, self).filter_queryset(queryset)
-    #     return self.ordering_filter.filter(self.request, queryset)
-
-    # return Listing.objects.all()
 
     # def get_queryset(self):
     #     # print("hello\n")
