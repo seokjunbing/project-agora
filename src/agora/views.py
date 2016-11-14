@@ -4,14 +4,15 @@ import django_filters.rest_framework
 from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 from django.conf import settings
 from django.http import HttpResponse
+from rest_framework.response import Response
 from django.views.generic import View
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from .models import Category, Listing, Message, Conversation, UserProfile
 from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
     UserSerializer
-from rest_framework import generics
-
+from rest_framework import generics, renderers
+from rest_framework.decorators import list_route
 
 class IndexView(View):
     """Render main page."""
@@ -39,10 +40,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
         try:
             cate = self.kwargs['cate']
         except KeyError:
-            print('in KEYERROR\n')
+            #print('in KEYERROR\n')
             return Category.objects.all()
 
-        print('SEARCHING....\n')
+        #print('SEARCHING....\n')
         # cate = self.kwargs['cate']
         return Category.objects.filter(name=cate)
 
@@ -63,7 +64,7 @@ class ListFilter(django_filters.rest_framework.FilterSet):
 
 # class ListingViewSet(generics.ListAPIView):
 class ListingViewSet(viewsets.ModelViewSet):
-    print("IN LISTINGVIEWSET")
+
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
     filter_backends = (DjangoFilterBackend,)
@@ -121,6 +122,10 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    @list_route()
+    def current_user(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
 
 class ListingList(generics.ListAPIView):
     serializer_class = ListingSerializer

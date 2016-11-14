@@ -15,9 +15,9 @@ DATABASES['default'] = {
     'PORT': ''
 }
 
-REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'django_rest_logger.handlers.rest_exception_handler'  # NOQA (ignore all errors on this line)
-}
+#REST_FRAMEWORK = {
+#    'EXCEPTION_HANDLER': 'django_rest_logger.handlers.rest_exception_handler'  # NOQA (ignore all errors on this line)
+#}
 
 WSGI_APPLICATION = 'djangoreactredux.wsgi.application'
 

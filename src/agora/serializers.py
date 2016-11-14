@@ -17,7 +17,6 @@ def current_user(request):
         'email': user.email
     })
 
-
 def validate_email(email):
     try:
         ind = email.index(EMAIL_SUFFIX)
@@ -82,7 +81,7 @@ class UserSerializer(serializers.ModelSerializer):
 
             # token = create_auth_token(instance=user)
             token = Token.objects.get_or_create(user=user)
-            print(token)
+            #print(token)
 
             user_profile = UserProfile(user=user)
             user_profile.save()
