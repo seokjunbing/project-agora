@@ -5,16 +5,15 @@ import * as actionCreators from '../../actions/auth';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
 import Account from '../../components/Account';
-import CategoryDropdown from '../../components/CategoryDropdown';
+import CreateListing from '../../components/CreateListing';
 
 
-class AccountView extends React.Component {
+class CreateListingView extends React.Component {
 
     render() {
         return (
           <div>
-            <Account/>
-            <CategoryDropdown/>
+            <CreateListing/>
           </div>
         );
     }
@@ -26,5 +25,5 @@ const mapDispatchToProps = () => {
 
 
 
-export default connect(mapDispatchToProps)(AccountView);
-export { AccountView as AccountViewNotConnected };
+export default connect(mapDispatchToProps)(CreateListingView);
+export { CreateListingView as CreateListingViewNotConnected };

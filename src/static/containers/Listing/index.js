@@ -4,16 +4,21 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/auth';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
-import Listing from '../../components/Listing';
-
+import ListingTile from '../../components/ListingTile';
+import ListingWrapper from '../../components/ListingWrapper';
 
 class ListingView extends React.Component {
 
     render() {
+        var style = {
+            display: 'block',
+            margin: 'auto',
+            width: '82.5%',
+        }
         return (
-          <div>
-            <Listing/>
-          </div>
+            <div style={style}>
+                <ListingWrapper/>
+            </div>
         );
     }
 }
@@ -21,13 +26,6 @@ class ListingView extends React.Component {
 const mapDispatchToProps = () => {
     return {};
 };
-
-var count=0;
-function incrementCount(){
-    $('#main1').text('You have been logged in for: ' + count + ' seconds!')
-    count++;
-}
-setInterval(function() { incrementCount() }, 1000);
 
 export default connect(mapDispatchToProps)(ListingView);
 export { ListingView as ListingViewNotConnected };

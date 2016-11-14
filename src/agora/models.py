@@ -3,6 +3,14 @@ from django.contrib.auth.models import User
 from enum import Enum
 
 
+# String representation for user
+def user_str(self):
+    return "%s %s" % (self.first_name, self.last_name)
+
+
+User.__str__ = user_str
+
+
 # TODO unsure about subcategories
 
 # class Pricetype(models.Model):
@@ -14,6 +22,17 @@ from enum import Enum
 #     def __unicode__(self):
 #         return self.name
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+
+    # messages = models.ManyToOneRel(Message)
+
+    class Meta:
+        verbose_name_plural = "user profiles"
+        # def create(self, validated_data):
+        #     return Listing.objects.create(**validated_data)
+        # return Listing(**validated_data)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -21,7 +40,8 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "categories"
 
-    def __unicode__(self):
+    # python 3.x
+    def __str__(self):
         return self.name
 
 
@@ -46,6 +66,10 @@ class Subcategory(models.Model):
 
 
 class Listing(models.Model):
+    def create(self, validated_data):
+        return Listing.objects.create(**validated_data)
+        # return Listing(**validated_data)
+
     SALE_TYPES = (
         ('SA', 'Sale'),
         ('RE', 'Rent'),
@@ -66,17 +90,17 @@ class Listing(models.Model):
     #     ('OT', 'Other'),
     # )
 
-    #author = models.ForeignKey('accounts.User')
+    # author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     price = models.DecimalField(decimal_places=2, max_digits=7)
 
-    priceType = models.CharField(
+    price_type = models.CharField(
         max_length=2,
         choices=PRICE_TYPES,
         default='OT',
     )
 
-    saleType = models.CharField(
+    sale_type = models.CharField(
         max_length=2,
         choices=SALE_TYPES,
         default='SA',
@@ -91,42 +115,40 @@ class Listing(models.Model):
 
     title = models.CharField(max_length=100)
 
-    pictures = models.ImageField()
+    pictures = models.ImageField(blank=True, null=True)
 
-    flags = models.BooleanField()
+    flags = models.PositiveIntegerField(default=0)
 
-    listingDate = models.DateField(auto_now_add=True)
+    listing_date = models.DateField(auto_now_add=True)
 
     # views(internal for popularity filtering)
     views = models.PositiveIntegerField(default=0)
 
     # numberOfInquiries(internal for filtering)
-    numberOfInquiries = models.PositiveIntegerField(default=0)
+    number_of_inquiries = models.PositiveIntegerField(default=0)
 
 
-"""
-A single message in a conversation thread.
-"""
+class Conversation(models.Model):
+    """
+    Conversation
+    """
+
+    listing = models.ForeignKey(Listing)
+
+    # TODO Change?
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+
 class Message(models.Model):
+    """
+    A single message in a conversation thread.
+    """
     text = models.TextField(max_length=5000)
 
     date = models.DateField(auto_now_add=True)
 
-    #author = models.ForeignKey('accounts.User')
-
     read = models.BooleanField(default=False)
 
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
-"""
-Conversation
-"""
-class Conversation(models.Model):
-    # users = [
-    #     models.ForeignKey('accounts.User'),
-    # ]
-
-    listing = models.ForeignKey(Listing)
-
-    messages = [
-        models.ForeignKey(Message),
-    ]
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, null=True)

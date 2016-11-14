@@ -3,11 +3,10 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { authLogoutAndRedirect } from './actions/auth';
 import SideMenu from './components/SideMenu';
+import NavBar from './components/NavBar';
 
 // More needed here
 import './styles/semantic/dist/semantic.min.css';
-import './styles/semantic/dist/components/transition';
-import './styles/semantic/dist/components/dropdown';
 
 class App extends React.Component {
 
@@ -55,6 +54,7 @@ class App extends React.Component {
 
         return (
             <div className="app">
+                <NavBar/>
                 {bodyContent}
             </div>
         );
