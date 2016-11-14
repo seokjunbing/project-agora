@@ -11,7 +11,6 @@ export default(
         <IndexRoute component={HomeView}/>
         <Route path="listing" component={ListingView}/>
         <Route path="account" component={AccountView}/>
-        <Route path="createlisting" component={CreateListingView}/>
         <Route path="about" component={AboutView}/>
         <Route path="protected" component={requireAuthentication(ProtectedView)}/>
     </Route>
