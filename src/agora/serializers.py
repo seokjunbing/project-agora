@@ -9,6 +9,14 @@ EMAIL_SUFFIX = '@dartmouth.edu'
 
 UserModel = get_user_model()
 
+#@api_view(['GET'])
+def current_user(request):
+    user = request.user
+    return Response({
+        'username': user.username,
+        'email': user.email
+    })
+
 
 def validate_email(email):
     try:
