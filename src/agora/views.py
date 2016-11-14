@@ -67,19 +67,12 @@ class ListingViewSet(viewsets.ModelViewSet):
     print("IN LISTINGVIEWSET")
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     # filter_fields = ('title', 'views', 'category__name')
-    # filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_class = ListFilter
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
     # ordering = ('price',)
-    #
-    def filter_queryset(self, queryset):
-        queryset = super(ListingViewSet, self).filter_queryset(queryset)
-        return self.ordering_filter.filter_queryset(self.request, queryset, self)
-
-    # return Listing.objects.all()
 
     # def get_queryset(self):
     #     # print("hello\n")
