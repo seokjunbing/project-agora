@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import App from './app';
 
-import { HomeView, ListingView, AccountView, AboutView, ProtectedView, NotFoundView, CreateListingView } from './containers';
+import { HomeView, ListingView, AccountView, AboutView, ProtectedView, NotFoundView } from './containers';
 
 import { requireAuthentication } from './utils/requireAuthentication';
 
