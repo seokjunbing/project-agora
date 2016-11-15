@@ -36,13 +36,13 @@ class ListingTile extends React.Component {
                       </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button positive icon='mail outline' labelPosition='right' content='Contact Seller' />
+                        <Button color='teal' icon='mail outline' labelPosition='right' content='Contact Seller' />
                       </Modal.Actions>
                   </Modal>
                 <Card.Content extra>
                     <Button.Group style={style3}>
                         <Button>${this.props.price}{this.props.extraPriceInfo}</Button>
-                        <Button primary>Contact</Button>
+                        <Button color='teal' icon='mail outline' labelPosition='right' content='Contact' />
                     </Button.Group>
                 </Card.Content>
               </Card>

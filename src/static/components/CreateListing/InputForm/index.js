@@ -65,7 +65,7 @@ class InputForm extends Component {
         <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' />
         <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' />
 
-        <Button primary type='submit'>Submit</Button>
+        <Button color='teal' type='submit'>Submit</Button>
 
       </Form>
     )

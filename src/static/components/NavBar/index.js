@@ -19,7 +19,7 @@ class NavBar extends React.Component {
                          <Input className='icon' icon='search' placeholder='Search listings...' />
                       </Menu.Item>
                       <Menu.Item>
-                        <Button href="/verify" primary>Log In</Button>
+                        <Button href="/verify" color='teal'>Log In</Button>
                       </Menu.Item>
                   </Menu.Menu>
                 </Menu>
