@@ -10,8 +10,6 @@ export default(
         <Route path="verify" component={VerifyEmailView}/>
         <Route path="createlisting" component={CreateListingView}/>
         <Route path="listing" component={ListingView}/>
-        <Route path="account" component={AccountView}/>
-        <Route path="about" component={AboutView}/>
         <Route path="protected" component={requireAuthentication(ProtectedView)}/>
     </Route>
 );
