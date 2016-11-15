@@ -34,7 +34,6 @@ export function postListingRequest(postdata) {
 export function postListing(postdata) {
     return (dispatch) => {
         dispatch(postListingRequest(postdata));
-        console.log(postdata);
         return fetch(`${SERVER_URL}/api/listings/`, {
             method: 'post',
             headers: {
@@ -48,9 +47,8 @@ export function postListing(postdata) {
 
             .then(parseJSON)
             .then(response => {
-                console.log(response);
                 dispatch(postListingSuccess(response));
-                
+
             })
             .catch(error => {
                 dispatch(postListingFailure(error));
