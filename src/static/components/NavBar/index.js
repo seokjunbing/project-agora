@@ -1,31 +1,26 @@
 import React from 'react';
+import { Menu, Input, Button } from 'semantic-ui-react';
 
 class NavBar extends React.Component {
     render() {
         var style = {
-            marginBottom: '80px'
+            marginBottom: '20px'
         }
         return (
             <div style={style}>
-                <div className="ui top fixed menu">
-                  <div className="item">
-                    <h2><a href="/">AGORA</a></h2>
-                  </div>
-                  <a className="item" href="/listing">Listings</a>
-                  <a className="item" href="/createlisting">Create Listing</a>
-                  <div className="item">
-                    <div className="ui category search item">
-                      <div className="ui transparent icon input">
-                        <input className="prompt" type="text" placeholder="Search listings..."/>
-                        <i className="search link icon"></i>
-                      </div>
-                      <div className="results"></div>
-                    </div>
-                  </div>
-                  <div className="right item">
-                    <a className="ui primary button" href="/verify">Log In</a>
-                  </div>
-                </div>
+                <Menu stackable>
+                  <Menu.Item href="/">
+                    <h2>AGORA</h2>
+                  </Menu.Item>
+                  <Menu.Item href="/listing">Listings</Menu.Item>
+                  <Menu.Item href="/createlisting">Create Listing</Menu.Item>
+                  <Menu.Item>
+                     <Input className='icon' icon='search' placeholder='Search listings...' />
+                  </Menu.Item>
+                  <Menu.Item position='right'>
+                    <Button href="/verify" primary>Log In</Button>
+                  </Menu.Item>
+                </Menu>
             </div>
         );
     }
