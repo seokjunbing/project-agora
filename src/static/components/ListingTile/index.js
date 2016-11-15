@@ -30,7 +30,7 @@ class ListingTile extends React.Component {
                       <Modal.Description>
                         <Header as='h2'>{this.props.title}</Header>
                         <Header sub>Price</Header>
-                        <span>${this.props.price}</span>
+                        <span>${this.props.price}{this.props.extraPriceInfo}</span>
                         <Divider/>
                         <p>{this.props.description}</p>
                       </Modal.Description>
@@ -41,7 +41,7 @@ class ListingTile extends React.Component {
                   </Modal>
                 <Card.Content extra>
                     <Button.Group style={style3}>
-                        <Button>${this.props.price}</Button>
+                        <Button>${this.props.price}{this.props.extraPriceInfo}</Button>
                         <Button primary>Contact</Button>
                     </Button.Group>
                 </Card.Content>
