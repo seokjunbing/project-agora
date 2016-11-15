@@ -11,7 +11,7 @@ PAGE_CACHE_SECONDS = 60
 ALLOWED_HOSTS = ['*']
 
 DATABASES = {}
-DATABASES['default'] = dj_database_url.config()
+DATABASES['default'] = dj_database_url.config(default='postgresql:///postgresql')
 
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'django_rest_logger.handlers.rest_exception_handler'  # NOQA (ignore all errors on this line)
