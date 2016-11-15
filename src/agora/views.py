@@ -1,6 +1,6 @@
 import os
-
 import django_filters.rest_framework
+
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django.conf import settings
@@ -33,7 +33,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        # print("hello\n")
         """
         This view should return a list of all the purchases for
         the user as determined by the username portion of the URL.
