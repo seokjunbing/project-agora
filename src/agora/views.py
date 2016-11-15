@@ -41,21 +41,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
         try:
             cate = self.kwargs['cate']
         except KeyError:
-            #print('in KEYERROR\n')
             return Category.objects.all()
 
-        #print('SEARCHING....\n')
-        # cate = self.kwargs['cate']
         return Category.objects.filter(name=cate)
 
 
 class ListFilter(django_filters.rest_framework.FilterSet):
     min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')
     max_price = django_filters.NumberFilter(name="price", lookup_expr='lte')
-
-    # views = django_filters.NumberFilter(name="views", lookup_expr='exact')
-    # title = django_filters.CharFilter(name='title')
-    # category = django_filters.CharFilter(name='category__name')
 
     class Meta:
         model = Listing
@@ -69,37 +62,10 @@ class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    # filter_fields = ('title', 'views', 'category__name')
+
     filter_class = ListFilter
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
-    # ordering = ('price',)
-
-    # def get_queryset(self):
-    #     # print("hello\n")
-    #     """
-    #     This view should return a list of all the purchases for
-    #     the user as determined by the username portion of the URL.
-    #     """
-    #
-    #     if 'cate' in self.kwargs:
-    #         cate = self.kwargs['cate']
-    #         return Listing.objects.filter(category__name=cate)
-    #     elif 'title' in self.kwargs:
-    #         title = self.kwargs['title']
-    #         return Listing.objects.filter(title=title)
-    #     elif 'low' in self.kwargs or 'high' in self.kwargs:
-    #         low = 0
-    #         high = 20000
-    #         if 'low' in self.kwargs:
-    #             low = self.kwargs['low']
-    #         if 'high' in self.kwargs:
-    #             high = self.kwargs['high']
-    #
-    #         return Listing.objects.filter(price__gte=low).filter(price__lte=high)
-    #
-    #     else:
-    #         return Listing.objects.all()
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -130,7 +96,6 @@ class ListingList(generics.ListAPIView):
         the user as determined by the username portion of the URL.
         """
         title = self.kwargs['title']
-        # print("hahaha" + str(title))
 
         # a hyphen "-" in front of "check_in" indicates descending order; ascending order is implied
         return Listing.objects.filter(title=title).order_by('-check_in')

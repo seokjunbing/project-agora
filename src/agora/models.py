@@ -10,7 +10,6 @@ from rest_framework.authtoken.models import Token
 def user_str(self):
     return "%s %s" % (self.first_name, self.last_name)
 
-
 User.__str__ = user_str
 
 
@@ -27,10 +26,6 @@ class UserProfile(models.Model):
 
     class Meta:
         verbose_name_plural = "user profiles"
-        # def create(self, validated_data):
-        #     return Listing.objects.create(**validated_data)
-        # return Listing(**validated_data)
-
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
