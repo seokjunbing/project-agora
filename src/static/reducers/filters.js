@@ -7,6 +7,8 @@ import {
 const initialState = {
     min_price: null,
     max_price: null,
+    price_type: null,
+    sale_type: null,
     category__name: '',
 };
 
@@ -20,6 +22,8 @@ export default createReducer(initialState, {
         return Object.assign({}, state, {
             min_price: null,
             max_price: null,
+            price_type: null,
+            sale_type: null,
             category__name: null
         });
     },

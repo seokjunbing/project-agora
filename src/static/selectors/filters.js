@@ -16,7 +16,6 @@ export const buildQueryString = createSelector(
         if (qs.length > 0){
             qs = qs.substring(0, qs.length-1); //chop off last "&"
         }
-        console.log(window.location.protocol + '//' + window.location.host + '/api/listings/' + qs);
         return window.location.protocol + '//' + window.location.host + '/api/listings/' + qs;
     }
 );

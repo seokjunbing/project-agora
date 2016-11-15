@@ -52,6 +52,7 @@ export function fetchListings(url) {
                 if(typeof response.results !== 'undefined' && response.results.length > 0){
                     dispatch(fetchListingsSuccess(response.results));
                 }
+                else { dispatch(fetchListingsSuccess(null)); }
             })
             .catch(error => {
                 dispatch(fetchListingsFailure(error));
