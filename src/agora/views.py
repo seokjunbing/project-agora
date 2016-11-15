@@ -1,16 +1,19 @@
 import os
 
 import django_filters.rest_framework
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django.conf import settings
 from django.http import HttpResponse
+from rest_framework.response import Response
 from django.views.generic import View
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from .models import Category, Listing, Message, Conversation, UserProfile
-from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, UserSerializer
-from rest_framework import generics
-
+from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
+    UserSerializer
+from rest_framework import generics, renderers
+from rest_framework.decorators import list_route
 
 class IndexView(View):
     """Render main page."""
@@ -38,39 +41,39 @@ class CategoryViewSet(viewsets.ModelViewSet):
         try:
             cate = self.kwargs['cate']
         except KeyError:
-            print('in KEYERROR\n')
+            #print('in KEYERROR\n')
             return Category.objects.all()
 
-        print('SEARCHING....\n')
+        #print('SEARCHING....\n')
         # cate = self.kwargs['cate']
         return Category.objects.filter(name=cate)
 
+
 class ListFilter(django_filters.rest_framework.FilterSet):
-    print("IN LISTFILTER start")
     min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')
     max_price = django_filters.NumberFilter(name="price", lookup_expr='lte')
+
     # views = django_filters.NumberFilter(name="views", lookup_expr='exact')
     # title = django_filters.CharFilter(name='title')
     # category = django_filters.CharFilter(name='category__name')
 
-    print("IN LISTFILTER after")
-
     class Meta:
         model = Listing
-        fields = ['price_type', 'sale_type', 'category__name','min_price', 'max_price', 'description', 'title', 'listing_date', 'views', 'number_of_inquiries']
+        fields = ['price_type', 'sale_type', 'category__name', 'min_price', 'max_price', 'description', 'title',
+                  'listing_date', 'views', 'number_of_inquiries']
 
 
 # class ListingViewSet(generics.ListAPIView):
 class ListingViewSet(viewsets.ModelViewSet):
-    print("IN LISTINGVIEWSET")
+
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     # filter_fields = ('title', 'views', 'category__name')
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_class = ListFilter
-
-    # return Listing.objects.all()
+    ordering_filter = OrderingFilter()
+    ordering_fields = ('price', 'views')
+    # ordering = ('price',)
 
     # def get_queryset(self):
     #     # print("hello\n")
@@ -112,6 +115,11 @@ class ConversationViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    @list_route()
+    def current_user(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
 
 class ListingList(generics.ListAPIView):
     serializer_class = ListingSerializer

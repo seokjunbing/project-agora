@@ -14,6 +14,7 @@ class NavBar extends React.Component {
                   <a className="item" href="/listing">Listings</a>
                   <a className="item" href="/about">About</a>
                   <a className="item" href="/account">Account</a>
+                  <a className="item" href="/createlisting">Create Listing</a>
                   <div className="item">
                     <div className="ui category search item">
                       <div className="ui transparent icon input">
@@ -24,7 +25,7 @@ class NavBar extends React.Component {
                     </div>
                   </div>
                   <div className="right item">
-                    <div className="ui primary button">Log In</div>
+                    <a className="ui primary button" href="/verify">Log In</a>
                   </div>
                 </div>
             </div>

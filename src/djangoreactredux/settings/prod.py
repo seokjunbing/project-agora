@@ -13,7 +13,9 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config()
 
-REST_FRAMEWORK['EXCEPTION_HANDLER'] = 'django_rest_logger.handlers.rest_exception_handler'  # NOQA (ignore all errors on this line)
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'django_rest_logger.handlers.rest_exception_handler'  # NOQA (ignore all errors on this line)
+}
 
 WSGI_APPLICATION = 'djangoreactredux.wsgi.application'
 

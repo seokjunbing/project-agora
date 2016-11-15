@@ -5,6 +5,7 @@ import dataReducer from './data';
 import categoriesReducer from './categories';
 import listingsReducer from './listings';
 import filtersReducer from './filters';
+import postListingReducer from './postlisting';
 
 export default combineReducers({
     auth: authReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
     categories: categoriesReducer,
     listings: listingsReducer,
     filters: filtersReducer,
+    postListing: postListingReducer,
 });
