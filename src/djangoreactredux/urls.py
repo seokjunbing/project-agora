@@ -33,7 +33,7 @@ router.register(r'users', UserViewSet)
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'api/auth-token', views.obtain_auth_token), # TODO Temporary fix. Move to routers at some point.
-    url(r'^api/', include(router.urls))
+    url(r'^api/', include(router.urls)),
 
 
     # url(r'^api/categories/(?P<cate>.+)/$', CategoryViewSet.as_view),
@@ -42,5 +42,5 @@ urlpatterns = [
     # catch all others because of how history is handled by react router - cache this page because it will never change
 
     # comment this out to test the API (Backend team)
-    #url(r'', cache_page(settings.PAGE_CACHE_SECONDS)(IndexView.as_view()), name='index'),
+    url(r'', cache_page(settings.PAGE_CACHE_SECONDS)(IndexView.as_view()), name='index'),
 ]
