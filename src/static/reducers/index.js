@@ -4,6 +4,7 @@ import authReducer from './auth';
 import dataReducer from './data';
 import categoriesReducer from './categories';
 import listingsReducer from './listings';
+import filtersReducer from './filters';
 import postListingReducer from './postlisting';
 
 export default combineReducers({
@@ -12,5 +13,6 @@ export default combineReducers({
     routing: routerReducer,
     categories: categoriesReducer,
     listings: listingsReducer,
+    filters: filtersReducer,
     postListing: postListingReducer,
 });

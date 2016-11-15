@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch';
-import { SERVER_URL } from '../utils/config';
 import { checkHttpStatus, parseJSON } from '../utils';
 import { FETCH_LISTINGS_REQUEST, FETCH_LISTINGS_SUCCESS, FETCH_LISTINGS_FAILURE, SET_SELECTED_LISTING } from '../constants';
 
@@ -37,33 +36,10 @@ export function setSelectedListing(listing) {
     };
 }
 
-export function fetchListings() {
+export function fetchListings(url) {
     return (dispatch) => {
         dispatch(fetchListingsRequest());
-        return fetch(`${SERVER_URL}/api/listings/`, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-        })
-            .then(checkHttpStatus)
-            .then(parseJSON)
-            .then(response => {
-                if(typeof response.results !== 'undefined' && response.results.length > 0){
-                    dispatch(fetchListingsSuccess(response.results));
-                }
-            })
-            .catch(error => {
-                dispatch(fetchListingsFailure(error));
-            });
-    };
-}
-
-export function fetchListingsByCategory(category) {
-    return (dispatch) => {
-        dispatch(fetchListingsRequest());
-        return fetch(`${SERVER_URL}/api/listings/c/${category}/`, {
+        return fetch(url, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
