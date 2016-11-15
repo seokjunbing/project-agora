@@ -52,16 +52,45 @@ At this moment, the following API endpoints are accepting either GET or POST req
 state and are likely to change somewhat. We strive to not rename fields in our responses as to maintain
 some backwards compatibility, but this is not guaranteed.
 
-```
-{
-    "listings": "http://[ site_url ]/api/listings/",
-    "categories": "http://[ site_url ]/api/categories/",
-    "messages": "http://[ site_url ]/api/messages/",
-    "conversations": "http://[ site_url ]/api/conversations/",
-    "users": "http://[ site_url ]/api/users/"
-    "auth-token": "http://[ site_url ]/api/auth-token/"
-}
-```
+##### Listings
+`http://[ site_url ]/api/listings/`
+
+Lists the listings made by users on the site.
+ 
+##### Categories
+`http://[ site_url ]/api/categories/`
+
+Lists the available categories for users to post items on.
+
+##### Messages
+`http://[ site_url ]/api/messages/`
+
+Lists the messages on the site's database. *not working yet.*
+
+##### Conversations
+`http://[ site_url ]/api/conversations/`
+
+Lists the conversations on the site's database. *not working yet*
+
+##### Users
+`http://[ site_url ]/api/users/`
+
+Lists the users on the site's database and allows for the creation of new users.
+
+###### Creating users
+
+Make a POST request with the following fields: `email`, `password`, `first_name`, `last_name`.
+###### Retrieving users
+
+Make a GET request. You will receive the following fields: `id`, `username`, `email`, `first_name`, `last_name`. `password`
+is, naturally, a read-only field. 
+
+##### auth-token
+
+`http://[ site_url ]/api/auth-token/`
+
+**Accepts POST requests only**. Send a POST request containing the following fields: `username` and `password` to try to
+authenticate a user. If the user is successfully authenticated, you will receive a `token`.
 
 ### Models
 
@@ -71,7 +100,7 @@ We have so far focused on creating working models for `Listing` and `User` so as
 ### Upgrading to Django 1.10
 
 1. Update your python packages: run `pip install -r requirements.txt` in the repository's root folder.
-2. You _might_ have to migrate: `python manage.py makemigrations && python manage.py migrate` 
+2. You _might_ have to migrate: `python manage.py makemigrations && python manage.py migrate`.
 If that doesn't work, run `python manage.py makemigrations agora` and `python manage.py migrate agora`.
 
 ### Changelog
@@ -79,7 +108,7 @@ If that doesn't work, run `python manage.py makemigrations agora` and `python ma
 1. Added user sign-in endpoint: `[ site_url ]/api/auth-token` that returns a token if the username and password combination
 are valid. To make a request, send a `POST` request with `username` and `password` fields to the url. With `curl`,
  for instance, do 
- ```curl --data "username=value1&username=value2" https://[ site_url ]/api/auth-token```. 
+ ```curl --data "username=value1&password=value2" https://[ site_url ]/api/auth-token```. 
  For now this sends the password in plain text, but it should work for the demo.
 2. Modified user creation endpoint. Now, you need a @dartmouth.edu email to sign up and it no longer requires a username, 
 which is instead derived from the Dartmouth email. If you need a user's username (for authentication, for instance), for
