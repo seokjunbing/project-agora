@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import * as actionCreators from '../../../actions/postlisting';
+import * as postActionCreators from '../../../actions/postlisting';
+import * as catActionCreators from '../../../actions/categories';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CategoryDropdown from '../../CategoryDropdown';
@@ -12,12 +13,6 @@ const price_units = [
   { text: '/week', value: 'WE' },
   { text: '/day', value: 'DA' },
   { text: '/term', value: 'PT' },
-];
-
-const categories = [
-  { text: 'Electronics', value: '1' },
-  { text: 'Furniture', value: '2' },
-  { text: 'Services', value: '3' },
 ];
 
 class InputForm extends Component {
@@ -38,12 +33,23 @@ class InputForm extends Component {
   handleChange = (e, { value }) => this.setState({ value });
 
   handleSubmit = (e, serializedForm, title, description, price, price_type, pictures, category) => {
-
-
     e.preventDefault();
-    this.props.actions.postListing(serializedForm);
-
+    this.props.postActions.postListing(serializedForm);
     window.location = '/listing';
+  }
+
+  componentDidMount() {
+      this.props.catActions.fetchCategories();
+  }
+
+  processCategories() {
+      if (!this.props.categories) {
+          return [];
+      } else {
+          return this.props.categories.map(category => {
+              return { text: category.name, value: category.id };
+          });
+      }
   }
 
   render() {
@@ -56,7 +62,7 @@ class InputForm extends Component {
           <Form.Input label='Price' name='price' placeholder='$50' />
           <Form.Field control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' />
         </Form.Group>
-        <Form.Field control={Select} label='Category' name='category' options={categories} placeholder='select' />
+        <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' />
         <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' />
 
         <Button primary type='submit'>Submit</Button>
@@ -68,9 +74,8 @@ class InputForm extends Component {
 
 const mapStateToProps = (state) => {
     return {
-
         isPosting : state.postListing.isPosting,
-        categories : state.postListing.postdata,
+        categories : state.categories.categories,
         statusText : state.postListing.statusText,
     };
 };
@@ -78,7 +83,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         dispatch,
-        actions: bindActionCreators(actionCreators, dispatch)
+        postActions: bindActionCreators(postActionCreators, dispatch),
+        catActions: bindActionCreators(catActionCreators, dispatch),
     };
 };
 
