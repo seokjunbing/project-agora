@@ -14,12 +14,14 @@ class NavBar extends React.Component {
                   </Menu.Item>
                   <Menu.Item href="/listing">Listings</Menu.Item>
                   <Menu.Item href="/createlisting">Create Listing</Menu.Item>
-                  <Menu.Item>
-                     <Input className='icon' icon='search' placeholder='Search listings...' />
-                  </Menu.Item>
-                  <Menu.Item position='right'>
-                    <Button href="/verify" primary>Log In</Button>
-                  </Menu.Item>
+                  <Menu.Menu position='right'>
+                      <Menu.Item>
+                         <Input className='icon' icon='search' placeholder='Search listings...' />
+                      </Menu.Item>
+                      <Menu.Item>
+                        <Button href="/verify" primary>Log In</Button>
+                      </Menu.Item>
+                  </Menu.Menu>
                 </Menu>
             </div>
         );
