@@ -19,7 +19,6 @@ class ListingTile extends React.Component {
             textAlign: 'center',
         }
         var myImage = require("../../images/tv.jpg");
-        console.log(this.props.extraPriceInfo);
         return (
             <Card style={style1}>
                 <Image src={myImage}/>
