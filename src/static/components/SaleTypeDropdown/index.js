@@ -26,7 +26,7 @@ class SaleTypeDropdown extends React.Component {
 
     render() {
         return (
-            <Dropdown placeholder='Sale Types' search selection onChange={this.filterListings.bind(this)} options={saleTypes} value={this.buildOption(this.props.selected)}/>
+            <Dropdown placeholder='Sale/Rental' search selection onChange={this.filterListings.bind(this)} options={saleTypes} value={this.buildOption(this.props.selected)}/>
         )
     }
 }

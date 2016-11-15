@@ -1,7 +1,6 @@
 import React from 'react';
 import { Menu, Button } from 'semantic-ui-react';
 import CategoryDropdown from '../CategoryDropdown';
-import PriceTypeDropdown from '../PriceTypeDropdown';
 import SaleTypeDropdown from '../SaleTypeDropdown';
 import PriceInput from '../PriceInput';
 import { bindActionCreators } from 'redux';
@@ -20,9 +19,6 @@ class FilterBar extends React.Component {
                 <Menu stackable>
                     <Menu.Item>
                         <CategoryDropdown/>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <PriceTypeDropdown/>
                     </Menu.Item>
                     <Menu.Item>
                         <SaleTypeDropdown/>

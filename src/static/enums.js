@@ -8,5 +8,5 @@ export const priceTypes = [
 
 export const saleTypes = [
     { text: 'Sale', value: 'SA' },
-    { text: 'Rent', value: 'RE' },
+    { text: 'Rental', value: 'RE' },
 ];
