@@ -18,13 +18,13 @@ class ListingTile extends React.Component {
             margin: 'auto',
             textAlign: 'center',
         }
-        var myImage = require("../../images/tv.jpg");
+        var myImage = require("../../images/tim.png");
         return (
             <Card style={style1}>
                 <Image src={myImage}/>
                 <Modal trigger={<Button><h2>{this.props.title}</h2></Button>}>
                     <Modal.Header>
-                        <Image wrapped size='medium' src='http://semantic-ui.com/images/wireframe/image.png'/>
+                        <Image wrapped size='medium' src={myImage}/>
                     </Modal.Header>
                     <Modal.Content>
                       <Modal.Description>
