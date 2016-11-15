@@ -6,11 +6,18 @@ import classNames from 'classnames';
 import { push } from 'react-router-redux';
 import ListingTile from '../../components/ListingTile';
 import ListingWrapper from '../../components/ListingWrapper';
-import ListingsMenu from '../../components/ListingsMenu';
+import FilterBar from '../../components/FilterBar';
+import { buildQueryString } from '../../selectors/filters';
 
 class ListingView extends React.Component {
     componentDidMount() {
-        this.props.actions.fetchListings();
+        this.props.actions.fetchListings(this.props.fetchUrl);
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        if(this.props.fetchUrl != nextProps.fetchUrl) {
+            this.props.actions.fetchListings(nextProps.fetchUrl);
+        }
     }
 
     render() {
@@ -22,7 +29,7 @@ class ListingView extends React.Component {
 
         return (
             <div style={style1}>
-                <ListingsMenu/>
+                <FilterBar/>
                 {this.props.listings && <ListingWrapper listings={this.props.listings}/>}
             </div>
         );
@@ -34,6 +41,7 @@ const mapStateToProps = (state) => {
         isFetching : state.listings.isFetching,
         listings : state.listings.listings,
         statusText : state.listings.statusText,
+        fetchUrl: buildQueryString(state),
     };
 };
 
