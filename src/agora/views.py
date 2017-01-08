@@ -28,7 +28,7 @@ def sign_s3_upload(request):
         300,
         "PUT",
         'www.agoradartmouth.com',
-        'images' + object_name,
+        'images/' + object_name,
         headers = {'Content-Type': content_type, 'x-amz-acl':'public-read'})
 
     return HttpResponse(json.dumps({'signedUrl': signed_url}))

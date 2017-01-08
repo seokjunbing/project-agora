@@ -4,6 +4,7 @@ import * as catActionCreators from '../../../actions/categories';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CategoryDropdown from '../../CategoryDropdown';
+import ReactS3Uploader from 'react-s3-uploader';
 
 import { Button, Checkbox, Form, Input, Message, Radio, Select, TextArea } from 'semantic-ui-react';
 
@@ -64,7 +65,9 @@ class InputForm extends Component {
         </Form.Group>
         <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' />
         <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' />
-
+        <ReactS3Uploader
+            signingUrl="/api/get_s3_url"
+            accept="image/*"/>
         <Button color='teal' type='submit'>Submit</Button>
 
       </Form>
