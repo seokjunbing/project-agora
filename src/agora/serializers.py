@@ -2,23 +2,19 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, AnonymousUser
 from rest_framework.authtoken.models import Token
-from re import compile
 
 from .models import Listing, Category, UserProfile, Message, Conversation, create_auth_token
 
 EMAIL_SUFFIX = '@dartmouth.edu'
-EMAIL_REGEX = compile('.+@dartmouth.edu$')
 
 UserModel = get_user_model()
 
 def validate_email(email):
-    return EMAIL_REGEX.match(email) is not None
-    # try:
-    #
-    #     ind = email.index(EMAIL_SUFFIX)
-    #     return True
-    # except ValueError:
-    #     return False
+    try:
+        ind = email.index(EMAIL_SUFFIX)
+        return True
+    except ValueError:
+        return False
 
 
 def get_username(validated_email):
