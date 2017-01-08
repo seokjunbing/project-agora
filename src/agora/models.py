@@ -90,7 +90,7 @@ class Listing(models.Model):
 
     title = models.CharField(max_length=100)
 
-    pictures = models.ImageField(blank=True, null=True)
+    pictures = models.CharField()
 
     flags = models.PositiveIntegerField(default=0)
 
