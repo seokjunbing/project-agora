@@ -10,7 +10,9 @@ from rest_framework.authtoken.models import Token
 def user_str(self):
     return "%s %s" % (self.first_name, self.last_name)
 
+
 User.__str__ = user_str
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
@@ -25,6 +27,7 @@ class UserProfile(models.Model):
 
     class Meta:
         verbose_name_plural = "user profiles"
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -90,7 +93,7 @@ class Listing(models.Model):
 
     title = models.CharField(max_length=100)
 
-    pictures = models.CharField(max_length=5000)
+    pictures = models.CharField(max_length=5000, null=True)
 
     flags = models.PositiveIntegerField(default=0)
 
