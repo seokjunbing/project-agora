@@ -12,7 +12,6 @@ def user_str(self):
 
 User.__str__ = user_str
 
-
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:

@@ -1,6 +1,7 @@
 import os
 import django_filters.rest_framework
-
+from django.conf import settings
+import boto, mimetypes, json
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django.conf import settings
@@ -13,7 +14,24 @@ from .models import Category, Listing, Message, Conversation, UserProfile
 from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
     UserSerializer
 from rest_framework import generics, renderers
-from rest_framework.decorators import list_route
+from rest_framework.decorators import list_route, api_view
+
+# import environment variables
+conn = boto.connect_s3(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
+
+@api_view(['GET'])
+def sign_s3_upload(request):
+    object_name = request.GET['objectName']
+    content_type = mimetypes.guess_type(object_name)[0]
+
+    signed_url = conn.generate_url(
+        300,
+        "PUT",
+        'www.agoradartmouth.com',
+        'images' + object_name,
+        headers = {'Content-Type': content_type, 'x-amz-acl':'public-read'})
+
+    return HttpResponse(json.dumps({'signedUrl': signed_url}))
 
 class IndexView(View):
     """Render main page."""
@@ -23,7 +41,6 @@ class IndexView(View):
 
         abspath = open(os.path.join(settings.BASE_DIR, 'static_dist/index.html'), 'r')
         return HttpResponse(content=abspath.read())
-
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
