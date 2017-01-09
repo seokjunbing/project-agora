@@ -18,13 +18,12 @@ class ListingTile extends React.Component {
             margin: 'auto',
             textAlign: 'center',
         }
-        var myImage = require("../../images/tim.png");
         return (
             <Card style={style1}>
-                <Image src={myImage}/>
+                <Image src={this.props.pictures}/>
                 <Modal trigger={<Button><h2>{this.props.title}</h2></Button>}>
                     <Modal.Header>
-                        <Image wrapped size='medium' src={myImage}/>
+                        <Image wrapped size='medium' src={this.props.pictures}/>
                     </Modal.Header>
                     <Modal.Content>
                       <Modal.Description>
