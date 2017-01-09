@@ -191,3 +191,11 @@ JWT_AUTH = {
 AWS_ACCESS_KEY_ID = 'AKIAITLHCNXC45JUHPPA'
 
 AWS_SECRET_ACCESS_KEY = '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'
+
+# ############ MEMCACHE ##################
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
