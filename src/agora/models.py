@@ -5,6 +5,11 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 
+# for messaging
+from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import ugettext_lazy as _
+
 
 # String representation for user
 def user_str(self):
@@ -105,28 +110,67 @@ class Listing(models.Model):
     # numberOfInquiries(internal for filtering)
     number_of_inquiries = models.PositiveIntegerField(default=0)
 
-
+"""
+messaging classes adapted from: http://pydoc.net/Python/django-conversation/1.2/conversation.models/
+"""
 class Conversation(models.Model):
     """
-    Conversation
+    Model to contain different messages between one or more users.
+
+    :users: Users participating in this conversation.
+    :read_by: List of participants, who read this conversation.
+    :content_object: Optional related object the users are talking about.
+
     """
+    users = models.ManyToManyField(
+        'auth.User',
+        verbose_name=_('Users'),
+        related_name='conversations',
+    )
 
-    listing = models.ForeignKey(Listing)
+    read_by = models.ManyToManyField(
+        'auth.User',
+        verbose_name=_('Read by'),
+        related_name='read_conversations',
+    )
 
-    # TODO Change?
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-
+    # Generic FK to the object this conversation is about
+    content_type = models.ForeignKey(
+        ContentType,
+        related_name='conversation_content_objects',
+        null=True, blank=True,
+    )
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
 
 class Message(models.Model):
     """
-    A single message in a conversation thread.
+    Model, which holds information about a post within one conversation.
+
+    :user: User, who posted the message.
+    :conversation: Conversation, which contains this message.
+    :date: Date the message was posted.
+    :text: Message text.
+
     """
-    text = models.TextField(max_length=5000)
+    user = models.ForeignKey(
+        'auth.User',
+        verbose_name=_('User'),
+        related_name='messages',
+    )
 
-    date = models.DateField(auto_now_add=True)
+    conversation = models.ForeignKey(
+        Conversation,
+        verbose_name=_('Conversation'),
+        related_name='messages',
+    )
 
-    read = models.BooleanField(default=False)
+    date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('Date'),
+    )
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-
-    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, null=True)
+    text = models.TextField(
+        max_length=2048,
+        verbose_name=_('Text'),
+    )
