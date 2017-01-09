@@ -18,24 +18,34 @@ const price_units = [
 
 class InputForm extends Component {
 
-  state = { serializedForm: {
-    "price" : "0",
-    "price_type" : "OT",
-    "sale_type" : "SA",
-    "description" : " ",
-    "title" : " ",
-    "pictures" : null,
-    "flags" : "0",
-    "views" : "0",
-    "number_of_inquiries" : "0",
-    "categories" : "1",
-  }};
+  handleTitleChange = (e) => {
+      e.preventDefault();
+      this.setState({ title : e.target.value })
+  }
 
-  handleChange = (e, { value }) => this.setState({ value });
+  handlePriceChange = (e) => {
+      e.preventDefault();
+      this.setState({ price : e.target.value })
+  }
 
-  handleSubmit = (e, serializedForm, title, description, price, price_type, pictures, category) => {
+  handlePriceTypeChange = (e, selection) => {
+      e.preventDefault();
+      this.setState({ price_type : selection.value })
+  }
+
+  handleCategoryChange = (e, selection) => {
+      e.preventDefault();
+      this.setState({ category : selection.value })
+  }
+
+  handleDescriptionChange = (e) => {
+      e.preventDefault();
+      this.setState({ description : e.target.value })
+  }
+
+  handleSubmit = (e) => {
     e.preventDefault();
-    this.props.postActions.postListing(serializedForm);
+    this.props.postActions.postListing(this.state);
     window.location = '/listing';
   }
 
@@ -53,21 +63,24 @@ class InputForm extends Component {
       }
   }
 
-  render() {
-    const { serializedForm, value } = this.state
-    return (
+  onUploadFinish(signResult) {
+     this.setState({pictures: signResult.signedUrl.split("?")[0]});
+  }
 
+  render() {
+    return (
       <Form onSubmit={this.handleSubmit.bind(this)}>
-        <Form.Input label='Title' name='title' placeholder='e.g. 42 inch LG TV' />
+        <Form.Input label='Title' name='title' placeholder='e.g. 42 inch LG TV' onChange={this.handleTitleChange.bind(this)}/>
         <Form.Group widths='equal'>
-          <Form.Input label='Price' name='price' placeholder='$50' />
-          <Form.Field control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' />
+          <Form.Input label='Price' name='price' placeholder='$50' onChange={this.handlePriceChange.bind(this)}/>
+          <Form.Field control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' onChange={this.handlePriceTypeChange.bind(this)}/>
         </Form.Group>
-        <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' />
-        <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' />
+        <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' onChange={this.handleCategoryChange.bind(this)}/>
+        <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' onChange={this.handleDescriptionChange.bind(this)}/>
         <ReactS3Uploader
             signingUrl="/api/get_s3_url"
-            accept="image/*"/>
+            accept="image/*"
+            onFinish={this.onUploadFinish.bind(this)}/>
         <Button color='teal' type='submit'>Submit</Button>
 
       </Form>
