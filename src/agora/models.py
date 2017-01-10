@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 
 # for messaging
-from django.contrib.contenttypes import generic
+#from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
@@ -119,29 +119,30 @@ class Conversation(models.Model):
 
     :users: Users participating in this conversation.
     :read_by: List of participants, who read this conversation.
-    :content_object: Optional related object the users are talking about.
+    :listing_object: Optional related object the users are talking about.
 
     """
     users = models.ManyToManyField(
         'auth.User',
         verbose_name=_('Users'),
         related_name='conversations',
+        default=0,
     )
+    # default --> first, not nullable (must be associated with a user)
 
     read_by = models.ManyToManyField(
         'auth.User',
         verbose_name=_('Read by'),
         related_name='read_conversations',
+        blank=True,
     )
 
     # Generic FK to the object this conversation is about
-    content_type = models.ForeignKey(
-        ContentType,
-        related_name='conversation_content_objects',
-        null=True, blank=True,
+    listing = models.ForeignKey(
+        Listing,
+        related_name='conversation_listing',
+        default=0,
     )
-    object_id = models.PositiveIntegerField(null=True, blank=True)
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
 
 class Message(models.Model):
     """
@@ -157,12 +158,14 @@ class Message(models.Model):
         'auth.User',
         verbose_name=_('User'),
         related_name='messages',
+        default=0,
     )
 
     conversation = models.ForeignKey(
         Conversation,
         verbose_name=_('Conversation'),
         related_name='messages',
+        default=0,
     )
 
     date = models.DateTimeField(
