@@ -91,9 +91,15 @@ class MessageViewSet(viewsets.ModelViewSet):
     filter_fields = ('conversation',)
 
 class ConversationViewSet(viewsets.ModelViewSet):
-    queryset = Conversation.objects.all().order_by('listing')
+    queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
 
+    @list_route()
+    def get_for_user(self, request):
+        name = str(request.user.id)
+        serializer = ConversationSerializer(Conversation.objects.filter(users__in=name), many=True)
+
+        return Response(serializer.data)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
