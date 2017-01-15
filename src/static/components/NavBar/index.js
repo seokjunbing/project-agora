@@ -44,7 +44,7 @@ class NavBar extends React.Component {
                                           </List.Content>
                                         </List.Item>
                                         <List.Item>
-                                          <Button basic color='black'>See all conversations</Button>
+                                          <Button href='/messages' basic color='black'>See all conversations</Button>
                                         </List.Item>
                                       </List>}
                             on='click'
