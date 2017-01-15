@@ -8,3 +8,4 @@ export CreateListingView from './CreateListing/index';
 
 export AboutView from './About/index';
 export VerifyEmailView from './VerifyEmail/index';
+export MessagesView from './Messages/index';
