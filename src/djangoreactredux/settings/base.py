@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -196,6 +197,8 @@ AWS_SECRET_ACCESS_KEY = 'pvaKiFBsbvdTqK8c+0+JL6zxcvyjstgg3bLdO90V'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+        'LOCATION': '127.0.0.1:8000',
+        # which port? which address?
+
     }
 }
