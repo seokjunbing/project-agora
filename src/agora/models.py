@@ -207,3 +207,11 @@ def invalidate_cache(sender, instance, **kwargs):
 
 post_save.connect(invalidate_cache, sender=Listing)
 post_delete.connect(invalidate_cache, sender=Listing)
+post_save.connect(invalidate_cache, sender=Category)
+post_delete.connect(invalidate_cache, sender=Category)
+post_save.connect(invalidate_cache, sender=Message)
+post_delete.connect(invalidate_cache, sender=Message)
+post_save.connect(invalidate_cache, sender=User)
+post_delete.connect(invalidate_cache, sender=User)
+post_save.connect(invalidate_cache, sender=Conversation)
+post_delete.connect(invalidate_cache, sender=Conversation)
