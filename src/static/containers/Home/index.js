@@ -10,14 +10,6 @@ class HomeView extends React.Component {
         statusText: React.PropTypes.string
     };
 
-    componentDidMount() {
-        $(ReactDom.findDOMNode(this.refs.dropdown)).dropdown();
-    }
-
-    componentDidUpdate() {
-        $(ReactDom.findDOMNode(this.refs.dropdown)).dropdown('refresh');
-    }
-
     render() {
         return (
             <div>
