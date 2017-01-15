@@ -46,7 +46,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-
+    'django.middleware.cache.UpdateCacheMiddleware', # cache
+    'django.middleware.common.CommonMiddleware',     # cache
+    'django.middleware.cache.FetchFromCacheMiddleware', #cache
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
