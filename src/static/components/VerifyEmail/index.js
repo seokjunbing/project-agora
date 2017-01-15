@@ -1,5 +1,5 @@
 import React from 'react';
-import {Header, Input, Label, Container, Button, Grid, Divider} from 'semantic-ui-react';
+import {Header, Input, Label, Container, Button, Grid, Divider, Form, Checkbox} from 'semantic-ui-react';
 
 class VerifyEmail extends React.Component {
     constructor(props) {
@@ -17,46 +17,77 @@ class VerifyEmail extends React.Component {
         marginTop: '45px',
       }
 
-      var label_style1 = {
-        width: '150px',
-        textAlign: 'left'
+      var label_email = {
+        marginTop: '30px',
+        marginLeft: '170px'
       }
 
-      var label_style2 = {
+      var label_email_style = {
         width: '150px',
-        textAlign: 'right'
+        marginLeft: '170px'
+      }
+
+      var label_username_style = {
+        width: '279px',
+        marginLeft: '170px'
+      }
+
+      var label_password = {
+        marginTop: '30px',
+        marginRight: '219px'
+      }
+
+      var label_username_login = {
+        width: '279px'
       }
 
       var button_style = {
-        marginTop: '45px',
-        textAlign: 'center',
+        marginTop: '30px',
+        marginLeft: '243',
+        textAlign: 'center'
+      }
+
+      var button_style_login = {
+        marginTop: '30px',
+        textAlign: 'center'
       }
 
         return (
 
           <Grid columns={2} relaxed>
             <Grid.Column>
-              <Container textAlign='center'>
+              <Container>
                 <Header style={style_head}>
-                  Sign up for Agora today:
+                  Sign up for Agora:
                 </Header>
-                <Input style={style_input} labelPosition='right'>
-                  <input type='text' />
-                  <Label style={label_style1}>@dartmouth.edu</Label>
-                </Input>
-                <Input style={style_input} labelPosition='left'>
-                  <Label basic style={label_style2}>username:</Label>
-                  <input type='text'/>
-                </Input>
-                <Input style={style_input} labelPosition='left'>
-                  <Label basic style={label_style2}>password:</Label>
-                  <input type='password'/>
-                </Input>
-                <Input style={style_input} labelPosition='left'>
-                  <Label basic style={label_style2}>verify password:</Label>
-                  <input type='password'/>
-                </Input>
-                <Button style={button_style} color='teal' content='Create Account' />
+                <Form>
+                  <Form.Field>
+                    <label style={label_email}>Email</label>
+                    <Input style= {label_email_style} labelPosition='right'>
+                      <input style={style_head} placeholder='your.name' type='text' />
+                      <Label>@dartmouth.edu</Label>
+                    </Input>
+                  </Form.Field>
+                  <Form.Field>
+                    <label style={label_email}>Username</label>
+                    <Input style= {label_username_style}>
+                      <input style={style_head} placeholder='DartMan' type='text' />
+                    </Input>
+                  </Form.Field>
+                  <Form.Field>
+                    <label style={label_email}>Password</label>
+                    <Input style= {label_username_style}>
+                      <input style={style_head} placeholder='XXXXXXXXXXXXX' type='password' />
+                    </Input>
+                  </Form.Field>
+                  <Form.Field>
+                    <label style={label_email}>Verify Password</label>
+                    <Input style= {label_username_style}>
+                      <input style={style_head} placeholder='XXXXXXXXXXXXX' type='password' />
+                    </Input>
+                  </Form.Field>
+                  <Button style={button_style} color='teal' content='Create Account' />
+                </Form>
               </Container>
             </Grid.Column>
 
@@ -65,19 +96,21 @@ class VerifyEmail extends React.Component {
               <Header style={style_head}>
                 Log in:
               </Header>
-
-              <Input style={style_input} labelPosition='left'>
-                <Label basic style={label_style2}>username:</Label>
-                <input type='text'/>
-              </Input>
-
-              <Input style={style_input} labelPosition='left'>
-                <Label basic style={label_style2}>password:</Label>
-                <input type='password'/>
-              </Input>
-
-              <Button style={button_style} color='teal' content='log in' />
-
+                <Form>
+                  <Form.Field>
+                    <label style={label_password}>Username</label>
+                    <Input style= {label_username_login}>
+                      <input style={style_head} placeholder='DartMan' type='text' />
+                    </Input>
+                  </Form.Field>
+                  <Form.Field>
+                    <label style={label_password}>Password</label>
+                    <Input style= {label_username_login}>
+                      <input style={style_head} placeholder='XXXXXXXXXXXXX' type='password' />
+                    </Input>
+                  </Form.Field>
+                  <Button style={button_style_login} color='teal' content='log in' />
+                </Form>
               </Container>
             </Grid.Column>
           </Grid>
