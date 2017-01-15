@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'api/auth-token', views.obtain_auth_token), # TODO Temporary fix. Move to routers at some point.
     url(r'^api/', include(router.urls)),
     url(r'^api/get_s3_url', sign_s3_upload),
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
     # comment this out to test the API (Backend team)
     url(r'', cache_page(settings.PAGE_CACHE_SECONDS)(IndexView.as_view()), name='index'),
