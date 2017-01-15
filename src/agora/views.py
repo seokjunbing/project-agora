@@ -128,7 +128,8 @@ class ListingViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all().order_by('date')
     serializer_class = MessageSerializer
-
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('conversation',)
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all().order_by('listing')
