@@ -82,7 +82,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
 
     filter_class = ListFilter
     ordering_filter = OrderingFilter()
