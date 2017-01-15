@@ -46,6 +46,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware', # cache
+    'django.middleware.common.CommonMiddleware',     # cache
+    'django.middleware.cache.FetchFromCacheMiddleware', #cache
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -191,3 +194,20 @@ JWT_AUTH = {
 AWS_ACCESS_KEY_ID = 'AKIAITLHCNXC45JUHPPA'
 
 AWS_SECRET_ACCESS_KEY = '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'
+
+# ############ MEMCACHE ##################
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:8000',
+        # which port? which address?
+        'TIMEOUT': 60,
+        'OPTIONS': {
+            'MAX_ENTRIES': 300
+        }
+    }
+}
+
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
+CACHE_MIDDLEWARE_SECONDS = 600
+CACHE_MIDDLEWARE_ALIAS = 'default'
