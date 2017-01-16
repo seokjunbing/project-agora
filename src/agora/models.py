@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 
 # for messaging
-#from django.contrib.contenttypes import generic
+# from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
@@ -25,13 +25,25 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    verified = models.BooleanField(default=False)
 
     # messages = models.ManyToOneRel(Message)
 
     class Meta:
         verbose_name_plural = "user profiles"
+
+
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
+#
+#
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()
 
 
 class Category(models.Model):
@@ -110,9 +122,12 @@ class Listing(models.Model):
     # numberOfInquiries(internal for filtering)
     number_of_inquiries = models.PositiveIntegerField(default=0)
 
+
 """
 messaging classes adapted from: http://pydoc.net/Python/django-conversation/1.2/conversation.models/
 """
+
+
 class Conversation(models.Model):
     """
     Model to contain different messages between one or more users.
@@ -143,6 +158,7 @@ class Conversation(models.Model):
         related_name='conversation_listing',
         default=0,
     )
+
 
 class Message(models.Model):
     """

@@ -7,7 +7,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic import View
 from django.contrib.auth.models import User
-from .models import Category, Listing, Message, Conversation, UserProfile
+from .models import Category, Listing, Message, Conversation, Profile
 from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
     UserSerializer
 
