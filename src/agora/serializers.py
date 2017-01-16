@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, AnonymousUser
 from rest_framework.authtoken.models import Token
 
-from .models import Listing, Category, UserProfile, Message, Conversation, create_auth_token
+from .models import Listing, Category, Profile, Message, Conversation, create_auth_token
 
 EMAIL_SUFFIX = '@dartmouth.edu'
 
@@ -48,14 +48,17 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
-        fields = '__all__'
+        model = Profile
+        # fields = '__all__'
+        fields = ('verified',)
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name')
+        profile = ProfileSerializer(source='profile_set')
+        fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name', 'profile')
+        depth = 1
         extra_kwargs = {'password': {'write_only': True}}
         # write_only_fields = ('password',)
         read_only_fields = ('id', 'username')
@@ -76,7 +79,7 @@ class UserSerializer(serializers.ModelSerializer):
             token = Token.objects.get_or_create(user=user)
             # print(token)
 
-            user_profile = UserProfile(user=user)
+            user_profile = Profile(user=user)
             user_profile.save()
 
             return user
