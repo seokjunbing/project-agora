@@ -2,9 +2,11 @@ import os
 import django_filters.rest_framework
 from django.conf import settings
 import boto, mimetypes, json
+from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django.conf import settings
 from django.http import HttpResponse
+from rest_framework.response import Response
 from django.views.generic import View
 from django.contrib.auth.models import User
 from .models import Category, Listing, Message, Conversation, Profile
@@ -46,7 +48,7 @@ class IndexView(View):
         abspath = open(os.path.join(settings.BASE_DIR, 'static_dist/index.html'), 'r')
         return HttpResponse(content=abspath.read())
 
-
+# original
 class CategoryViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -66,6 +68,44 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
         return Category.objects.filter(name=cate)
 
+# class CategoryViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows users to be viewed or edited.
+#     """
+#
+#
+#     queryset = Category.objects.all()
+#     serializer_class = CategorySerializer
+#
+#     def get_queryset(self):
+#         """
+#         This view should return a list of all the purchases for
+#         the user as determined by the username portion of the URL.
+#         """
+#         cache_key = 'cate_cache_key'
+#         cache_time = 1000  # time to live in seconds
+#         cate = cache.get(cache_key)
+#
+#         try:
+#             if not cate:
+#                 cate = self.kwargs['cate']
+#                 cache.set(cache_key, cate, cache_time)
+#             else:
+#                 print("\nFOUND CACHE FOR category search!!!\n")
+#                 return cate
+#         except KeyError:
+#             return Category.objects.all()
+#
+#         return Category.objects.filter(name=cate)
+#
+# def heavy_view(request):
+#     cache_key = 'my_heavy_view_cache_key'
+#     cache_time = 1800 # time to live in seconds
+#     result = cache.get(cache_key)
+#     if not result:
+#         result = # some calculations here
+#         cache.set(cache_key, result, cache_time)
+#     return result
 
 class ListFilter(django_filters.rest_framework.FilterSet):
     min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')

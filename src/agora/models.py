@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.conf import settings
 from django.db.models.signals import post_save
+from django.db.models.signals import post_delete
 from rest_framework.authtoken.models import Token
 
 # for messaging
@@ -10,6 +11,9 @@ from rest_framework.authtoken.models import Token
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
+from django.utils.cache import get_cache_key
+from django.core.cache import cache
+from django.http import HttpRequest
 
 # String representation for user
 def user_str(self):
@@ -71,6 +75,13 @@ class Listing(models.Model):
     def create(self, validated_data):
         return Listing.objects.create(**validated_data)
         # return Listing(**validated_data)
+
+    # def get_absolute_url(self):
+    #     from django.urls import reverse
+    #     return reverse('api/listings', args=[str(self.id)])
+
+    # def get_absolute_url(self):
+    #     return "api/listings/%i" % self.id
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
@@ -193,3 +204,30 @@ class Message(models.Model):
         max_length=2048,
         verbose_name=_('Text'),
     )
+
+
+
+# def expire_page(path):
+#     request = HttpRequest()
+#     request.path = path
+#     key = get_cache_key(request)
+#     if cache.has_key(key):
+#         cache.delete(key)
+#         print("\n\nCACHE DELETED!!!\n\n")
+
+def invalidate_cache(sender, instance, **kwargs):
+    cache.clear()
+    # print("\n\nCACHE invalidated due to a new POST / DELETE!!!\n\n")
+    #  expire_page(instance.get_absolute_url())
+
+
+post_save.connect(invalidate_cache, sender=Listing)
+post_delete.connect(invalidate_cache, sender=Listing)
+post_save.connect(invalidate_cache, sender=Category)
+post_delete.connect(invalidate_cache, sender=Category)
+post_save.connect(invalidate_cache, sender=Message)
+post_delete.connect(invalidate_cache, sender=Message)
+post_save.connect(invalidate_cache, sender=User)
+post_delete.connect(invalidate_cache, sender=User)
+post_save.connect(invalidate_cache, sender=Conversation)
+post_delete.connect(invalidate_cache, sender=Conversation)
