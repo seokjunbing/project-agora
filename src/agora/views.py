@@ -2,16 +2,14 @@ import os
 import django_filters.rest_framework
 from django.conf import settings
 import boto, mimetypes, json
-from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django.conf import settings
 from django.http import HttpResponse
-from rest_framework.response import Response
 from django.views.generic import View
 from django.contrib.auth.models import User
 from .models import Category, Listing, Message, Conversation, Profile
 from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
-    UserSerializer
+    UserSerializer, ProfileSerializer
 
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
@@ -48,6 +46,7 @@ class IndexView(View):
         abspath = open(os.path.join(settings.BASE_DIR, 'static_dist/index.html'), 'r')
         return HttpResponse(content=abspath.read())
 
+
 # original
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -67,6 +66,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
             return Category.objects.all()
 
         return Category.objects.filter(name=cate)
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
 
 # class CategoryViewSet(viewsets.ModelViewSet):
 #     """

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'rest_framework',
     'rest_framework.authtoken',
@@ -44,13 +45,17 @@ INSTALLED_APPS = [
 
     'oauth2_provider',
 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
     'agora',
 ]
 
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware', # cache
-    'django.middleware.common.CommonMiddleware',     # cache
-    'django.middleware.cache.FetchFromCacheMiddleware', #cache
+    # 'django.middleware.cache.UpdateCacheMiddleware', # cache
+    # 'django.middleware.common.CommonMiddleware',     # cache
+    # 'django.middleware.cache.FetchFromCacheMiddleware', #cache
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -169,6 +175,13 @@ OAUTH2_PROVIDER = {
     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
 }
 
+# ########## AUTHENTICATION
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
 # ############ JWT AUTHENTICATION ##################
 
 JWT_AUTH = {
@@ -214,7 +227,7 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
         # which port? which address?
-        'TIMEOUT': 60,
+        'TIMEOUT': 1,
         'OPTIONS': {
             'MAX_ENTRIES': 300
         },

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.db.models.signals import post_delete
 from rest_framework.authtoken.models import Token
+from allauth.account.signals import user_signed_up
 
 # for messaging
 # from django.contrib.contenttypes import generic
@@ -14,6 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.cache import get_cache_key
 from django.core.cache import cache
 from django.http import HttpRequest
+
 
 # String representation for user
 def user_str(self):
@@ -32,22 +34,12 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     verified = models.BooleanField(default=False)
+    verification_code = models.CharField(max_length=200, null=True)
 
     # messages = models.ManyToOneRel(Message)
 
     class Meta:
         verbose_name_plural = "user profiles"
-
-
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Profile.objects.create(user=instance)
-#
-#
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.profile.save()
 
 
 class Category(models.Model):
@@ -206,7 +198,6 @@ class Message(models.Model):
     )
 
 
-
 # def expire_page(path):
 #     request = HttpRequest()
 #     request.path = path
@@ -221,6 +212,13 @@ def invalidate_cache(sender, instance, **kwargs):
     #  expire_page(instance.get_absolute_url())
 
 
+# Signals
+@receiver(user_signed_up, dispatch_uid='some.unique.string.for.allauth.user_signed_up')
+def user_signed_up(request, user, **kwargs):
+    print('User signed up. Sending verification now.')
+
+
+# Caching
 post_save.connect(invalidate_cache, sender=Listing)
 post_delete.connect(invalidate_cache, sender=Listing)
 post_save.connect(invalidate_cache, sender=Category)
