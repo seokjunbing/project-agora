@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, AnonymousUser
 from rest_framework.authtoken.models import Token
+import hashlib
 
 from .models import Listing, Category, Profile, Message, Conversation, create_auth_token
 
@@ -51,16 +52,26 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         # fields = '__all__'
         fields = ('verified',)
+        read_only_fields = ('verified',)
 
 
-class UserSerializer(serializers.ModelSerializer):
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         profile = ProfileSerializer(source='profile_set')
+#         fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name', 'profile')
+#         depth = 1
+#         extra_kwargs = {'password': {'write_only': True}}
+#         write_only_fields = ('password',)
+#         read_only_fields = ('id', 'username', 'profile')
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    profile = ProfileSerializer(required=False)
+
     class Meta:
         model = User
-        profile = ProfileSerializer(source='profile_set')
         fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name', 'profile')
-        depth = 1
         extra_kwargs = {'password': {'write_only': True}}
-        # write_only_fields = ('password',)
         read_only_fields = ('id', 'username')
 
     def create(self, validated_data):
@@ -80,6 +91,9 @@ class UserSerializer(serializers.ModelSerializer):
             # print(token)
 
             user_profile = Profile(user=user)
+            user_email = validated_data['email'].encode('utf-8')
+            verif_code = hashlib.sha256(user_email).hexdigest()
+            user_profile.verification_code = verif_code
             user_profile.save()
 
             return user
