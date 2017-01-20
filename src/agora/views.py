@@ -99,8 +99,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
         name = str(request.user.id)
         serializer = ConversationSerializer(Conversation.objects.filter(users__in=name), many=True)
 
-        # please change this
-
         return Response(serializer.data)
 
 class UserViewSet(viewsets.ModelViewSet):
