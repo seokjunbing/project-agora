@@ -113,7 +113,11 @@ class Listing(models.Model):
 
     title = models.CharField(max_length=100)
 
-    pictures = models.CharField(max_length=5000, null=True, blank=True)
+    picture1 = models.CharField(max_length=5000, null=True, blank=True)
+
+    picture2 = models.CharField(max_length=5000, null=True, blank=True)
+
+    picture3 = models.CharField(max_length=5000, null=True, blank=True)
 
     flags = models.PositiveIntegerField(default=0)
 
@@ -132,21 +136,13 @@ messaging classes adapted from: http://pydoc.net/Python/django-conversation/1.2/
 
 
 class Conversation(models.Model):
-    """
-    Model to contain different messages between one or more users.
 
-    :users: Users participating in this conversation.
-    :read_by: List of participants, who read this conversation.
-    :listing_object: Optional related object the users are talking about.
-
-    """
     users = models.ManyToManyField(
         'auth.User',
         verbose_name=_('Users'),
         related_name='conversations',
         default=0,
     )
-    # default --> first, not nullable (must be associated with a user)
 
     read_by = models.ManyToManyField(
         'auth.User',
@@ -164,15 +160,7 @@ class Conversation(models.Model):
 
 
 class Message(models.Model):
-    """
-    Model, which holds information about a post within one conversation.
 
-    :user: User, who posted the message.
-    :conversation: Conversation, which contains this message.
-    :date: Date the message was posted.
-    :text: Message text.
-
-    """
     user = models.ForeignKey(
         'auth.User',
         verbose_name=_('User'),
