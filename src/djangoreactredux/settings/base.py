@@ -26,6 +26,7 @@ SECRET_KEY = 'w2snxatgu!q-@&ti@x9i22u4gvx!lrgqst8*9@ehe-9#mtt@09'
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'lvh.me']
+SITE_ID = 1  # solves [ site_url ]/admin/ saying "Site matching query does not exist."
 
 # Application definition
 
@@ -234,5 +235,3 @@ CACHES = {
 
     }
 }
-
-

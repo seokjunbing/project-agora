@@ -18,3 +18,4 @@ raven==5.8.1
 six==1.10.0
 whitenoise==2.0.6
 python-memcached==1.58
+google_api_python_client==1.6.1
