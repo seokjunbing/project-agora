@@ -15,6 +15,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
 from rest_framework.decorators import list_route, api_view
+import datetime
 
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
@@ -35,6 +36,28 @@ def sign_s3_upload(request):
         headers={'Content-Type': content_type, 'x-amz-acl': 'public-read'})
 
     return HttpResponse(json.dumps({'signedUrl': signed_url}))
+
+
+@api_view(['POST'])
+def verify_user(request):
+    data = request.data
+    try:
+        user_email = data['email']
+        verification_code = data['verification_code']
+    except ValueError:
+        return Response({"message": "Please specify 'user_email' and 'verification_code' in your POST request."})
+    user_queryset = User.objects.filter(email=user_email)
+    if len(user_queryset) == 0:  # no user matching email
+        return Response({"message:" "Could not find specified user matching email %s." % user_email})
+    else:
+        user = user_queryset[0]
+        if user.profile.verification_code == verification_code:  # match!
+            user.profile.verified = True
+            user.profile.save()
+            # user.save()
+            return Response({"message": "Thank you for verifying your email"})
+        else:  # wrong verification code
+            return Response({"message": "Could not verify user with the provided verification code"})
 
 
 class IndexView(View):
@@ -112,7 +135,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 #         cache.set(cache_key, result, cache_time)
 #     return result
 
-class ListFilter(django_filters.rest_framework.FilterSet):
+class ListingFilter(django_filters.rest_framework.FilterSet):
     min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')
     max_price = django_filters.NumberFilter(name="price", lookup_expr='lte')
 
@@ -130,7 +153,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     # uncomment to require authentication for listings
     # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
 
-    filter_class = ListFilter
+    filter_class = ListingFilter
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
 
@@ -161,6 +184,16 @@ class UserViewSet(viewsets.ModelViewSet):
     def current_user(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+
+
+class VerifyUser(generics.ListAPIView):
+    queryset = User.objects.filter
+
+
+def get_current_timestamp(request):
+    now = datetime.datetime.now()
+    html = '<html><body>It is now %s.</body></html>' % now
+    return HttpResponse(html)
 
 
 class ListingList(generics.ListAPIView):
