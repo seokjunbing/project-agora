@@ -21,7 +21,7 @@ class VerifyEmail extends React.Component {
       }
 
       var vertical_offset = {
-        marginTop: '30px'
+        marginTop: '25px'
       }
 
       var field_length = {
@@ -50,9 +50,15 @@ class VerifyEmail extends React.Component {
                     </Input>
                   </Form.Field>
                   <Form.Field>
-                    <label style={vertical_offset}>Username</label>
+                    <label style={vertical_offset}>First Name</label>
                     <Input style= {field_length}>
-                      <input style={style_centered} placeholder='DartMan' type='text' />
+                      <input style={style_centered} placeholder='e.g. Phil' type='text' />
+                    </Input>
+                  </Form.Field>
+                  <Form.Field>
+                    <label style={vertical_offset}>Last Name</label>
+                    <Input style= {field_length}>
+                      <input style={style_centered} placeholder='e.g. Hanlon' type='text' />
                     </Input>
                   </Form.Field>
                   <Form.Field>
@@ -79,9 +85,10 @@ class VerifyEmail extends React.Component {
               </Header>
                 <Form>
                   <Form.Field>
-                    <label style={vertical_offset}>Username</label>
-                    <Input style= {field_length}>
-                      <input style={style_centered} placeholder='DartMan' type='text' />
+                    <label style={vertical_offset}>Email</label>
+                    <Input style= {style_block} labelPosition='right'>
+                      <input style={email_size} placeholder='your.name' type='text' />
+                      <Label>@dartmouth.edu</Label>
                     </Input>
                   </Form.Field>
                   <Form.Field>
