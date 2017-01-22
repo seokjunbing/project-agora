@@ -14,7 +14,6 @@ router.register(r'categories', CategoryViewSet)
 router.register(r'messages', MessageViewSet)
 router.register(r'conversations', ConversationViewSet)
 router.register(r'users', UserViewSet)
-router.register(r'profiles', ProfileViewSet)
 # router.register(r'token', include('oauth2_provider.urls', namespace='oauth2_provider'))
 
 urlpatterns = [
