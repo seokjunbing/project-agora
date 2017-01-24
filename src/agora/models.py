@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 from django.dispatch import receiver
 from django.conf import settings
 from django.db.models.signals import post_save
@@ -113,11 +114,7 @@ class Listing(models.Model):
 
     title = models.CharField(max_length=100)
 
-    picture1 = models.CharField(max_length=5000, null=True, blank=True)
-
-    picture2 = models.CharField(max_length=5000, null=True, blank=True)
-
-    picture3 = models.CharField(max_length=5000, null=True, blank=True)
+    images = ArrayField(models.CharField(max_length=500, blank=True), blank=True, null=True,)
 
     flags = models.PositiveIntegerField(default=0)
 
@@ -133,7 +130,6 @@ class Listing(models.Model):
 """
 messaging classes adapted from: http://pydoc.net/Python/django-conversation/1.2/conversation.models/
 """
-
 
 class Conversation(models.Model):
 
