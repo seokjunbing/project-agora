@@ -7,9 +7,10 @@ It is adapted to be deployed on Heroku. There's a couple other changes I've made
 
 ## Architecture
 
+We're using Django for our backend with a Postgres local database (on Heroku), and then react-redux for our frontend component. We have also implemented an Amazon S3 bucket for image storage related to listings.
+
 ## Setup
 Use setup instructions found on [django-react-redux-jwt-base boilerplate project](https://github.com/Seedstars/django-react-redux-jwt-base)
-
 
 
 Make sure to setup postgres on Heroku and have your buildpacks in order:
