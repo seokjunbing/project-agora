@@ -110,6 +110,19 @@ are valid. To make a request, send a `POST` request with `username` and `passwor
 which is instead derived from the Dartmouth email. If you need a user's username (for authentication, for instance), for
 now use `get_username()` in `serializers.py`.
 
+
+## AUTH
+
+### Getting a user token
+    curl -X POST -H "Content-Type: application/json" -d '{"username":"user","password":"password"}' http://localhost:8000/api-token-auth/
+
+### Registering a new user
+
+### Making an authenticated request
+
+    curl -H "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjo3LCJlbWFpbCI6Imp1YW4uMTdAZGFydG1vdXRoLmVkdSIsInVzZXJuYW1lIjoianVhbl8xNyIsImV4cCI6MTQ4NTgwMjIwM30.1Zd1aBNrtgbgFp8_ZQtXekflZbAAN3Z3LBlFPgf1UCuXaxfB_Wz7Me0goCo60k_PZqYL3l2Gpqk3TEMfJjy68A" http://localhost:8000/api/listings/
+    
+
 ### TODO
 
 - Authentication (User Creation and Log-in)

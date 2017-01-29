@@ -15,7 +15,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
 from rest_framework.decorators import list_route, api_view
-import datetime
+from rest_framework.permissions import IsAuthenticated
 
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
@@ -151,8 +151,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     serializer_class = ListingSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     # uncomment to require authentication for listings
-    # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
-
+    permission_classes = (permissions.IsAuthenticated,)
     filter_class = ListingFilter
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
