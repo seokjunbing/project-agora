@@ -16,6 +16,11 @@ from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
 from rest_framework.decorators import list_route, api_view
 
+# caching
+from django.utils.cache import get_cache_key
+from django.core.cache import cache
+from django.http import HttpRequest
+
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
 # import environment variables
@@ -122,6 +127,19 @@ class ListFilter(django_filters.rest_framework.FilterSet):
                   'listing_date', 'views', 'number_of_inquiries']
 
 
+# def expire_page(path):
+#     request = HttpRequest()
+#     # request.path = path
+#     request.path = request.get_full_path()
+#     try:
+#         key = get_cache_key(request)
+#         if key in cache:
+#             cache.delete(key)
+#             print("\n\nCACHE EXPIRED!!!\n\n")
+#     except KeyError:
+#         print("\n\n KEY ERROR %s in expire_page in views.py", request.path)
+
+
 # class ListingViewSet(generics.ListAPIView):
 class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
@@ -131,8 +149,12 @@ class ListingViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
 
     filter_class = ListFilter
+    # expire_page(ListFilter)
+
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
+
+
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -175,3 +197,4 @@ class ListingList(generics.ListAPIView):
 
         # a hyphen "-" in front of "check_in" indicates descending order; ascending order is implied
         return Listing.objects.filter(title=title).order_by('-check_in')
+
