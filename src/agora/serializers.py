@@ -70,6 +70,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 #         write_only_fields = ('password',)
 #         read_only_fields = ('id', 'username', 'profile')
 
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = ProfileSerializer(required=False)
 
@@ -105,6 +106,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
             user_profile = Profile(user=user)
             user_email = validated_data['email'].encode('utf-8')
+
             # TODO salt the user's email - easily guessable right now.
             verif_code = hashlib.sha256(user_email).hexdigest()
             user_profile.verification_code = verif_code
