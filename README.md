@@ -112,6 +112,9 @@ now use `get_username()` in `serializers.py`.
 
 ### TODO
 
-- s3
-- cloudfront
-- Figure out image storing: db? store in s3 and store file url? 
+- Authentication (User Creation and Log-in)
+- Messaging (conversation style about listings)
+- Image upload (multiple images)
+- Caching
+- Wishlist Feature
+- Anonymity of Home Page

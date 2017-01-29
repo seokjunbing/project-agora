@@ -15,6 +15,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
 from rest_framework.decorators import list_route, api_view
+import datetime
 
 # caching
 from django.utils.cache import get_cache_key
@@ -40,6 +41,28 @@ def sign_s3_upload(request):
         headers={'Content-Type': content_type, 'x-amz-acl': 'public-read'})
 
     return HttpResponse(json.dumps({'signedUrl': signed_url}))
+
+
+@api_view(['POST'])
+def verify_user(request):
+    data = request.data
+    try:
+        user_email = data['email']
+        verification_code = data['verification_code']
+    except ValueError:
+        return Response({"message": "Please specify 'user_email' and 'verification_code' in your POST request."})
+    user_queryset = User.objects.filter(email=user_email)
+    if len(user_queryset) == 0:  # no user matching email
+        return Response({"message:" "Could not find specified user matching email %s." % user_email})
+    else:
+        user = user_queryset[0]
+        if user.profile.verification_code == verification_code:  # match!
+            user.profile.verified = True
+            user.profile.save()
+            # user.save()
+            return Response({"message": "Thank you for verifying your email"})
+        else:  # wrong verification code
+            return Response({"message": "Could not verify user with the provided verification code"})
 
 
 class IndexView(View):
@@ -127,19 +150,6 @@ class ListFilter(django_filters.rest_framework.FilterSet):
                   'listing_date', 'views', 'number_of_inquiries']
 
 
-# def expire_page(path):
-#     request = HttpRequest()
-#     # request.path = path
-#     request.path = request.get_full_path()
-#     try:
-#         key = get_cache_key(request)
-#         if key in cache:
-#             cache.delete(key)
-#             print("\n\nCACHE EXPIRED!!!\n\n")
-#     except KeyError:
-#         print("\n\n KEY ERROR %s in expire_page in views.py", request.path)
-
-
 # class ListingViewSet(generics.ListAPIView):
 class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
@@ -149,12 +159,8 @@ class ListingViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
 
     filter_class = ListFilter
-    # expire_page(ListFilter)
-
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
-
-
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -185,6 +191,16 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+class VerifyUser(generics.ListAPIView):
+    queryset = User.objects.filter
+
+
+def get_current_timestamp(request):
+    now = datetime.datetime.now()
+    html = '<html><body>It is now %s.</body></html>' % now
+    return HttpResponse(html)
+
+
 class ListingList(generics.ListAPIView):
     serializer_class = ListingSerializer
 
@@ -197,4 +213,3 @@ class ListingList(generics.ListAPIView):
 
         # a hyphen "-" in front of "check_in" indicates descending order; ascending order is implied
         return Listing.objects.filter(title=title).order_by('-check_in')
-
