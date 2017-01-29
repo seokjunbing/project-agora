@@ -78,5 +78,4 @@ if __name__ == '__main__':
     """
 
     msg = construct_email_msg(receiver=recv, email_subject=subject, html_body=html_content, plain_text_body=text_content)
-
     send_email(recipient=recv, message=msg)
