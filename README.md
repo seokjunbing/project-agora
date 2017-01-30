@@ -7,9 +7,10 @@ It is adapted to be deployed on Heroku. There's a couple other changes I've made
 
 ## Architecture
 
+We're using Django for our backend with a Postgres local database (on Heroku), and then react-redux for our frontend component. We have also implemented an Amazon S3 bucket for image storage related to listings.
+
 ## Setup
 Use setup instructions found on [django-react-redux-jwt-base boilerplate project](https://github.com/Seedstars/django-react-redux-jwt-base)
-
 
 
 Make sure to setup postgres on Heroku and have your buildpacks in order:
@@ -57,12 +58,12 @@ Lists the available categories for users to post items on.
 ##### Messages
 `http://[ site_url ]/api/messages/`
 
-Lists the messages on the site's database. *not working yet.*
+Lists the messages on the site's database.
 
 ##### Conversations
 `http://[ site_url ]/api/conversations/`
 
-Lists the conversations on the site's database. *not working yet*
+Lists the conversations on the site's database.
 
 ##### Users
 `http://[ site_url ]/api/users/`
@@ -88,8 +89,7 @@ altogether. You can derive a `username` from an email for now by using `get_user
 
 ### Models
 
-We have so far focused on creating working models for `Listing` and `User` so as to implement core functionality in our
- site. We have removed some fields provisionally so as to make development and front-end integration easier.
+We have so far focused on creating working models for `Listing`, `User`, `Message`, and `conversations`. We have removed some fields provisionally so as to make development and front-end integration easier.
  
 ## Troubleshooting
 
@@ -112,6 +112,9 @@ now use `get_username()` in `serializers.py`.
 
 ### TODO
 
-- s3
-- cloudfront
-- Figure out image storing: db? store in s3 and store file url? 
+- Authentication (User Creation and Log-in)
+- Messaging (conversation style about listings)
+- Image upload (multiple images)
+- Caching
+- Wishlist Feature
+- Anonymity of Home Page

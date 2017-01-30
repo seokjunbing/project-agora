@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 from django.dispatch import receiver
 from django.conf import settings
 from django.db.models.signals import post_save
@@ -12,6 +13,7 @@ from allauth.account.signals import user_signed_up
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
+# for caching
 from django.utils.cache import get_cache_key
 from django.core.cache import cache
 from django.http import HttpRequest
@@ -113,7 +115,7 @@ class Listing(models.Model):
 
     title = models.CharField(max_length=100)
 
-    pictures = models.CharField(max_length=5000, null=True, blank=True)
+    images = ArrayField(models.CharField(max_length=500, blank=True), blank=True, null=True,)
 
     flags = models.PositiveIntegerField(default=0)
 
@@ -130,23 +132,14 @@ class Listing(models.Model):
 messaging classes adapted from: http://pydoc.net/Python/django-conversation/1.2/conversation.models/
 """
 
-
 class Conversation(models.Model):
-    """
-    Model to contain different messages between one or more users.
 
-    :users: Users participating in this conversation.
-    :read_by: List of participants, who read this conversation.
-    :listing_object: Optional related object the users are talking about.
-
-    """
     users = models.ManyToManyField(
         'auth.User',
         verbose_name=_('Users'),
         related_name='conversations',
         default=0,
     )
-    # default --> first, not nullable (must be associated with a user)
 
     read_by = models.ManyToManyField(
         'auth.User',
@@ -164,15 +157,7 @@ class Conversation(models.Model):
 
 
 class Message(models.Model):
-    """
-    Model, which holds information about a post within one conversation.
 
-    :user: User, who posted the message.
-    :conversation: Conversation, which contains this message.
-    :date: Date the message was posted.
-    :text: Message text.
-
-    """
     user = models.ForeignKey(
         'auth.User',
         verbose_name=_('User'),
@@ -198,18 +183,27 @@ class Message(models.Model):
     )
 
 
-# def expire_page(path):
-#     request = HttpRequest()
-#     request.path = path
-#     key = get_cache_key(request)
-#     if cache.has_key(key):
-#         cache.delete(key)
-#         print("\n\nCACHE DELETED!!!\n\n")
+def expire_page(path):
+    request = HttpRequest()
+    request.path = request.get_full_path()
+    try:
+        key = get_cache_key(request)
+        if key in cache:
+            cache.delete(key)
+            print("\n\nCACHE DELETED!!!\n\n")
+
+    except KeyError:
+        print("\n\nkeyError in exp_page\n\n")
+        pass
+
+
+
 
 def invalidate_cache(sender, instance, **kwargs):
-    cache.clear()
+    # cache.clear()
     # print("\n\nCACHE invalidated due to a new POST / DELETE!!!\n\n")
-    #  expire_page(instance.get_absolute_url())
+    expire_page(instance)
+    # print("\n\ndoing nothing for now...\n\n")
 
 
 # Signals

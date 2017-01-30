@@ -15,6 +15,12 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
 from rest_framework.decorators import list_route, api_view
+import datetime
+
+# caching
+from django.utils.cache import get_cache_key
+from django.core.cache import cache
+from django.http import HttpRequest
 
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
@@ -35,6 +41,28 @@ def sign_s3_upload(request):
         headers={'Content-Type': content_type, 'x-amz-acl': 'public-read'})
 
     return HttpResponse(json.dumps({'signedUrl': signed_url}))
+
+
+@api_view(['POST'])
+def verify_user(request):
+    data = request.data
+    try:
+        user_email = data['email']
+        verification_code = data['verification_code']
+    except ValueError:
+        return Response({"message": "Please specify 'user_email' and 'verification_code' in your POST request."})
+    user_queryset = User.objects.filter(email=user_email)
+    if len(user_queryset) == 0:  # no user matching email
+        return Response({"message:" "Could not find specified user matching email %s." % user_email})
+    else:
+        user = user_queryset[0]
+        if user.profile.verification_code == verification_code:  # match!
+            user.profile.verified = True
+            user.profile.save()
+            # user.save()
+            return Response({"message": "Thank you for verifying your email"})
+        else:  # wrong verification code
+            return Response({"message": "Could not verify user with the provided verification code"})
 
 
 class IndexView(View):
@@ -143,9 +171,15 @@ class MessageViewSet(viewsets.ModelViewSet):
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
-    queryset = Conversation.objects.all().order_by('listing')
+    queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
 
+    @list_route()
+    def get_for_user(self, request):
+        name = str(request.user.id)
+        serializer = ConversationSerializer(Conversation.objects.filter(users__in=name), many=True)
+
+        return Response(serializer.data)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -155,6 +189,16 @@ class UserViewSet(viewsets.ModelViewSet):
     def current_user(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+
+
+class VerifyUser(generics.ListAPIView):
+    queryset = User.objects.filter
+
+
+def get_current_timestamp(request):
+    now = datetime.datetime.now()
+    html = '<html><body>It is now %s.</body></html>' % now
+    return HttpResponse(html)
 
 
 class ListingList(generics.ListAPIView):

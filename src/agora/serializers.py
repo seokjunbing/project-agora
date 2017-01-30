@@ -1,8 +1,13 @@
+from __future__ import print_function
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, AnonymousUser
 from rest_framework.authtoken.models import Token
+from django.core.exceptions import ObjectDoesNotExist
 import hashlib
+import httplib2
+import os
+# from .helpers import do_something
 
 from .models import Listing, Category, Profile, Message, Conversation, create_auth_token
 
@@ -65,6 +70,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 #         write_only_fields = ('password',)
 #         read_only_fields = ('id', 'username', 'profile')
 
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = ProfileSerializer(required=False)
 
@@ -77,6 +83,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
 
         if validate_email(validated_data['email']):
+            # Handle duplicate users without crashing
+            try:
+                User.objects.get(email=validated_data['email'])
+                return AnonymousUser
+            except ObjectDoesNotExist:
+                pass
+            # Create user
             user = User.objects.create(
                 username=get_username(validated_data['email']),
                 email=validated_data['email'],
@@ -89,9 +102,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             # token = create_auth_token(instance=user)
             token = Token.objects.get_or_create(user=user)
             # print(token)
+            # TODO send email on backend.
 
             user_profile = Profile(user=user)
             user_email = validated_data['email'].encode('utf-8')
+
+            # TODO salt the user's email - easily guessable right now.
             verif_code = hashlib.sha256(user_email).hexdigest()
             user_profile.verification_code = verif_code
             user_profile.save()

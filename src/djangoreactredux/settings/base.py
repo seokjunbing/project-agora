@@ -26,6 +26,7 @@ SECRET_KEY = 'w2snxatgu!q-@&ti@x9i22u4gvx!lrgqst8*9@ehe-9#mtt@09'
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'lvh.me']
+SITE_ID = 1  # solves [ site_url ]/admin/ saying "Site matching query does not exist."
 
 # Application definition
 
@@ -60,7 +61,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.AuthenticationMiddleware', # TODO uncomment
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -77,7 +78,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
+                # 'django.contrib.auth.context_processors.auth', # TODO uncomment
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
             ],
@@ -177,9 +178,9 @@ OAUTH2_PROVIDER = {
 
 # ########## AUTHENTICATION
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
+    # 'django.contrib.auth.backends.ModelBackend',
 
-    'allauth.account.auth_backends.AuthenticationBackend',
+    # 'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 # ############ JWT AUTHENTICATION ##################
@@ -227,12 +228,10 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
         # which port? which address?
-        'TIMEOUT': 1,
+        'TIMEOUT': 600,
         'OPTIONS': {
             'MAX_ENTRIES': 300
         },
 
     }
 }
-
-
