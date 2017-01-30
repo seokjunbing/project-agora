@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Image, Grid, Label } from 'semantic-ui-react';
+import { Segment, Image, Grid, Label, Progress } from 'semantic-ui-react';
 import * as postActionCreators from '../../../actions/postlisting';
 import * as catActionCreators from '../../../actions/categories';
 import { bindActionCreators } from 'redux';
@@ -20,62 +20,44 @@ const price_units = [
 const title_length = 20;
 const description_length = 40;
 
-var form_status = [0, 0, 1, 0, 0, 0];
-var form_touched = [0, 0, 0, 0, 0, 0];
-
 class InputForm extends Component {
 
   handleTitleChange = (e) => {
       e.preventDefault();
-      form_touched[0] = 1;
       if (e.target.value.length < title_length) {
-        this.setState({ title : e.target.value });
-        form_status[0] = 1;
-        console.log(form_status);
+        this.setState({ title : e.target.value,  titleValid : 1, titleChanged : 1});
       } else {
-        form_status[0] = 0;
-        console.log(form_status);
+        this.setState({ titleValid : 0, titleChanged : 1});
       }
   }
 
   handlePriceChange = (e) => {
       e.preventDefault();
-      form_touched[1] = 1;
       if (isNaN(e.target.value) == false) {
-        this.setState({ price : e.target.value });
-        form_status[1] = 1;
-        console.log(form_status);
-        console.log(form_touched[1]);
+        this.setState({ price : e.target.value, priceValid : 1, priceChanged : 1});
+        console.log('price valid');
       } else {
-        form_status[1] = 0;
-        console.log(form_status);
-        console.log(form_touched[1]);
+        this.setState({ priceValid : 0, priceChanged : 1});
       }
   }
 
   handlePriceTypeChange = (e, selection) => {
       e.preventDefault();
-      form_touched[2] = 1;
-      this.setState({ price_type : selection.value });
+      this.setState({ price_type : selection.value, pricetypeValid : 1, pricetypeChanged : 1});
   }
 
   handleCategoryChange = (e, selection) => {
       e.preventDefault();
-      form_touched[3] = 1;
-      form_status[3] = 1;
-      this.setState({ category : selection.value });
+      this.setState({ category : selection.value, categoryValid : 1, categoryChanged : 1});
+      console.log('changed category');
   }
 
   handleDescriptionChange = (e) => {
       e.preventDefault();
-      form_touched[4] = 1;
       if (e.target.value.length < description_length) {
-        this.setState({ description : e.target.value });
-        form_status[4] = 1;
-        console.log(form_status);
+        this.setState({ description : e.target.value, descriptionValid : 1, descriptionChanged : 1});
       } else {
-        form_status[4] = 0;
-        console.log(form_status);
+        this.setState({ descriptionValid : 0, descriptionChanged : 1});
       }
   }
 
@@ -89,6 +71,10 @@ class InputForm extends Component {
       this.props.catActions.fetchCategories();
   }
 
+  componentWillUpdate(nextProps, nextState) {
+      console.log(nextState);
+  }
+
   processCategories() {
       if (!this.props.categories) {
           return [];
@@ -99,79 +85,267 @@ class InputForm extends Component {
       }
   }
 
-  onUploadFinish(signResult) {
-    form_touched[5] = 1;
-    this.setState({pictures: signResult.signedUrl.split("?")[0]});
-  }
 
   titleError() {
-      if (form_status[0] == 0 && form_touched[0] == 1) {
+    if (this.state) {
+      if (this.state.titleValid) {
+        console.log('title valid')
+        return (true);
+
+      } else if (this.state.titleChanged) {
         return (<Label basic color='red' pointing>Please enter a shorter title!</Label>);
-      } else {
-        return (true);
       }
-  }
-
-  priceError() {
-      if (form_status[1] == 0 && form_touched[1] == 1) {
-        return (<Label basic color='red' pointing>Please enter a valid price!</Label>);
-      } else {
-        return (true);
-      }
-  }
-
-  descriptionError() {
-      if (form_status[4] == 0 && form_touched[4] == 1) {
-        return (<Label basic color='red' pointing>Please enter a shorter description!</Label>);
-      } else {
-        return (true);
-      }
-  }
-
-  submitActive() {
-    var ready = true;
-    for (var i = 0; i < form_status.length; i++) {
-      if (form_status[i] == 0) {
-        ready = false;
-      }
-    }
-
-    if (ready) {
-      return (false);
     } else {
       return (true);
     }
   }
 
+  priceError() {
+    if (this.state) {
+      if (this.state.priceValid) {
+        return (true);
+
+      } else if (this.state.priceChanged) {
+        return (<Label basic color='red' pointing>Please enter a valid price!</Label>);
+      }
+    } else {
+      return (true);
+    }
+  }
+
+  descriptionError() {
+    if (this.state) {
+      if (this.state.descriptionValid) {
+        return (true);
+      } else if (this.state.descriptionChanged) {
+        return (<Label basic color='red' pointing>Please enter a shorter description!</Label>);
+      }
+    } else {
+      return (true);
+    }
+  }
+
+  submitActive() {
+
+    if (this.state) {
+      if (this.state.titleValid && this.state.priceValid && this.state.pricetypeValid && this.state.categoryValid && this.state.descriptionValid && this.state.imagePresent) {
+        return (false);
+      } else {
+        return (true);
+      }
+    } return (true);
+
+  }
+
+  removePrimary() {
+    if (this.state) {
+      if (this.state.images) {
+        var images_copy = this.state.images.slice();
+        images_copy.shift();
+        this.setState({ images : images_copy});
+      }
+    }
+  }
+
+  rotateImageOrder() {
+    if (this.state) {
+      if (this.state.images) {
+        var images_copy = this.state.images.slice();
+        var first_image = images_copy.shift();
+        images_copy.push(first_image);
+        console.log('images below:');
+        console.log(images_copy);
+        this.setState({images : images_copy});
+      }
+    }
+  }
+
+  onUploadFinish(signResult) {
+
+    this.setState({imageUploadStatus : 2});
+    this.setState({imagePresent : 1});
+
+    console.log('Upload Finished');
+    var images_copy;
+    if (this.state.images) {
+      images_copy = this.state.images.slice();
+
+    } else {
+      images_copy = [];
+    }
+
+    images_copy.push(signResult.signedUrl.split("?")[0]);
+    this.setState({images:images_copy});
+  }
+
   onImageUploadError(message) {
-
     console.log('Upload error: ' + message);
+    this.setState({imageUploadStatus : 3});
+  }
 
+  renderPrimaryImage() {
+    if (this.state) {
+      if (this.state.images && this.state.images.length > 0) {
+        var primary = [this.state.images[0]];
+        console.log('rendering primary image');
+        return (
+          primary.map((image)=> {
+          return (
+
+            <Image fluid src={image}/>
+          );
+        }));
+      } else {
+        return (true);
+      }
+    }
+  }
+
+  renderSecondaryImages() {
+    if (this.state) {
+      if (this.state.images)
+        if (this.state.images.length > 1) {
+          console.log('rendering secondary images');
+          var images_copy = this.state.images.slice();
+          images_copy.shift();
+          var secondary = images_copy;
+          return (
+          secondary.map((image)=> {
+            return <Image src={image} />;
+          }));
+        } else {
+          return (true);
+      }
+    } else {
+        return (true);
+      }
+    }
+
+
+  onUploadStart(file, next) {
+    this.setState({imageUploadStatus : 1});
+    next(file);
+  }
+
+  onProgress(percent, message) {
+    console.log(percent);
+    console.log(message);
+    this.setState({imageUploadPercent : percent});
+  }
+
+  uploadProgress() {
+    if (this.state) {
+      if (this.state.imageUploadStatus == 1) {
+        return (<Progress percent={this.state.imageUploadPercent} progress />);
+      } else if (this.state.imageUploadStatus == 2) {
+        return (<Progress percent={100} success>Upload successful!</Progress>);
+      } else if (this.state.imageUploadStatus == 3) {
+        return (<Progress percent={100} error>There was an error uploading the image</Progress>);
+      }
+    } else {
+      return (true);
+    }
+  }
+
+
+
+  onTitleSelect() {
+    this.setState({ titleTouched : 1});
+  }
+
+  onPriceSelect() {
+    this.setState({ priceTouched : 1});
+  }
+
+  onPriceTypeSelect() {
+    this.setState({ pricetypeTouched : 1});
+  }
+
+  onCategorySelect() {
+    this.setState({ categoryTouched : 1});
+  }
+
+  onDescriptionSelect() {
+    this.setState({ descriptionTouched : 1});
+  }
+
+  canRotateOrder() {
+    if (this.state) {
+      if (this.state.images) {
+        if (this.state.images.length > 1) {
+          return (false)
+        } else {
+          return (true)
+        }
+      } else {
+        return (true)
+      }
+    } else {
+      return (true)
+    }
+  }
+
+  canDelete() {
+    if (this.state) {
+      if (this.state.images) {
+        if (this.state.images.length > 0) {
+          return (false)
+        } else {
+          return (true)
+        }
+      } else {
+        return (true)
+      }
+    } else {
+      return (true)
+    }
   }
 
 
 
   render() {
     return (
-      <Form onSubmit={this.handleSubmit.bind(this)}>
-        <Form.Input label='Title' name='title' placeholder='e.g. 42 inch LG TV' onChange={this.handleTitleChange.bind(this)}/>
-        {this.titleError()}
-        <Form.Group widths='equal'>
-          <Form.Input label='Price' name='price' placeholder='$50' onChange={this.handlePriceChange.bind(this)}/>
-          <Form.Field control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' onChange={this.handlePriceTypeChange.bind(this)}/>
-        </Form.Group>
-        {this.priceError()}
-        <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' onChange={this.handleCategoryChange.bind(this)}/>
-        <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' onChange={this.handleDescriptionChange.bind(this)}/>
-        {this.descriptionError()}
-        <ReactS3Uploader
-            signingUrl="/api/get_s3_url"
-            accept="image/*"
-            onError={this.onImageUploadError.bind(this)}
-            onFinish={this.onUploadFinish.bind(this)}/>
-        <Button color='teal' disabled={this.submitActive()} type='submit'>Submit</Button>
+      <Segment padded='very'>
+        <Grid>
+          <Grid.Column width={8}>
+            <Form onSubmit={this.handleSubmit.bind(this)}>
+              <Form.Input label='Title' name='title' placeholder='e.g. 42 inch LG TV' onChange={this.handleTitleChange.bind(this)} onSelect={this.onTitleSelect.bind(this)}/>
+              {this.titleError()}
+              <Form.Group widths='equal'>
+                <Form.Input label='Price' name='price' placeholder='$50' onChange={this.handlePriceChange.bind(this)} onSelect={this.onPriceSelect.bind(this)}/>
+                <Form.Field control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' onChange={this.handlePriceTypeChange.bind(this)} onSelect={this.onPriceTypeSelect.bind(this)}/>
+              </Form.Group>
+              {this.priceError()}
+              <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' onChange={this.handleCategoryChange.bind(this)} onSelect={this.onCategorySelect.bind(this)}/>
+              <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' onChange={this.handleDescriptionChange.bind(this)} onSelect={this.onDescriptionSelect.bind(this)}/>
+              {this.descriptionError()}
+              {this.uploadProgress()}
+              <ReactS3Uploader
+                  signingUrl="/api/get_s3_url"
+                  accept="image/*"
+                  preprocess={this.onUploadStart.bind(this)}
+                  onProgress={this.onProgress.bind(this)}
+                  onError={this.onImageUploadError.bind(this)}
+                  onFinish={this.onUploadFinish.bind(this)}/>
+              <Button color='teal' disabled={this.submitActive()} type='submit'>Submit</Button>
 
-      </Form>
+            </Form>
+          </Grid.Column>
+          <Grid.Column width={1}>
+
+          </Grid.Column>
+          <Grid.Column width={7}>
+            {this.state && this.state.images && this.state.images.length > 0 && <Label color='red' icon='close' attached='top right' onClick={this.removePrimary.bind(this)}></Label>}
+            <Image.Group size='medium' centered='true'>
+              {this.renderPrimaryImage()}
+            </Image.Group>
+            {this.state && this.state.images && this.state.images.length > 1 && <Label color='blue' icon='chevron down' attached='top left' onClick={this.rotateImageOrder.bind(this)}></Label>}
+            <Image.Group size='small' centered='true'>
+              {this.renderSecondaryImages()}
+            </Image.Group>
+          </Grid.Column>
+        </Grid>
+      </Segment>
     )
   }
 }
