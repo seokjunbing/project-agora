@@ -6,7 +6,7 @@ class VerifyEmail extends React.Component {
     constructor(props) {
       super(props);
 
-      // initial state variables
+      // user sign up state variables
       this.state = {
         emailAddressSU: '',
         firstName: '',
@@ -15,6 +15,10 @@ class VerifyEmail extends React.Component {
         verifyPasswordSU: '',
         passwordErrorText1: '',
         passwordErrorText2: '',
+
+        // login credential state variables
+        logInEmail: '',
+        logInPassword: '',
 
         // boolean flags to determine if input is sufficient
         emailOK: '0',
@@ -123,6 +127,8 @@ class VerifyEmail extends React.Component {
     onSignUpClick = (e) => {
       e.preventDefault();
       console.log("sign up clicked!")
+
+      // check boolean flags
 
       // post the data to the API url if everything is good
       this.props.userSignupRequest(this.state);
