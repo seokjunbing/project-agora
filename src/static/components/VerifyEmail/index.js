@@ -1,5 +1,6 @@
 import React from 'react';
 import {Header, Input, Label, Container, Button, Grid, Divider, Form, Checkbox} from 'semantic-ui-react';
+import axios from 'axios';
 
 class VerifyEmail extends React.Component {
     constructor(props) {
@@ -118,6 +119,17 @@ class VerifyEmail extends React.Component {
       }
     }
 
+    // handle the onClick event for account creation
+    onSignUpClick = (e) => {
+      e.preventDefault();
+      console.log("sign up clicked!")
+
+      // post the data to the API url if everything is good
+      this.props.userSignupRequest(this.state);
+
+    }
+
+
     render() {
       var style_centered = {
         textAlign: 'center'
@@ -191,7 +203,7 @@ class VerifyEmail extends React.Component {
                     </Input>
                     <label style={label_color}>{this.state.passwordErrorText2}</label>
                   </Form.Field>
-                  <Button style={button_style} color='teal' content='Create Account' />
+                  <Button style={button_style} onClick={this.onSignUpClick.bind(this)} color='teal' content='Create Account' />
                 </Form>
               </Container>
             </Grid.Column>
@@ -222,6 +234,11 @@ class VerifyEmail extends React.Component {
           </Grid>
         );
     }
+}
+
+// prop is a function
+VerifyEmail.propTypes = {
+  userSignupRequest: React.PropTypes.func.isRequired
 }
 
 export default (VerifyEmail);

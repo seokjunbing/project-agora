@@ -6,6 +6,7 @@ import categoriesReducer from './categories';
 import listingsReducer from './listings';
 import filtersReducer from './filters';
 import postListingReducer from './postlisting';
+import signUpPromptReducer from './signUpPromptReducer';
 
 export default combineReducers({
     auth: authReducer,
@@ -15,4 +16,5 @@ export default combineReducers({
     listings: listingsReducer,
     filters: filtersReducer,
     postListing: postListingReducer,
+    verificationPrompt: signUpPromptReducer,
 });
