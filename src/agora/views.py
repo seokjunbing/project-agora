@@ -145,7 +145,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 #         cache.set(cache_key, result, cache_time)
 #     return result
 
-class ListFilter(django_filters.rest_framework.FilterSet):
+class ListingFilter(django_filters.rest_framework.FilterSet):
     min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')
     max_price = django_filters.NumberFilter(name="price", lookup_expr='lte')
 
