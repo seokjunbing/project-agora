@@ -115,7 +115,7 @@ class Listing(models.Model):
 
     title = models.CharField(max_length=100)
 
-    images = ArrayField(models.CharField(max_length=500, blank=True), blank=True, null=True,)
+    images = ArrayField(models.CharField(max_length=500, blank=True), blank=True, null=True, )
 
     flags = models.PositiveIntegerField(default=0)
 
@@ -132,8 +132,8 @@ class Listing(models.Model):
 messaging classes adapted from: http://pydoc.net/Python/django-conversation/1.2/conversation.models/
 """
 
-class Conversation(models.Model):
 
+class Conversation(models.Model):
     users = models.ManyToManyField(
         'auth.User',
         verbose_name=_('Users'),
@@ -157,7 +157,6 @@ class Conversation(models.Model):
 
 
 class Message(models.Model):
-
     user = models.ForeignKey(
         'auth.User',
         verbose_name=_('User'),

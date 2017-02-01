@@ -15,7 +15,8 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
 from rest_framework.decorators import list_route, api_view
-import datetime
+from rest_framework.exceptions import APIException
+from rest_framework.permissions import IsAuthenticated
 
 # caching
 from django.utils.cache import get_cache_key
@@ -23,6 +24,10 @@ from django.core.cache import cache
 from django.http import HttpRequest
 
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
+
+
+
+
 
 # import environment variables
 conn = boto.connect_s3(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
@@ -157,8 +162,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     # uncomment to require authentication for listings
     # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
-
-    filter_class = ListFilter
+    filter_class = ListingFilter
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
 
@@ -180,6 +184,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
         serializer = ConversationSerializer(Conversation.objects.filter(users__in=name), many=True)
 
         return Response(serializer.data)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
