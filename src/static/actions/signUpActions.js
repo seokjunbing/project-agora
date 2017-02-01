@@ -23,7 +23,7 @@ export function userSignupRequest(userData){
     .catch(error => {
 
       // in case of error tell the user
-      dispatch({type: SET_FEEDBACK, payload: "Oooops! Something went wrong!"});
+      dispatch({type: SET_FEEDBACK, payload: "Oooops! Something went wrong, try again!"});
 
       // take the person to the main page
       browserHistory.push('/');
