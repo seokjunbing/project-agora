@@ -15,9 +15,14 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
 from rest_framework.decorators import list_route, api_view
+from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
 
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
+
+
+
+
 
 # import environment variables
 conn = boto.connect_s3(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
@@ -174,6 +179,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
         serializer = ConversationSerializer(Conversation.objects.filter(users__in=name), many=True)
 
         return Response(serializer.data)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

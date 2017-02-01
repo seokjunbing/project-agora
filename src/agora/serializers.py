@@ -5,6 +5,7 @@ from django.contrib.auth.models import User, AnonymousUser
 from rest_framework.authtoken.models import Token
 from django.core.exceptions import ObjectDoesNotExist
 import hashlib
+from rest_framework.exceptions import APIException
 import httplib2
 import os
 # from .helpers import do_something
@@ -14,6 +15,12 @@ from .models import Listing, Category, Profile, Message, Conversation, create_au
 EMAIL_SUFFIX = '@dartmouth.edu'
 
 UserModel = get_user_model()
+
+class ConflictException(APIException):
+    status_code = 409
+    default_detail = 'This resource is already created, cannot successfully create'
+    default_code = 'conflict'
+
 
 
 def validate_email(email):
@@ -106,7 +113,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             # Handle duplicate users without crashing
             try:
                 User.objects.get(email=validated_data['email'])
-                return AnonymousUser
+                raise ConflictException('There was a problem')
             except ObjectDoesNotExist:
                 pass
             # Create user
