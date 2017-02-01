@@ -13,6 +13,7 @@ from allauth.account.signals import user_signed_up
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
+# for caching
 from django.utils.cache import get_cache_key
 from django.core.cache import cache
 from django.http import HttpRequest
@@ -181,18 +182,27 @@ class Message(models.Model):
     )
 
 
-# def expire_page(path):
-#     request = HttpRequest()
-#     request.path = path
-#     key = get_cache_key(request)
-#     if cache.has_key(key):
-#         cache.delete(key)
-#         print("\n\nCACHE DELETED!!!\n\n")
+def expire_page(path):
+    request = HttpRequest()
+    request.path = request.get_full_path()
+    try:
+        key = get_cache_key(request)
+        if key in cache:
+            cache.delete(key)
+            print("\n\nCACHE DELETED!!!\n\n")
+
+    except KeyError:
+        print("\n\nkeyError in exp_page\n\n")
+        pass
+
+
+
 
 def invalidate_cache(sender, instance, **kwargs):
-    cache.clear()
+    # cache.clear()
     # print("\n\nCACHE invalidated due to a new POST / DELETE!!!\n\n")
-    #  expire_page(instance.get_absolute_url())
+    expire_page(instance)
+    # print("\n\ndoing nothing for now...\n\n")
 
 
 # Signals

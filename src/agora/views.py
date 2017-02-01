@@ -18,6 +18,11 @@ from rest_framework.decorators import list_route, api_view
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
 
+# caching
+from django.utils.cache import get_cache_key
+from django.core.cache import cache
+from django.http import HttpRequest
+
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
 
@@ -140,7 +145,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 #         cache.set(cache_key, result, cache_time)
 #     return result
 
-class ListingFilter(django_filters.rest_framework.FilterSet):
+class ListFilter(django_filters.rest_framework.FilterSet):
     min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')
     max_price = django_filters.NumberFilter(name="price", lookup_expr='lte')
 
@@ -156,7 +161,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     serializer_class = ListingSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     # uncomment to require authentication for listings
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     filter_class = ListingFilter
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')

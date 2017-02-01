@@ -5,24 +5,27 @@ import * as actionCreators from '../../actions/auth';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
 import VerifyEmail from '../../components/VerifyEmail';
+import { userSignupRequest } from '../../actions/signUpActions';
 
 
 class VerifyEmailView extends React.Component {
 
   render() {
+
+      const { userSignupRequest } = this.props;
+
       return (
         <div>
-          <VerifyEmail/>
+          <VerifyEmail userSignupRequest={userSignupRequest}/>
         </div>
       );
   }
+
 }
 
-const mapDispatchToProps = () => {
-    return {};
-};
+VerifyEmailView.propTypes = {
+  userSignupRequest: React.PropTypes.func.isRequired
+}
 
-
-
-export default connect(mapDispatchToProps)(VerifyEmailView);
+export default connect(null, { userSignupRequest })(VerifyEmailView);
 export { VerifyEmailView as VerifyEmailViewNotConnected };
