@@ -114,7 +114,7 @@ now use `get_username()` in `serializers.py`.
 ## AUTH
 
 ### Getting a user token
-    curl -X POST -H "Content-Type: application/json" -d '{"username":"user","password":"password"}' http://localhost:8000/api-token-auth/
+    curl -X POST -H "Content-Type: application/json" -d '{"username":"user","password":"password"}' http://localhost:8000/api/token-auth/
 
 ### Registering a new user
 

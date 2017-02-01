@@ -41,9 +41,29 @@ class ListingSerializer(serializers.ModelSerializer):
     # Useful for visualization; breaks browsable API.
     # author = serializers.StringRelatedField()
 
+    get_sr_price = serializers.SerializerMethodField('get_sr_price_func')
+
+    def get_sr_price_func(self, obj):
+        user = self.context['request'].user
+        print('User: ' + str(user))
+        logged_in = user.is_authenticated()
+        if user.is_authenticated:
+            return obj.author.pk
+        else:
+            return 'Anonymous'
+        # return self.context['request'].user # access the request object
+
     class Meta:
         model = Listing
         fields = '__all__'
+        # fields = ('price_type', 'get_sr_price')
+
+
+
+class AnonymousListingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Listing
+        fields = ('price_type','price')
 
 
 class CategorySerializer(serializers.ModelSerializer):
