@@ -15,7 +15,8 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
 from rest_framework.decorators import list_route, api_view
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, PermissionDenied
+import rest_framework.status as status
 from rest_framework.permissions import IsAuthenticated
 
 # caching
@@ -24,6 +25,13 @@ from django.core.cache import cache
 from django.http import HttpRequest
 
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
+
+
+class ForbiddenException(APIException):
+    status_code = 403
+    default_detail = 'You are not authorized to perform that action.'
+    default_code = 'Forbidden'
+
 
 # import environment variables
 conn = boto.connect_s3(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
@@ -68,13 +76,12 @@ def sign_s3_upload(request):
 
 @api_view(['GET'])
 def verify_user(request):
-    # print(code)
+    # TODO make this an actual webpage, not just an api endpoint.
     email = request.GET.get('email')
     verification_code = request.GET.get('code')
     if email is not None and verification_code is not None:
         print(email, verification_code)
         user_queryset = User.objects.filter(email=email)
-        print(user_queryset)
         if len(user_queryset) > 0:
             user = user_queryset[0]
             if user.profile.verification_code == verification_code:  # match
@@ -83,7 +90,6 @@ def verify_user(request):
                 return Response({"message": "Thank you for veryfing your email."})
     # TODO return non 500.
     raise APIException("User email not verified")
-    # return Response({"message": "nope, no."})
 
 
 class IndexView(View):
@@ -97,9 +103,10 @@ class IndexView(View):
 
 
 # original
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows users to be viewed or edited. Read only as no need to expose an API endpoint
+    to create categories; this can be done in the admin site.
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -182,8 +189,19 @@ class ListingViewSet(viewsets.ModelViewSet):
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
 
+    def destroy(self, request, *args, **kwargs):
+        user = request.user
+        instance = self.get_object()
+        if user.is_authenticated() and user == instance.author and user.profile.verified:
+            viewsets.ModelViewSet.perform_destroy(self, instance)
+        else:
+            return Response(status.HTTP_403_FORBIDDEN)
+
+    # TODO update
+
 
 class MessageViewSet(viewsets.ModelViewSet):
+    # TODO figure out permissions
     queryset = Message.objects.all().order_by('date')
     serializer_class = MessageSerializer
     filter_backends = (DjangoFilterBackend,)
@@ -191,6 +209,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
+    # TODO figure out permissions
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
 
@@ -211,15 +230,17 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
-
-class VerifyUser(generics.ListAPIView):
-    queryset = User.objects.filter
-
-
-def get_current_timestamp(request):
-    now = datetime.datetime.now()
-    html = '<html><body>It is now %s.</body></html>' % now
-    return HttpResponse(html)
+    def destroy(self, request, *args, **kwargs):
+        user = request.user
+        instance = self.get_object()
+        print(user)
+        print(user.id)
+        print(instance)
+        if user.is_authenticated() and user == instance:
+            viewsets.ModelViewSet.perform_destroy(self, instance)
+            return Response({"message": "You have successfully deleted your profile on Agora. We hope to see you back soon."})
+        raise ForbiddenException()
+        # return Response(status.HTTP_403_FORBIDDEN)
 
 
 class ListingList(generics.ListAPIView):

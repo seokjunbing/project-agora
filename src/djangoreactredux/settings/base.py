@@ -61,7 +61,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    # 'django.contrib.auth.middleware.AuthenticationMiddleware', # TODO uncomment
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Commenting out breaks admin site
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -78,7 +78,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth', # TODO uncomment
+                'django.contrib.auth.context_processors.auth',  # TODO uncomment
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
             ],
