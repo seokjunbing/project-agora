@@ -16,11 +16,11 @@ EMAIL_SUFFIX = '@dartmouth.edu'
 
 UserModel = get_user_model()
 
+
 class ConflictException(APIException):
     status_code = 409
     default_detail = 'This resource is already created, cannot successfully create'
     default_code = 'conflict'
-
 
 
 def validate_email(email):
@@ -58,7 +58,7 @@ class ListingSerializer(serializers.ModelSerializer):
             return obj.author.pk
         else:
             return 'Anonymous'
-        # return self.context['request'].user # access the request object
+            # return self.context['request'].user # access the request object
 
     class Meta:
         model = Listing
@@ -66,11 +66,10 @@ class ListingSerializer(serializers.ModelSerializer):
         # fields = ('price_type', 'get_sr_price')
 
 
-
 class AnonymousListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Listing
-        fields = ('price_type','price')
+        fields = ('price_type', 'price')
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -118,7 +117,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
                 pass
             # Create user
             user = User.objects.create(
-                username=get_username(validated_data['email']),
+                username=validated_data['email'],
                 email=validated_data['email'],
                 first_name=validated_data['first_name'],
                 last_name=validated_data['last_name']
