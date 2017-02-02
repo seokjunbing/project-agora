@@ -12,6 +12,9 @@ import os
 
 from .models import Listing, Category, Profile, Message, Conversation, create_auth_token
 
+# verification email
+from .send_email import construct_and_send_verification_email
+
 EMAIL_SUFFIX = '@dartmouth.edu'
 
 UserModel = get_user_model()
@@ -128,7 +131,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             # token = create_auth_token(instance=user)
             token = Token.objects.get_or_create(user=user)
             # print(token)
-            # TODO send email on backend.
+
+
 
             user_profile = Profile(user=user)
             user_email = validated_data['email'].encode('utf-8')
@@ -137,6 +141,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             verif_code = hashlib.sha256(user_email).hexdigest()
             user_profile.verification_code = verif_code
             user_profile.save()
+
+            # TODO send email on backend, change domain.
+            construct_and_send_verification_email(user)
 
             return user
         else:
