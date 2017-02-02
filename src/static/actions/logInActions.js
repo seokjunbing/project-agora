@@ -8,7 +8,7 @@ import { EXECUTE_USERLOGIN_REQUEST } from '../constants';
 export function userLogInRequest(userData){
   return dispatch => {
     axios.post('/api/token-auth/', {
-      username: userData.logInEmail,
+      username: userData.logInEmail.concat("@dartmouth.edu"),
       password: userData.logInPassword
     })
     .then(response => {
