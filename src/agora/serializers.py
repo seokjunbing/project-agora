@@ -147,7 +147,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
             return user
         else:
-            return AnonymousUser
+            raise ConflictException("Please enter a Dartmouth email")
 
 
 class MessageSerializer(serializers.ModelSerializer):

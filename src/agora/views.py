@@ -25,10 +25,6 @@ from django.http import HttpRequest
 
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
-
-
-
-
 # import environment variables
 conn = boto.connect_s3(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
 
@@ -48,26 +44,46 @@ def sign_s3_upload(request):
     return HttpResponse(json.dumps({'signedUrl': signed_url}))
 
 
-@api_view(['POST'])
+# @api_view(['GET'])
+# def verify_user(request, code):
+#     data = request.data
+#     print(code)
+#     try:
+#         user_email = data['email']
+#         verification_code = data['verification_code']
+#     except ValueError:
+#         return Response({"message": "Please specify 'user_email' and 'verification_code' in your POST request."})
+#     user_queryset = User.objects.filter(email=user_email)
+#     if len(user_queryset) == 0:  # no user matching email
+#         return Response({"message:" "Could not find specified user matching email %s." % user_email})
+#     else:
+#         user = user_queryset[0]
+#         if user.profile.verification_code == verification_code:  # match!
+#             user.profile.verified = True
+#             user.profile.save()
+#             # user.save()
+#             return Response({"message": "Thank you for verifying your email"})
+#         else:  # wrong verification code
+#             return Response({"message": "Could not verify user with the provided verification code"})
+
+@api_view(['GET'])
 def verify_user(request):
-    data = request.data
-    try:
-        user_email = data['email']
-        verification_code = data['verification_code']
-    except ValueError:
-        return Response({"message": "Please specify 'user_email' and 'verification_code' in your POST request."})
-    user_queryset = User.objects.filter(email=user_email)
-    if len(user_queryset) == 0:  # no user matching email
-        return Response({"message:" "Could not find specified user matching email %s." % user_email})
-    else:
-        user = user_queryset[0]
-        if user.profile.verification_code == verification_code:  # match!
-            user.profile.verified = True
-            user.profile.save()
-            # user.save()
-            return Response({"message": "Thank you for verifying your email"})
-        else:  # wrong verification code
-            return Response({"message": "Could not verify user with the provided verification code"})
+    # print(code)
+    email = request.GET.get('email')
+    verification_code = request.GET.get('code')
+    if email is not None and verification_code is not None:
+        print(email, verification_code)
+        user_queryset = User.objects.filter(email=email)
+        print(user_queryset)
+        if len(user_queryset) > 0:
+            user = user_queryset[0]
+            if user.profile.verification_code == verification_code:  # match
+                user.profile.verified = True
+                user.profile.save()
+                return Response({"message": "Thank you for veryfing your email."})
+    # TODO return non 500.
+    raise APIException("User email not verified")
+    # return Response({"message": "nope, no."})
 
 
 class IndexView(View):

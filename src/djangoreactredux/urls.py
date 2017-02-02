@@ -27,7 +27,8 @@ urlpatterns = [
     url(r'^api/token-auth/', obtain_jwt_token),
     url(r'^api/token-refresh/', refresh_jwt_token),
     url(r'^accounts/', include('allauth.urls')),
-    # url(r'^api/verify/', verify_user),
+    # url(r'^api/verify/(?P<code>.*)/', verify_user),
+    url(r'^api/verify/', verify_user),
 
     # comment this out to test the API (Backend team)
     url(r'', cache_page(settings.PAGE_CACHE_SECONDS)(IndexView.as_view()), name='index'),
