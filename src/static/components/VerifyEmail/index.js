@@ -135,6 +135,32 @@ class VerifyEmail extends React.Component {
 
     }
 
+    // log in fields
+
+    // update the value of the email state variable for Log In
+    onChangeSignInEmail = (e) => {
+      e.preventDefault();
+      this.setState({ logInEmail : e.target.value });
+      console.log(this.state.logInEmail)
+    }
+
+    // update the value of the password state variable for Log in
+    onChangeSignInPassword = (e) => {
+      e.preventDefault();
+      this.setState({ logInPassword : e.target.value });
+      console.log(this.state.logInPassword)
+    }
+
+    // handle the onClick event for account Log In
+    onLogInClick = (e) => {
+      e.preventDefault();
+      console.log("Log In clicked!")
+
+      // post the data to the API to get the auth token back
+      this.props.userLogInRequest(this.state);
+
+    }
+
 
     render() {
       var style_centered = {
@@ -223,17 +249,17 @@ class VerifyEmail extends React.Component {
                   <Form.Field>
                     <label style={vertical_offset}>Email</label>
                     <Input style= {style_block} labelPosition='right'>
-                      <input style={email_size} placeholder='your.name' type='text' />
+                      <input style={email_size} onChange={this.onChangeSignInEmail.bind(this)} name= 'logInEmail' placeholder='e.g. phil.j.hanlon.77' type='text' />
                       <Label>@dartmouth.edu</Label>
                     </Input>
                   </Form.Field>
                   <Form.Field>
                     <label style={vertical_offset}>Password</label>
                     <Input style= {field_length}>
-                      <input style={style_centered} placeholder='XXXXXXXXXXXXX' type='password' />
+                      <input style={style_centered} onChange={this.onChangeSignInPassword.bind(this)} name= 'logInPassword' placeholder='XXXXXXXXXXXXX' type='password' />
                     </Input>
                   </Form.Field>
-                  <Button style={button_style} color='teal' content='log in' />
+                  <Button style={button_style} onClick={this.onLogInClick.bind(this)} color='teal' content='log in' />
                 </Form>
               </Container>
             </Grid.Column>
@@ -242,9 +268,10 @@ class VerifyEmail extends React.Component {
     }
 }
 
-// prop is a function
+// Sign Up and Log In functions
 VerifyEmail.propTypes = {
-  userSignupRequest: React.PropTypes.func.isRequired
+  userSignupRequest: React.PropTypes.func.isRequired,
+  userLogInRequest: React.PropTypes.func.isRequired
 }
 
 export default (VerifyEmail);
