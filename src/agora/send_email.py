@@ -42,10 +42,12 @@ def construct_email_msg(receiver, email_subject, html_body=None, plain_text_body
     return msg
 
 
-# example of how to construct and send an email
-if __name__ == '__main__':
+def construct_and_send_verification_email(userprofile, domain='http://127.0.0.1:8000/'):
+    recv = userprofile.email
+    name = userprofile.first_name
+    token = userprofile.profile.verification_code
 
-    recv = "jun.17@dartmouth.edu"
+    verification_url = domain+'api/verify/?email=' + recv + '&code=' + token
 
     subject = "Please verify your Agora account"
 
@@ -53,29 +55,33 @@ if __name__ == '__main__':
     <html>
       <head></head>
       <body>
-        <p>Hi _BLAH_!<br>
+        <p>Hi %s!<br>
            How are you?<br>
-           This is a message to let you know that you should verify your email.<br>
-           Please click this <a href="http://www.python.org">link</a> or paste in the following link to your browser:<br>
-           http://www.python.org<br>
+           This is a message to let you know that you should verify your email address to have full access to Agora.<br>
+           Please click this <a href="%s">link</a> or paste in the following link to your browser:<br>
+           %s<br>
            <br>
            Best,<br>
            Your friendly team at Agora<br>
         </p>
       </body>
     </html>
-    """
+    """ % (name, verification_url, verification_url)
 
     text_content = """\
-    Hi _BLAH_!\n
+    Hi %s!\n
     How are you?\n
-    This is a message to let you know that you should verify your email.\n
+    This is a message to let you know that you should verify your email address to have full access to Agora.\n
     This is the url to verify your Agora account:\n
-    http://www.python.org\n
+    %s\n
     \n
     Best,\n
     Your friendly team at Agora\n
-    """
+    """ % (name, verification_url)
 
     msg = construct_email_msg(receiver=recv, email_subject=subject, html_body=html_content, plain_text_body=text_content)
     send_email(recipient=recv, message=msg)
+
+    pass
+
+# example of how to construct and send an email
