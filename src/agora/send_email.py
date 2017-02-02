@@ -47,7 +47,7 @@ def construct_and_send_verification_email(userprofile, domain='http://127.0.0.1:
     name = userprofile.first_name
     token = userprofile.profile.verification_code
 
-    verification_url = domain+'verify/?email=' + recv + '&code=' + token
+    verification_url = domain+'api/verify/?email=' + recv + '&code=' + token
 
     subject = "Please verify your Agora account"
 
