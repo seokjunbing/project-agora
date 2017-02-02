@@ -48,12 +48,15 @@ some backwards compatibility, but this is not guaranteed.
 ##### Listings
 `http://[ site_url ]/api/listings/`
 
-Lists the listings made by users on the site.
+Lists the listings made by users on the site. *Deleting* a listing can only be done by its author. 
+Unauthenticated requests and requests coming from unverified users will not receive the `author` of a Listing so
+ as to preserve anonymity and trust of users within the Dartmouth community.
  
 ##### Categories
 `http://[ site_url ]/api/categories/`
 
-Lists the available categories for users to post items on.
+Lists the available categories for users to post items on. This is a read-only endpoint. If you need to add categories,
+do so via the admin site.
 
 ##### Messages
 `http://[ site_url ]/api/messages/`
@@ -68,29 +71,68 @@ Lists the conversations on the site's database.
 ##### Users
 `http://[ site_url ]/api/users/`
 
-Lists the users on the site's database and allows for the creation of new users.
+Lists the users on the site's database and allows for the creation of new users. You will receive either a confirmation
+in the form of the created `User` object or a response with a 4XX status code specifying why the request failed. 
 
 ###### Creating users
 
 Make a POST request with the following fields: `email`, `password`, `first_name`, `last_name`.
 ###### Retrieving users
 
-Make a GET request. You will receive the following fields: `id`, `username`, `email`, `first_name`, `last_name`. `password`
-is, naturally, a read-only field. 
+Make a GET request. You will receive the following fields: `id`, `username`, `email`, `first_name`, `last_name`. 
+You will also receive a nested object, `profile`, containing a sole field, `verified`, specifying whether a user
+ has verified their email. 
 
-##### auth-token
+##### Authentication token
 
 `http://[ site_url ]/api/auth-token/`
 
 **Accepts POST requests only**. Send a POST request containing the following fields: `username` and `password` to try to
-authenticate a user. If the user is successfully authenticated, you will receive a `token`. For now, this endpoint
-requires `username`, but the plan is to either transition to requiring `email` or to remove this endpoint
-altogether. You can derive a `username` from an email for now by using `get_username()` in `serializers.py`.
+authenticate a user. If the user is successfully authenticated, you will receive a `token`, which you can use to 
+authenticate a user. See **AUTH** section for more details on this.
 
-### Models
+##### Refreshing an authentication token
 
-We have so far focused on creating working models for `Listing`, `User`, `Message`, and `conversations`. We have removed some fields provisionally so as to make development and front-end integration easier.
- 
+`http://[ site_url ]/api/token-refresh/`
+
+**Accepts POST requests only**. Send a POST request containing the field `token`, which must be an **unexpired** user token.
+You will receive a newer `token` in return.
+
+##### Verifying user emails
+
+`http://[ site_url ]/api/verify/`
+
+In order to verify a user, a GET request should be made with the queries `email` and `code`, containing the user's email
+ and verification code. A link of the form `http://[ site_url ]/api/verify/?email=<email>&code=<code>` is sent to the
+ email specified by users at signup. If the `code` matches the verification code stored for a `user`, the user is then
+  marked as verified and allowed to access the full features of the site.
+
+## AUTH
+
+In order to authenticate users to the API, you will need to provide a token that includes information about the user, such
+as their id, email, etc. You should include the token in your requests whenever it is available, as it is the only way the API
+knows a user is logged in and can authorize requests to view, modify, or delete restricted content.
+
+### Getting a user token (JWT)
+Send a POST request to `api/token-auth/` with the fields `username` and `password`. `username` should be a user's email.
+
+    curl -X POST -H "Content-Type: application/json" -d '{"username":"user","password":"password"}' http://localhost:8000/api/token-auth/
+
+### Making an authenticated request
+
+Include the user token in your header for every request you make; for instance, to make an authenticated request to 
+ the listings API endpoint, you might do
+
+    curl -H "Authorization: JWT <token>" http://localhost:8000/api/listings/
+
+### TODO
+
+- Messaging (conversation style about listings)
+- Image upload (multiple images)
+- Caching
+- Wishlist Feature
+- Anonymity of Home Page (frontend)
+
 ## Troubleshooting
 
 ### Upgrading to Django 1.10
@@ -98,36 +140,3 @@ We have so far focused on creating working models for `Listing`, `User`, `Messag
 1. Update your python packages: run `pip install -r requirements.txt` in the repository's root folder.
 2. You _might_ have to migrate: `python manage.py makemigrations && python manage.py migrate`.
 If that doesn't work, run `python manage.py makemigrations agora` and `python manage.py migrate agora`.
-
-## Changelog
-
-1. Added user sign-in endpoint: `[ site_url ]/api/auth-token` that returns a token if the username and password combination
-are valid. To make a request, send a `POST` request with `username` and `password` fields to the url. With `curl`,
- for instance, do 
- ```curl --data "username=value1&password=value2" https://[ site_url ]/api/auth-token```. 
- For now this sends the password in plain text, but it should work for the demo.
-2. Modified user creation endpoint. Now, you need a @dartmouth.edu email to sign up and it no longer requires a username, 
-which is instead derived from the Dartmouth email. If you need a user's username (for authentication, for instance), for
-now use `get_username()` in `serializers.py`.
-
-
-## AUTH
-
-### Getting a user token
-    curl -X POST -H "Content-Type: application/json" -d '{"username":"user","password":"password"}' http://localhost:8000/api/token-auth/
-
-### Registering a new user
-
-### Making an authenticated request
-
-    curl -H "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjo3LCJlbWFpbCI6Imp1YW4uMTdAZGFydG1vdXRoLmVkdSIsInVzZXJuYW1lIjoianVhbl8xNyIsImV4cCI6MTQ4NTgwMjIwM30.1Zd1aBNrtgbgFp8_ZQtXekflZbAAN3Z3LBlFPgf1UCuXaxfB_Wz7Me0goCo60k_PZqYL3l2Gpqk3TEMfJjy68A" http://localhost:8000/api/listings/
-    
-
-### TODO
-
-- Authentication (User Creation and Log-in)
-- Messaging (conversation style about listings)
-- Image upload (multiple images)
-- Caching
-- Wishlist Feature
-- Anonymity of Home Page
