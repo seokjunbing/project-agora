@@ -115,7 +115,9 @@ In order to verify a user, a GET request should be made with the queries `email`
   marked as verified and allowed to access the full features of the site.
 
 ##### Caching
-Implemented using Memcached. All successful search queries and web pages are cached. Cache is updated every time there is a change to the database; e.g. when a new listing or a user is created.
+Implemented using Memcached. Memcached helps to speed up dynamic websites by caching data and objects to RAM.
+All successful search queries and web pages are cached. Cache is updated every time there 
+is a change to the database; e.g. when a new listing or a user is created. 
 
 
 ## AUTH
