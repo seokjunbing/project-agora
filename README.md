@@ -12,6 +12,13 @@ We're using Django for our backend with a Postgres local database (on Heroku), a
 ## Setup
 Use setup instructions found on [django-react-redux-jwt-base boilerplate project](https://github.com/Seedstars/django-react-redux-jwt-base)
 
+In addition, make sure to install postrges and jpeg in your virtualenv:
+
+```
+brew install jpeg
+brew instlal postgres
+```
+
 
 Make sure to setup postgres on Heroku and have your buildpacks in order:
 ```
@@ -24,7 +31,6 @@ And set the `DJANGO_SETTINGS_MODULE` environment variable:
 ```
 heroku config:set DJANGO_SETTINGS_MODULE=djangoreactredux.settings.prod
 ```
-
 
 ## Deployment
 
