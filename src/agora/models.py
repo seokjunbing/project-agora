@@ -188,7 +188,7 @@ def expire_page(path):
             print("\n\nCACHE DELETED!!!\n\n")
 
     except KeyError:
-        print("\n\nkeyError in exp_page\n\n")
+        # print("\n\nkeyError in exp_page\n\n")
         pass
 
 
