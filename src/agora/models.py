@@ -8,23 +8,19 @@ from django.db.models.signals import post_delete
 from rest_framework.authtoken.models import Token
 from allauth.account.signals import user_signed_up
 
-# for messaging
+"""
+messaging imports
+"""
 # from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
-# for caching
+"""
+cashing imports
+"""
 from django.utils.cache import get_cache_key
 from django.core.cache import cache
 from django.http import HttpRequest
-
-
-# String representation for user
-def user_str(self):
-    return "%s %s" % (self.first_name, self.last_name)
-
-
-User.__str__ = user_str
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -128,10 +124,10 @@ class Listing(models.Model):
     number_of_inquiries = models.PositiveIntegerField(default=0)
 
 
+
 """
 messaging classes adapted from: http://pydoc.net/Python/django-conversation/1.2/conversation.models/
 """
-
 
 class Conversation(models.Model):
     users = models.ManyToManyField(
@@ -196,8 +192,6 @@ def expire_page(path):
         pass
 
 
-
-
 def invalidate_cache(sender, instance, **kwargs):
     # cache.clear()
     # print("\n\nCACHE invalidated due to a new POST / DELETE!!!\n\n")
@@ -210,6 +204,21 @@ def invalidate_cache(sender, instance, **kwargs):
 def user_signed_up(request, user, **kwargs):
     print('User signed up. Sending verification now.')
 
+
+# String representations
+
+def user_str(self):
+    return "%s %s %s" % (self.first_name, self.last_name, self.email)
+
+
+def listing_str(self):
+    return 'Title: %s, price: %.2f' % (self.title, self.price)
+
+# def conversation_str(self):
+    # return 'Listing: ' + str(self.listing) + 'users: [%s, %s]' % (self.)
+
+User.__str__ = user_str
+Listing.__str__ = listing_str
 
 # Caching
 post_save.connect(invalidate_cache, sender=Listing)

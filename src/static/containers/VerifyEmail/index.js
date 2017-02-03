@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import { push } from 'react-router-redux';
 import VerifyEmail from '../../components/VerifyEmail';
 import { userSignupRequest } from '../../actions/signUpActions';
+import { userLogInRequest } from '../../actions/logInActions';
+
 
 
 class VerifyEmailView extends React.Component {
@@ -13,10 +15,11 @@ class VerifyEmailView extends React.Component {
   render() {
 
       const { userSignupRequest } = this.props;
+      const { userLogInRequest } = this.props;
 
       return (
         <div>
-          <VerifyEmail userSignupRequest={userSignupRequest}/>
+          <VerifyEmail userSignupRequest={userSignupRequest} userLogInRequest={userLogInRequest}/>
         </div>
       );
   }
@@ -24,8 +27,9 @@ class VerifyEmailView extends React.Component {
 }
 
 VerifyEmailView.propTypes = {
-  userSignupRequest: React.PropTypes.func.isRequired
+  userSignupRequest: React.PropTypes.func.isRequired,
+  userLogInRequest: React.PropTypes.func.isRequired
 }
 
-export default connect(null, { userSignupRequest })(VerifyEmailView);
+export default connect(null, { userSignupRequest, userLogInRequest })(VerifyEmailView);
 export { VerifyEmailView as VerifyEmailViewNotConnected };

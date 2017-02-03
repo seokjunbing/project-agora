@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import signUpPromptReducer from '../../reducers/signUpPromptReducer';
+import logInReducers from '../../reducers/logInReducers';
 
 
 class WelcomeBanner extends React.Component {
@@ -29,9 +30,11 @@ class WelcomeBanner extends React.Component {
     }
 }
 
+// token saved as prop
 const mapStateToProps = (state) => {
     return {
         promptMessage : state.verificationPrompt.promptMessage,
+        sessionToken: state.authToken.tokenAuth,
     };
 };
 

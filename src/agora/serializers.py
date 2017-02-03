@@ -25,6 +25,10 @@ class ConflictException(APIException):
     default_detail = 'This resource is already created, cannot successfully create'
     default_code = 'conflict'
 
+class InvalidDataException(APIException):
+    status_code = 400
+    default_detail = 'Client error. Please verify your data is correct and try again.'
+    default_code = 'client error'
 
 def validate_email(email):
     try:
@@ -51,17 +55,26 @@ class ListingSerializer(serializers.ModelSerializer):
     # Useful for visualization; breaks browsable API.
     # author = serializers.StringRelatedField()
 
-    get_sr_price = serializers.SerializerMethodField('get_sr_price_func')
+    author = serializers.SerializerMethodField('get_author_func')
+    author_name = serializers.SerializerMethodField('get_author_name_func')
 
-    def get_sr_price_func(self, obj):
+    def get_author_func(self, obj):
         user = self.context['request'].user
         print('User: ' + str(user))
         logged_in = user.is_authenticated()
-        if user.is_authenticated:
+        if user.is_authenticated() and user.profile.verified:
             return obj.author.pk
         else:
-            return 'Anonymous'
+            return -1  # For now, to keep it an integer
             # return self.context['request'].user # access the request object
+
+    def get_author_name_func(self, obj):
+        user = self.context['request'].user
+        logged_in = user.is_authenticated()
+        if user.is_authenticated() and user.profile.verified:
+            return '%s %s' % (obj.author.first_name, obj.author.last_name)
+        else:
+            return 'Anonymous'
 
     class Meta:
         model = Listing
@@ -115,7 +128,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             # Handle duplicate users without crashing
             try:
                 User.objects.get(email=validated_data['email'])
-                raise ConflictException('There was a problem')
+                raise ConflictException('Error: There is already a user registered with that email.')
             except ObjectDoesNotExist:
                 pass
             # Create user
@@ -138,8 +151,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             user_email = validated_data['email'].encode('utf-8')
 
             # TODO salt the user's email - easily guessable right now.
-            verif_code = hashlib.sha256(user_email).hexdigest()
-            user_profile.verification_code = verif_code
+            verification_code = hashlib.sha256(user_email).hexdigest()
+            user_profile.verification_code = verification_code
             user_profile.save()
 
             # TODO send email on backend, change domain.
@@ -147,7 +160,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
             return user
         else:
-            raise ConflictException("Please enter a Dartmouth email")
+            raise InvalidDataException("Please enter a Dartmouth email")
 
 
 class MessageSerializer(serializers.ModelSerializer):
