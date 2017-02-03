@@ -11,6 +11,7 @@ from .models import Category, Listing, Message, Conversation, Profile
 from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
     UserSerializer, ProfileSerializer
 
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
@@ -199,11 +200,20 @@ class ListingViewSet(viewsets.ModelViewSet):
 
     # TODO update
 
+class MessagePagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+
+class ConversationPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+
 
 class MessageViewSet(viewsets.ModelViewSet):
     # TODO figure out permissions
     queryset = Message.objects.all().order_by('date')
     serializer_class = MessageSerializer
+    pagination_class = MessagePagination
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('conversation',)
 
@@ -212,6 +222,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
     # TODO figure out permissions
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
+    pagination_class = ConversationPagination
 
     @list_route()
     def get_for_user(self, request):
