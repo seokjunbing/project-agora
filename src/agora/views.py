@@ -46,34 +46,12 @@ def sign_s3_upload(request):
     signed_url = conn.generate_url(
         300,
         "PUT",
-        'www.agoradartmouth.com',
+        'agoradartmouth',
         'images/' + object_name,
         headers={'Content-Type': content_type, 'x-amz-acl': 'public-read'})
 
     return HttpResponse(json.dumps({'signedUrl': signed_url}))
 
-
-# @api_view(['GET'])
-# def verify_user(request, code):
-#     data = request.data
-#     print(code)
-#     try:
-#         user_email = data['email']
-#         verification_code = data['verification_code']
-#     except ValueError:
-#         return Response({"message": "Please specify 'user_email' and 'verification_code' in your POST request."})
-#     user_queryset = User.objects.filter(email=user_email)
-#     if len(user_queryset) == 0:  # no user matching email
-#         return Response({"message:" "Could not find specified user matching email %s." % user_email})
-#     else:
-#         user = user_queryset[0]
-#         if user.profile.verification_code == verification_code:  # match!
-#             user.profile.verified = True
-#             user.profile.save()
-#             # user.save()
-#             return Response({"message": "Thank you for verifying your email"})
-#         else:  # wrong verification code
-#             return Response({"message": "Could not verify user with the provided verification code"})
 
 @api_view(['GET'])
 def verify_user(request):
@@ -130,45 +108,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
 
 
-# class CategoryViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#
-#
-#     queryset = Category.objects.all()
-#     serializer_class = CategorySerializer
-#
-#     def get_queryset(self):
-#         """
-#         This view should return a list of all the purchases for
-#         the user as determined by the username portion of the URL.
-#         """
-#         cache_key = 'cate_cache_key'
-#         cache_time = 1000  # time to live in seconds
-#         cate = cache.get(cache_key)
-#
-#         try:
-#             if not cate:
-#                 cate = self.kwargs['cate']
-#                 cache.set(cache_key, cate, cache_time)
-#             else:
-#                 print("\nFOUND CACHE FOR category search!!!\n")
-#                 return cate
-#         except KeyError:
-#             return Category.objects.all()
-#
-#         return Category.objects.filter(name=cate)
-#
-# def heavy_view(request):
-#     cache_key = 'my_heavy_view_cache_key'
-#     cache_time = 1800 # time to live in seconds
-#     result = cache.get(cache_key)
-#     if not result:
-#         result = # some calculations here
-#         cache.set(cache_key, result, cache_time)
-#     return result
-
 class ListingFilter(django_filters.rest_framework.FilterSet):
     min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')
     max_price = django_filters.NumberFilter(name="price", lookup_expr='lte')
@@ -179,7 +118,6 @@ class ListingFilter(django_filters.rest_framework.FilterSet):
                   'listing_date', 'views', 'number_of_inquiries']
 
 
-# class ListingViewSet(generics.ListAPIView):
 class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
