@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import App from './app';
-import { HomeView, ListingView, AccountView, AboutView, ProtectedView, NotFoundView, VerifyEmailView, CreateListingView, MessagesView } from './containers';
+import { HomeView, ListingView, AccountView, AboutView, ProtectedView, NotFoundView, VerifyEmailView, CreateListingView, MessagingView } from './containers';
 import { requireAuthentication } from './utils/requireAuthentication';
 
 export default(
@@ -10,7 +10,7 @@ export default(
         <Route path="verify" component={VerifyEmailView}/>
         <Route path="createlisting" component={CreateListingView}/>
         <Route path="listing" component={ListingView}/>
-        <Route path="messages" component={MessagesView}/>
+        <Route path="messaging" component={MessagingView}/>
         <Route path="protected" component={requireAuthentication(ProtectedView)}/>
     </Route>
 );
