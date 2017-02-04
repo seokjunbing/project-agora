@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from .models import Category, Listing, Message, Conversation, Profile
 from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
     UserSerializer, ProfileSerializer
-from .permissions import CanEditProfile, MessagePermission
+from .permissions import CanEditProfile, MessagePermission, UserPermission
 
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter
@@ -189,7 +189,8 @@ class ConversationViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (CanEditProfile,)
+    # permission_classes = (CanEditProfile,)
+    permission_classes = (UserPermission,)
 
     @list_route()
     def current_user(self, request):
