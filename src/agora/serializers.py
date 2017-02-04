@@ -25,10 +25,12 @@ class ConflictException(APIException):
     default_detail = 'This resource is already created, cannot successfully create'
     default_code = 'conflict'
 
+
 class InvalidDataException(APIException):
     status_code = 400
     default_detail = 'Client error. Please verify your data is correct and try again.'
     default_code = 'client error'
+
 
 def validate_email(email):
     try:
@@ -164,12 +166,25 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    author = serializers.SerializerMethodField('get_author_func')
+
+    def get_author_func(self, obj):
+        author_pk = obj.user.pk
+        author = User.objects.filter(pk=author_pk)[0]
+        return '%s %s' % (author.first_name, author.last_name)
+
     class Meta:
         model = Message
         fields = '__all__'
 
 
 class ConversationSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField('get_title_func')
+
+    def get_title_func(self, obj):
+        listing_pk = obj.listing.pk
+        return Listing.objects.filter(pk=listing_pk)[0].title
+
     class Meta:
         model = Conversation
         fields = '__all__'
