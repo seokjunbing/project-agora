@@ -7,9 +7,11 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.generic import View
 from django.contrib.auth.models import User
+# Agora
 from .models import Category, Listing, Message, Conversation, Profile
 from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
     UserSerializer, ProfileSerializer
+from .permissions import CanEditProfile, MessagePermission
 
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter
@@ -17,8 +19,8 @@ from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
 from rest_framework.decorators import list_route, api_view
 from rest_framework.exceptions import APIException, PermissionDenied
-import rest_framework.status as status
 from rest_framework.permissions import IsAuthenticated
+import rest_framework.status as status
 
 # caching
 from django.utils.cache import get_cache_key
@@ -59,7 +61,6 @@ def verify_user(request):
     email = request.GET.get('email')
     verification_code = request.GET.get('code')
     if email is not None and verification_code is not None:
-        print(email, verification_code)
         user_queryset = User.objects.filter(email=email)
         if len(user_queryset) > 0:
             user = user_queryset[0]
@@ -67,8 +68,7 @@ def verify_user(request):
                 user.profile.verified = True
                 user.profile.save()
                 return Response({"message": "Thank you for veryfing your email."})
-    # TODO return non 500.
-    raise APIException("User email not verified")
+    return Response(data={"detail": "User email not verified."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class IndexView(View):
@@ -128,6 +128,14 @@ class ListingViewSet(viewsets.ModelViewSet):
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
 
+    # def create(self, request, *args, **kwargs):
+    #     user = request.user
+    #     instance = self.get_object()
+    #     if user.is_authenticated() and user.profile.verified:
+    #         viewsets.ModelViewSet.perform_create(self, instance)
+    #     else:
+    #         return Response(status=status.HTTP_403_FORBIDDEN)
+
     def destroy(self, request, *args, **kwargs):
         user = request.user
         instance = self.get_object()
@@ -135,11 +143,12 @@ class ListingViewSet(viewsets.ModelViewSet):
             viewsets.ModelViewSet.perform_destroy(self, instance)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
-    # TODO update
+
 
 class MessagePagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
+
 
 class ConversationPagination(PageNumberPagination):
     page_size = 5
@@ -149,10 +158,18 @@ class ConversationPagination(PageNumberPagination):
 class MessageViewSet(viewsets.ModelViewSet):
     # TODO figure out permissions
     queryset = Message.objects.all().order_by('date')
+    permission_classes = (MessagePermission,)
     serializer_class = MessageSerializer
     pagination_class = MessagePagination
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('conversation',)
+
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_superuser:
+            viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+        else:
+            return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
@@ -163,7 +180,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
     @list_route()
     def get_for_user(self, request):
-
         name = str(request.GET['user'])
         serializer = ConversationSerializer(Conversation.objects.filter(users__in=name), many=True)
 
@@ -173,22 +189,21 @@ class ConversationViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (CanEditProfile,)
 
     @list_route()
     def current_user(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
-    def destroy(self, request, *args, **kwargs):
-        user = request.user
-        instance = self.get_object()
-        print(user)
-        print(user.id)
-        print(instance)
-        if user.is_authenticated() and user == instance:
-            viewsets.ModelViewSet.perform_destroy(self, instance)
-            return Response({"message": "You have successfully deleted your profile on Agora. We hope to see you back soon."})
-        raise ForbiddenException()
+        # def destroy(self, request, *args, **kwargs):
+        #     user = request.user
+        #     instance = self.get_object()
+        #     if user.is_authenticated() and user == instance:
+        #         viewsets.ModelViewSet.perform_destroy(self, instance)
+        #         return Response(
+        #             {"message": "You have successfully deleted your profile on Agora. We hope to see you back soon."})
+        #     raise ForbiddenException()
         # return Response(status=status.HTTP_403_FORBIDDEN)
 
 

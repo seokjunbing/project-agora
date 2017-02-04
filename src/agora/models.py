@@ -217,11 +217,12 @@ def user_str(self):
 def listing_str(self):
     return 'Title: %s, price: %.2f' % (self.title, self.price)
 
-# def conversation_str(self):
-    # return 'Listing: ' + str(self.listing) + 'users: [%s, %s]' % (self.)
+def conversation_str(self):
+    return 'Title: %s' % (self.listing.title)
 
 User.__str__ = user_str
 Listing.__str__ = listing_str
+Conversation.__str__ = conversation_str
 
 # Caching
 post_save.connect(invalidate_cache, sender=Listing)
