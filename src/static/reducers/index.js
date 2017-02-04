@@ -8,6 +8,7 @@ import filtersReducer from './filters';
 import postListingReducer from './postlisting';
 import signUpPromptReducer from './signUpPromptReducer';
 import logInReducers from './logInReducers';
+import messagingReducer from './messaging';
 
 export default combineReducers({
     auth: authReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
     postListing: postListingReducer,
     verificationPrompt: signUpPromptReducer,
     user: logInReducers,
+    messaging: messagingReducer,
 });

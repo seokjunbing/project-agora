@@ -61,7 +61,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    # 'django.contrib.auth.middleware.AuthenticationMiddleware', # TODO uncomment
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Commenting out breaks admin site
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -78,7 +78,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth', # TODO uncomment
+                'django.contrib.auth.context_processors.auth',  # TODO uncomment
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
             ],
@@ -156,7 +156,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        #'oauth2_provider.ext.rest_framework.OAuth2Authentication',
     ),
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.PageNumberPagination',
@@ -213,6 +213,8 @@ JWT_AUTH = {
 
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
+
+AWS_STORAGE_BUCKET_NAME = 'agoradartmouth'
 
 AWS_ACCESS_KEY_ID = 'AKIAITLHCNXC45JUHPPA'
 
