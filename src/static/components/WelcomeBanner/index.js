@@ -34,7 +34,7 @@ class WelcomeBanner extends React.Component {
 const mapStateToProps = (state) => {
     return {
         promptMessage : state.verificationPrompt.promptMessage,
-        sessionToken: state.authToken.tokenAuth,
+        sessionToken: state.user.auth_token,
     };
 };
 
