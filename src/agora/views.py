@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from .models import Category, Listing, Message, Conversation, Profile
 from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
     UserSerializer, ProfileSerializer
-from .permissions import CanEditProfile, MessagePermission
+from .permissions import CanEditProfile, MessagePermission, ConversationPermission
 
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter
@@ -175,6 +175,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 class ConversationViewSet(viewsets.ModelViewSet):
     # TODO figure out permissions
     queryset = Conversation.objects.all()
+    permission_classes = (ConversationPermission,)
     serializer_class = ConversationSerializer
     pagination_class = ConversationPagination
 
@@ -184,6 +185,13 @@ class ConversationViewSet(viewsets.ModelViewSet):
         serializer = ConversationSerializer(Conversation.objects.filter(users__in=name), many=True)
 
         return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_superuser:
+            viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+        else:
+            return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -205,6 +213,13 @@ class UserViewSet(viewsets.ModelViewSet):
         #             {"message": "You have successfully deleted your profile on Agora. We hope to see you back soon."})
         #     raise ForbiddenException()
         # return Response(status=status.HTTP_403_FORBIDDEN)
+
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_superuser:
+            viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+        else:
+            return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 
 
 class ListingList(generics.ListAPIView):
