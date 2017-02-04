@@ -66,13 +66,6 @@ class Listing(models.Model):
         return Listing.objects.create(**validated_data)
         # return Listing(**validated_data)
 
-    # def get_absolute_url(self):
-    #     from django.urls import reverse
-    #     return reverse('api/listings', args=[str(self.id)])
-
-    # def get_absolute_url(self):
-    #     return "api/listings/%i" % self.id
-
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     SALE_TYPES = (
@@ -188,7 +181,7 @@ def expire_page(path):
         key = get_cache_key(request)
         if key in cache:
             cache.delete(key)
-            print("\n\nCACHE DELETED!!!\n\n")
+            # print("\n\nCACHE DELETED!!!\n\n")
 
     except KeyError:
         # print("\n\nkeyError in exp_page\n\n")
@@ -196,10 +189,7 @@ def expire_page(path):
 
 
 def invalidate_cache(sender, instance, **kwargs):
-    # cache.clear()
-    # print("\n\nCACHE invalidated due to a new POST / DELETE!!!\n\n")
     expire_page(instance)
-    # print("\n\ndoing nothing for now...\n\n")
 
 
 # Signals
