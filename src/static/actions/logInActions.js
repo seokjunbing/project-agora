@@ -38,3 +38,12 @@ export function userLogInRequest(userData){
     });
   }
 }
+
+// just save the user credentials in the state store
+// when a token already exists in local storage
+export function setCurrentUser(token){
+  return {
+    type: EXECUTE_USERLOGIN_REQUEST,
+    payload: token
+  };
+}
