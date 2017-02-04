@@ -120,7 +120,6 @@ class Listing(models.Model):
         return self.title
 
 
-
 """
 messaging classes adapted from: http://pydoc.net/Python/django-conversation/1.2/conversation.models/
 """
@@ -181,10 +180,8 @@ def expire_page(path):
         key = get_cache_key(request)
         if key in cache:
             cache.delete(key)
-            # print("\n\nCACHE DELETED!!!\n\n")
 
     except KeyError:
-        # print("\n\nkeyError in exp_page\n\n")
         pass
 
 
