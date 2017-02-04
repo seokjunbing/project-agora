@@ -7,10 +7,18 @@ It is adapted to be deployed on Heroku. There's a couple other changes I've made
 
 ## Architecture
 
-We're using Django for our backend with a Postgres local database (on Heroku), and then react-redux for our frontend component. We have also implemented an Amazon S3 bucket for image storage related to listings.
+We're using Django for our backend with a Postgres local database (on Heroku), and then react-redux for our frontend component. We have also implemented an Amazon S3 bucket for image storage related to listings. Caching of the website and search queries is implemented using memcached. 
 
 ## Setup
 Use setup instructions found on [django-react-redux-jwt-base boilerplate project](https://github.com/Seedstars/django-react-redux-jwt-base)
+
+In addition, make sure to install postrges and jpeg in your virtualenv:
+
+```
+brew install jpeg
+brew install postgres
+brew install memcached
+```
 
 
 Make sure to setup postgres on Heroku and have your buildpacks in order:
@@ -24,7 +32,6 @@ And set the `DJANGO_SETTINGS_MODULE` environment variable:
 ```
 heroku config:set DJANGO_SETTINGS_MODULE=djangoreactredux.settings.prod
 ```
-
 
 ## Deployment
 
@@ -107,6 +114,12 @@ In order to verify a user, a GET request should be made with the queries `email`
  email specified by users at signup. If the `code` matches the verification code stored for a `user`, the user is then
   marked as verified and allowed to access the full features of the site.
 
+##### Caching
+Implemented using Memcached. Memcached helps to speed up dynamic websites by caching data and objects to RAM.
+All successful search queries and web pages are cached. Cache is updated every time there 
+is a change to the database; e.g. when a new listing or a user is created. 
+
+
 ## AUTH
 
 In order to authenticate users to the API, you will need to provide a token that includes information about the user, such
@@ -125,13 +138,17 @@ Include the user token in your header for every request you make; for instance, 
 
     curl -H "Authorization: JWT <token>" http://localhost:8000/api/listings/
 
+
+
+
 ### TODO
 
 - Messaging (conversation style about listings)
 - Image upload (multiple images)
-- Caching
 - Wishlist Feature
 - Anonymity of Home Page (frontend)
+- User profile page
+- Ability to edit a listing
 
 ## Troubleshooting
 

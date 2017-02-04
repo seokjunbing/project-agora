@@ -8,12 +8,16 @@ from django.db.models.signals import post_delete
 from rest_framework.authtoken.models import Token
 from allauth.account.signals import user_signed_up
 
-# for messaging
+"""
+messaging imports
+"""
 # from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
-# for caching
+"""
+cashing imports
+"""
 from django.utils.cache import get_cache_key
 from django.core.cache import cache
 from django.http import HttpRequest
@@ -121,11 +125,9 @@ class Listing(models.Model):
 
 
 
-
 """
 messaging classes adapted from: http://pydoc.net/Python/django-conversation/1.2/conversation.models/
 """
-
 
 class Conversation(models.Model):
     users = models.ManyToManyField(
@@ -186,7 +188,7 @@ def expire_page(path):
             print("\n\nCACHE DELETED!!!\n\n")
 
     except KeyError:
-        print("\n\nkeyError in exp_page\n\n")
+        # print("\n\nkeyError in exp_page\n\n")
         pass
 
 
