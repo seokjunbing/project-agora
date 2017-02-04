@@ -17,6 +17,11 @@ module.exports = {
         }],
     },
 
+    node: {
+      net: 'empty',
+      dns: 'empty'
+    },
+
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {

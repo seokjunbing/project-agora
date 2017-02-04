@@ -123,6 +123,9 @@ class Listing(models.Model):
     # numberOfInquiries(internal for filtering)
     number_of_inquiries = models.PositiveIntegerField(default=0)
 
+    def __str__(self):
+        return self.title
+
 
 
 """
