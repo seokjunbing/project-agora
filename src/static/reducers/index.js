@@ -18,5 +18,5 @@ export default combineReducers({
     filters: filtersReducer,
     postListing: postListingReducer,
     verificationPrompt: signUpPromptReducer,
-    authToken: logInReducers,
+    user: logInReducers,
 });
