@@ -195,8 +195,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         if user.is_authenticated() and user == instance.author and user.profile.verified:
             viewsets.ModelViewSet.perform_destroy(self, instance)
         else:
-            return Response(status.HTTP_403_FORBIDDEN)
-
+            return Response(status=status.HTTP_403_FORBIDDEN)
     # TODO update
 
 
@@ -240,7 +239,7 @@ class UserViewSet(viewsets.ModelViewSet):
             viewsets.ModelViewSet.perform_destroy(self, instance)
             return Response({"message": "You have successfully deleted your profile on Agora. We hope to see you back soon."})
         raise ForbiddenException()
-        # return Response(status.HTTP_403_FORBIDDEN)
+        # return Response(status=status.HTTP_403_FORBIDDEN)
 
 
 class ListingList(generics.ListAPIView):
