@@ -70,6 +70,11 @@ def verify_user(request):
                 return Response({"message": "Thank you for veryfing your email."})
     return Response(data={"detail": "User email not verified."}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['PUT'])
+def edit_listing(request):
+    print('hehe')
+    pass
+
 
 class IndexView(View):
     """Render main page."""
