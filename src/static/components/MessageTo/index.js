@@ -8,6 +8,7 @@ class MessageTo extends React.Component {
             float: 'left',
             clear: 'both',
             textAlign: 'left',
+            margin: '0.2em 0',
         }
         return (
             <Message style={style}>
