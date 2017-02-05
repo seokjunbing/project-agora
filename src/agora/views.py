@@ -223,7 +223,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         user = request.user
         if user.is_superuser:
-            viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+            return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
         else:
             return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 
