@@ -6,10 +6,11 @@ class MessageTo extends React.Component {
         var style = {
             maxWidth: '60%',
             float: 'left',
+            clear: 'both',
             textAlign: 'left',
         }
         return (
-            <Message compact style={style}>
+            <Message style={style}>
                 {this.props.text}
             </Message>
         );

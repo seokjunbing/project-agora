@@ -156,8 +156,7 @@ class ConversationPagination(PageNumberPagination):
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    # TODO figure out permissions
-    queryset = Message.objects.all().order_by('date')
+    queryset = Message.objects.all().order_by('-date')
     permission_classes = (MessagePermission,)
     serializer_class = MessageSerializer
     pagination_class = MessagePagination

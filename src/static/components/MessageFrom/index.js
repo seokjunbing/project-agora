@@ -6,10 +6,12 @@ class MessageFrom extends React.Component {
         var style = {
             maxWidth: '60%',
             float: 'right',
+            clear: 'both',
             textAlign: 'right',
+            margin: '0.2em 0',
         }
         return (
-            <Message compact style={style} inverted color='blue' tertiary>
+            <Message color='blue' style={style}>
                 {this.props.text}
             </Message>
         );
