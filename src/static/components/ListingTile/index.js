@@ -20,10 +20,10 @@ class ListingTile extends React.Component {
         }
         return (
             <Card style={style1}>
-                <Image src={this.props.pictures}/>
+                <Image src={this.props.images[0]}/>
                 <Modal trigger={<Button><h2>{this.props.title}</h2></Button>}>
                     <Modal.Header>
-                        <Image wrapped size='medium' src={this.props.pictures}/>
+                        <Image wrapped size='medium' src={this.props.images[0]}/>
                     </Modal.Header>
                     <Modal.Content>
                       <Modal.Description>
