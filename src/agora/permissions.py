@@ -20,7 +20,6 @@ class CanEditListing(BasePermission):
 
 class MessagePermission(BasePermission):
     def has_object_permission(self, request, view, obj):
-        print(request.user, obj.conversation.users.all())
         return request.user in obj.conversation.users.all() or request.user == obj.user
 
 
