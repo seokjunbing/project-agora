@@ -67,7 +67,7 @@ def verify_user(request):
             if user.profile.verification_code == verification_code:  # match
                 user.profile.verified = True
                 user.profile.save()
-                return Response({"message": "Thank you for veryfing your email."})
+                return Response({"message": "Thank you for verifying your email."})
     return Response(data={"detail": "User email not verified."}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -185,12 +185,13 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-    def list(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_superuser:
-            viewsets.ModelViewSet.list(self, request, *args, **kwargs)
-        else:
-            return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
+    # def list(self, request, *args, **kwargs):
+    #     user = request.user
+    #     if user.is_superuser:
+    #         viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+    #
+    #     else:
+    #         return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -217,7 +218,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         user = request.user
         if user.is_superuser:
-            viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+            return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
         else:
             return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 
