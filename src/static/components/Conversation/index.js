@@ -79,8 +79,7 @@ class Conversation extends React.Component {
                         })
                     }
                     <Form onSubmit={this.handleSubmit.bind(this)}>
-                        <Form.Input name='message' placeholder='Write a message...' onChange={this.updateMessage.bind(this)} style={style3}/>
-                        <Button color='teal' type='submit' id='messageSubmit'>Submit</Button>
+                        <Form.Input name='message' placeholder='Write a message...' onChange={this.updateMessage.bind(this)} style={style3} action={<Button color='teal' type='submit' id='messageSubmit'>Send</Button>}/>
                     </Form>
                 </Grid.Column>
                 <Grid.Column width={3}>

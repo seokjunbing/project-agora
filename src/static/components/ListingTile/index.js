@@ -1,9 +1,37 @@
 import React from 'react';
-import { Card, Modal, Button, Header, Image, Divider } from 'semantic-ui-react';
+import { Card, Modal, Button, Header, Image, Divider, Form } from 'semantic-ui-react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actionCreators from '../../actions/messaging';
 
 class ListingTile extends React.Component {
     constructor(props) {
       super(props);
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        var submit = document.getElementById('messageSubmit');
+        if(nextState && nextState.text != '') {
+            submit.disabled = false;
+        } else {
+            submit.disabled = true;
+        }
+    }
+
+    updateMessage = (e) => {
+        this.setState({
+            text: e.target.value,
+        });
+    }
+
+    handleSubmit() {
+        // this.setState({
+        //     text: this.state.text,
+        //     conversation: this.props.convo_id,
+        //     user: this.props.user,
+        // }, function() {
+        //     this.props.actions.sendMessage(this.state);
+        // });
     }
 
     render() {
@@ -20,10 +48,10 @@ class ListingTile extends React.Component {
         }
         return (
             <Card style={style1}>
-                <Image src={this.props.images[0]}/>
+                <Image src={this.props.images ? this.props.images[0] : ''}/>
                 <Modal trigger={<Button><h2>{this.props.title}</h2></Button>}>
                     <Modal.Header>
-                        <Image wrapped size='medium' src={this.props.images[0]}/>
+                        <Image wrapped size='medium' src={this.props.images ? this.props.images[0] : ''}/>
                     </Modal.Header>
                     <Modal.Content>
                       <Modal.Description>
@@ -41,7 +69,21 @@ class ListingTile extends React.Component {
                 <Card.Content extra>
                     <Button.Group style={style3}>
                         <Button>${this.props.price}{this.props.extraPriceInfo}</Button>
-                        <Button color='teal' icon='mail outline' labelPosition='right' content='Contact' />
+                        <Modal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact' />} basic>
+                            <Modal.Header>
+                                <h1>Contact Seller</h1>
+                                <h4>Write your first message below.</h4>
+                            </Modal.Header>
+                            <Modal.Content>
+                              <Modal.Description>
+                                  <Form onSubmit={this.handleSubmit.bind(this)}>
+                                      <Form.Input name='message' placeholder='Write a message...' onChange={this.updateMessage.bind(this)} action={<Button color='teal' type='submit' id='messageSubmit'>Send</Button>}/>
+                                  </Form>
+                              </Modal.Description>
+                            </Modal.Content>
+                            <Modal.Actions>
+                              </Modal.Actions>
+                          </Modal>
                     </Button.Group>
                 </Card.Content>
               </Card>
@@ -49,4 +91,15 @@ class ListingTile extends React.Component {
     }
 }
 
-export default (ListingTile);
+const mapStateToProps = (state) => {
+    return {};
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch,
+        actions: bindActionCreators(actionCreators, dispatch)
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListingTile);

@@ -115,12 +115,14 @@ export function fetchMessages(conversation) {
     return (dispatch) => {
         var url = '/api/messages/?conversation=' + conversation.toString();
         dispatch(fetchMessagesRequest());
+        var token = localStorage.getItem("LOCAL_TOKEN");
 
         return fetch(url, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authentication': 'JWT ' + token,
             },
         })
             .then(checkHttpStatus)
@@ -140,11 +142,13 @@ export function fetchMessages(conversation) {
 export function fetchConversations(url) {
     return (dispatch) => {
         dispatch(fetchConversationsRequest());
+        var token = localStorage.getItem("LOCAL_TOKEN");
         return fetch(url, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authentication': 'JWT ' + token,
             },
         })
             .then(checkHttpStatus)

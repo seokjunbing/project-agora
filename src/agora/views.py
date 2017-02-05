@@ -163,12 +163,12 @@ class MessageViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('conversation',)
 
-    def list(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_superuser:
-            viewsets.ModelViewSet.list(self, request, *args, **kwargs)
-        else:
-            return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
+    # def list(self, request, *args, **kwargs):
+    #     user = request.user
+    #     if user.is_superuser:
+    #         viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+    #     else:
+    #         return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
