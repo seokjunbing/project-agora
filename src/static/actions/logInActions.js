@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 import { SET_FEEDBACK } from '../constants';
-import { EXECUTE_USERLOGIN_REQUEST, LOCAL_TOKEN } from '../constants';
+import { EXECUTE_USERLOGIN_REQUEST, EXECUTE_LOGOUT, LOCAL_TOKEN } from '../constants';
 import jwt from 'jsonwebtoken';
+import { Router } from 'react-router';
 
 
 // function that posts the data to the api and responds to successful completion
@@ -46,4 +47,25 @@ export function setCurrentUser(token){
     type: EXECUTE_USERLOGIN_REQUEST,
     payload: token
   };
+}
+
+export function executeLogout(data){
+  return {
+    type: EXECUTE_LOGOUT,
+    payload: data
+  };
+}
+
+// logout function
+export function logout(){
+  return dispatch => {
+    localStorage.removeItem(LOCAL_TOKEN);
+    dispatch(executeLogout('logout'));
+
+    // user is logged out
+    dispatch({type: SET_FEEDBACK, payload: "Logged out!"});
+
+    // take the person to the main page
+    browserHistory.push('/');
+  }
 }
