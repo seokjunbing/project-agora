@@ -139,7 +139,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         user = request.user
         instance = self.get_object()
-        if user.is_authenticated() and user == instance.author and user.profile.verified:
+        if user.is_admin or (user.is_authenticated() and user == instance.author and user.profile.verified):
             viewsets.ModelViewSet.perform_destroy(self, instance)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
