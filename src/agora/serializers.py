@@ -57,7 +57,7 @@ class ListingSerializer(serializers.ModelSerializer):
     # Useful for visualization; breaks browsable API.
     # author = serializers.StringRelatedField()
 
-    author = serializers.SerializerMethodField('get_author_func')
+    author_id = serializers.SerializerMethodField('get_author_func')
     author_name = serializers.SerializerMethodField('get_author_name_func')
 
     def get_author_func(self, obj):
@@ -80,7 +80,9 @@ class ListingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Listing
-        fields = '__all__'
+        fields = ('sale_type', 'price', 'price_type', 'sale_type', 'category', 'description', 'title',
+                  'images', 'flags', 'listing_date', 'views', 'number_of_inquiries', 'author_id', 'author_name', 'author')
+        extra_kwargs = {'author': {'write_only': True}}
         # fields = ('price_type', 'get_sr_price')
 
 
