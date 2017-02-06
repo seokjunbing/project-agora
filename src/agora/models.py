@@ -66,7 +66,7 @@ class Listing(models.Model):
         return Listing.objects.create(**validated_data)
         # return Listing(**validated_data)
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null =True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     SALE_TYPES = (
         ('SA', 'Sale'),
