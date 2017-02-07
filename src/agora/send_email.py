@@ -17,8 +17,8 @@ def send_email(recipient, message, sender='agoradartmouth@gmail.com', pwd='agora
         server.sendmail(FROM, TO, message.as_string())
         server.quit()
         print('Successfully sent the email')
-    except:
-        print('failed to send mail')
+    except Exception as e:
+        print(e)
 
 
 def construct_email_msg(receiver, email_subject, html_body=None, plain_text_body=None, sender="agoradartmouth@gmail.com"):
