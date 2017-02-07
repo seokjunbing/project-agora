@@ -58,7 +58,17 @@ def get_username(validated_email):
 
 
 class ListingSerializer(serializers.ModelSerializer):
-    # Useful for visualization; breaks browsable API.
+    category_name = serializers.SerializerMethodField('get_category_name_func')
+    author_str = serializers.SerializerMethodField('get_author_str_func')
+
+    def get_category_name_func(self, obj):
+        return obj.category.name
+
+    def get_author_str_func(self, obj):
+        return '%s %s' % (obj.author.first_name, obj.author.last_name)
+
+        # Useful for visualization; breaks browsable API.
+
     # author = serializers.StringRelatedField()
 
     # author_id = serializers.SerializerMethodField('get_author_func')
@@ -151,12 +161,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             user.set_password(validated_data['password'])
             user.save()
 
-            # token = create_auth_token(instance=user)
-            token = Token.objects.get_or_create(user=user)
-            # print(token)
-
-
-
             user_profile = Profile(user=user)
             user_email = validated_data['email'].encode('utf-8')
 
@@ -168,7 +172,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             # print(settings.HOSTURL)
             # TODO send email on backend, change domain.
             construct_and_send_verification_email(user, domain=settings.HOSTURL)
-
             return user
         else:
             raise InvalidDataException("Please enter a Dartmouth email")
@@ -196,6 +199,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     # title = serializers.SerializerMethodField('get_title_func')
     all_messages = serializers.SerializerMethodField('get_messages_func')
     related_listing = serializers.SerializerMethodField('get_listing_func')
+
     # messages_all = serializers.ManyRelatedField(source='messages', child_relation='messages')
     #  THIS KIND OF WORKS
     # messages = MessageField(many=True, read_only=True)
