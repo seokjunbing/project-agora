@@ -32,5 +32,5 @@ urlpatterns = [
     url(r'^api/start_convo/', start_conversation),
 
     # comment this out to test the API (Backend team)
-    #url(r'', cache_page(settings.PAGE_CACHE_SECONDS)(IndexView.as_view()), name='index'),
+    url(r'', cache_page(settings.PAGE_CACHE_SECONDS)(IndexView.as_view()), name='index'),
 ]
