@@ -61,6 +61,7 @@ class ListingTile extends React.Component {
             display: 'inline-block',
             marginRight: '10%',
         }
+
         return (
             <Card style={style1}>
                 <Image style={style4} src={this.props.images ? this.props.images[0] : ''}/>
@@ -82,6 +83,10 @@ class ListingTile extends React.Component {
                         <div style={style5}>
                             <Header sub>Seller</Header>
                             <span>{this.props.author}</span>
+                        </div>
+                        <div style={style5}>
+                            <Header sub>Date Posted</Header>
+                            <span>{this.props.date}</span>
                         </div>
                         <Divider/>
                         <p>{this.props.description}</p>
