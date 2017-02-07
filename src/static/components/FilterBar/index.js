@@ -5,11 +5,24 @@ import SaleTypeDropdown from '../SaleTypeDropdown';
 import PriceInput from '../PriceInput';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actionCreators from '../../actions/filters';
+import * as filActionCreators from '../../actions/filters';
+import * as lisActionCreators from '../../actions/listings';
+import { buildQueryString } from '../../selectors/filters';
 
 class FilterBar extends React.Component {
     clearFilters() {
-        this.props.actions.clearFilters();
+        this.props.filActions.clearFilters();
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        var cleared = !nextProps.fetchUrl.includes('?');
+        if(cleared) {
+            this.props.lisActions.fetchListings(nextProps.fetchUrl);
+        }
+    }
+
+    updateListings() {
+        this.props.lisActions.fetchListings(this.props.fetchUrl);
     }
 
     render() {
@@ -30,7 +43,10 @@ class FilterBar extends React.Component {
                         <PriceInput placeholder='Max Price' filterName='max_price'/>
                     </Menu.Item>
                     <Menu.Item>
-                        <Button onClick={this.clearFilters.bind(this)}>Clear Filters</Button>
+                        <Button.Group>
+                            <Button onClick={this.updateListings.bind(this)} primary>Update</Button>
+                            <Button onClick={this.clearFilters.bind(this)}>Clear Filters</Button>
+                        </Button.Group>
                     </Menu.Item>
                 </Menu>
             </div>
@@ -38,11 +54,19 @@ class FilterBar extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
     return {
-        dispatch,
-        actions: bindActionCreators(actionCreators, dispatch),
+        fetchUrl : buildQueryString(state),
+        filters: state.filters,
     };
 };
 
-export default connect(null, mapDispatchToProps)(FilterBar);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch,
+        filActions: bindActionCreators(filActionCreators, dispatch),
+        lisActions: bindActionCreators(lisActionCreators, dispatch),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilterBar);
