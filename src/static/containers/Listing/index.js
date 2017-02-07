@@ -14,12 +14,6 @@ class ListingView extends React.Component {
         this.props.actions.fetchListings(this.props.fetchUrl);
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        if(this.props.fetchUrl != nextProps.fetchUrl) {
-            this.props.actions.fetchListings(nextProps.fetchUrl);
-        }
-    }
-
     render() {
         var style1 = {
             display: 'block',

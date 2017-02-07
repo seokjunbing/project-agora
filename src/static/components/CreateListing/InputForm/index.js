@@ -33,7 +33,7 @@ class InputForm extends Component {
 
   handlePriceChange = (e) => {
       e.preventDefault();
-      if (isNaN(e.target.value) == false) {
+      if (isNaN(e.target.value) == false && ((e.target.value*100 % 1) == 0)) {
         this.setState({ price : e.target.value, priceValid : 1, priceChanged : 1});
       } else {
         this.setState({ priceValid : 0, priceChanged : 1});
@@ -104,7 +104,6 @@ class InputForm extends Component {
     if (this.state) {
       if (this.state.priceValid) {
         return (true);
-
       } else if (this.state.priceChanged) {
         return (<Label basic color='red' pointing>Please enter a valid price!</Label>);
       }
@@ -327,11 +326,11 @@ class InputForm extends Component {
 
           </Grid.Column>
           <Grid.Column width={7}>
-            {this.state && this.state.images && this.state.images.length > 0 && <Label color='red' icon='close' attached='top right' onClick={this.removePrimary.bind(this)}></Label>}
+            {this.state && this.state.images && this.state.images.length > 0 && <Label color='red' icon='close' attached='top right' onClick={this.removePrimary.bind(this)}>Delete</Label>}
             <Image.Group size='medium' centered='true'>
               {this.renderPrimaryImage()}
             </Image.Group>
-            {this.state && this.state.images && this.state.images.length > 1 && <Label color='blue' icon='chevron down' attached='top left' onClick={this.rotateImageOrder.bind(this)}></Label>}
+            {this.state && this.state.images && this.state.images.length > 1 && <Label color='blue' icon='chevron down' attached='top left' onClick={this.rotateImageOrder.bind(this)}>Rotate Order</Label>}
             <Image.Group size='small' centered='true'>
               {this.renderSecondaryImages()}
             </Image.Group>

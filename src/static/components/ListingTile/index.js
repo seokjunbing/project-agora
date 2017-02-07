@@ -53,9 +53,17 @@ class ListingTile extends React.Component {
             margin: 'auto',
             textAlign: 'center',
         }
+        var style4 = {
+            minHeight: '200px',
+            maxHeight: '200px',
+        }
+        var style5 = {
+            display: 'inline-block',
+            marginRight: '10%',
+        }
         return (
             <Card style={style1}>
-                <Image src={this.props.images ? this.props.images[0] : ''}/>
+                <Image style={style4} src={this.props.images ? this.props.images[0] : ''}/>
                 <Modal trigger={<Button><h2>{this.props.title}</h2></Button>}>
                     <Modal.Header>
                         <Image wrapped size='medium' src={this.props.images ? this.props.images[0] : ''}/>
@@ -63,20 +71,25 @@ class ListingTile extends React.Component {
                     <Modal.Content>
                       <Modal.Description>
                         <Header as='h2'>{this.props.title}</Header>
-                        <Header sub>Price</Header>
-                        <span>${this.props.price}{this.props.extraPriceInfo}</span>
+                        <div style={style5}>
+                            <Header sub>Price</Header>
+                            <span>${this.props.price}{this.props.extraPriceInfo}</span>
+                        </div>
+                        <div style={style5}>
+                            <Header sub>Category</Header>
+                            <span>{this.props.category}</span>
+                        </div>
+                        <div style={style5}>
+                            <Header sub>Seller</Header>
+                            <span>{this.props.author}</span>
+                        </div>
                         <Divider/>
                         <p>{this.props.description}</p>
                       </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button color='teal' icon='mail outline' labelPosition='right' content='Contact Seller' />
-                      </Modal.Actions>
-                  </Modal>
-                <Card.Content extra>
-                    <Button.Group style={style3}>
-                        <Button>${this.props.price}{this.props.extraPriceInfo}</Button>
-                        <Modal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact' />} basic>
+                        {this.props.user_id &&
+                            <Modal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact Seller' />} basic>
                             <Modal.Header>
                                 <h1>Contact Seller</h1>
                                 <h4>Write your first message below.</h4>
@@ -90,7 +103,29 @@ class ListingTile extends React.Component {
                             </Modal.Content>
                             <Modal.Actions>
                               </Modal.Actions>
-                          </Modal>
+                          </Modal>}
+                      </Modal.Actions>
+                  </Modal>
+                <Card.Content extra>
+                    <Button.Group style={style3}>
+                        <Button>${this.props.price}{this.props.extraPriceInfo}</Button>
+                        {this.props.user_id &&
+                            <Modal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact' />} basic>
+                            <Modal.Header>
+                                <h1>Contact Seller</h1>
+                                <h4>Write your first message below.</h4>
+                            </Modal.Header>
+                            <Modal.Content>
+                              <Modal.Description>
+                                  <Form onSubmit={this.handleSubmit.bind(this)}>
+                                      <Form.Input name='message' placeholder='Write a message...' onChange={this.updateMessage.bind(this)} action={<Button color='teal' type='submit' id='messageSubmit'>Send</Button>}/>
+                                  </Form>
+                              </Modal.Description>
+                            </Modal.Content>
+                            <Modal.Actions>
+                              </Modal.Actions>
+                          </Modal>}
+
                     </Button.Group>
                 </Card.Content>
               </Card>
