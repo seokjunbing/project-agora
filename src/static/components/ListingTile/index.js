@@ -30,7 +30,7 @@ class ListingTile extends React.Component {
         e.preventDefault();
         var users = [];
         users.push(this.props.user_id);
-        users.push(this.props.author);
+        users.push(this.props.author_id);
         this.setState({
             listing: this.props.listingId,
             users: users,
