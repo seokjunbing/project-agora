@@ -167,12 +167,12 @@ class ListingViewSet(viewsets.ModelViewSet):
 
 
 class MessagePagination(PageNumberPagination):
-    page_size = 10
+    page_size = 100
     page_size_query_param = 'page_size'
 
 
 class ConversationPagination(PageNumberPagination):
-    page_size = 5
+    page_size = 100
     page_size_query_param = 'page_size'
 
 

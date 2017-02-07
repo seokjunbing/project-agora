@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message } from 'semantic-ui-react';
+import { Message, Popup } from 'semantic-ui-react';
 
 class MessageTo extends React.Component {
     render() {
