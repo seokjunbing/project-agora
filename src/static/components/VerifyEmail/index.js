@@ -15,6 +15,9 @@ class VerifyEmail extends React.Component {
         verifyPasswordSU: '',
         passwordErrorText1: '',
         passwordErrorText2: '',
+        emailErrorText: '',
+        firstNameErrorText: '',
+        lastNameErrorText: '',
 
         // login credential state variables
         logInEmail: '',
@@ -33,28 +36,68 @@ class VerifyEmail extends React.Component {
     onChangeEmailSU = (e) => {
       e.preventDefault();
       this.setState({ emailAddressSU : e.target.value });
-      console.log(this.state.emailAddressSU)
+
+      // basic error checking
+      if ((e.target.value.length < 7) || (e.target.value.length >= 40)){
+        this.setState({ emailErrorText : "Email should be 7 to 40 characters long!" });
+        this.setState({ emailOK: '0' });
+      }
+      else if (e.target.value.includes(" ")){
+        this.setState({ emailErrorText : "Whitespace not allowed" });
+        this.setState({ emailOK: '0' });
+      }
+      else if (e.target.value.includes("@")){
+        this.setState({ emailErrorText : "'@' not allowed" });
+        this.setState({ emailOK: '0' });
+      }
+      else {
+        this.setState({ emailErrorText : "" });
+        this.setState({ emailOK: '1' });
+      }
     }
 
     // update the value of the firstName state variable
     onChangeFirstName = (e) => {
       e.preventDefault();
       this.setState({ firstName : e.target.value });
-      console.log(this.state.emailAddressSU)
+
+      if ((e.target.value.length < 2) || (e.target.value.length > 25)){
+        this.setState({ firstNameErrorText : "First name should be 2 to 25 characters long!" });
+        this.setState({ firstNameOK: '0' });
+      }
+      else if (!(/^[A-Za-z]+$/.test(e.target.value))){
+        this.setState({ firstNameErrorText : "Only letters allowed!" });
+        this.setState({ firstNameOK: '0' });
+      }
+      else {
+        this.setState({ firstNameErrorText : "" });
+        this.setState({ firstNameOK: '1' });
+      }
     }
 
     // update the value of the lastName state variable
     onChangeLastName = (e) => {
       e.preventDefault();
       this.setState({ lastName : e.target.value });
-      console.log(e.target.value)
+
+      if ((e.target.value.length < 2) || (e.target.value.length > 25)){
+        this.setState({ lastNameErrorText : "Last name should be 2 to 25 characters long!" });
+        this.setState({ lastNameOK: '0' });
+      }
+      else if (!(/^[A-Za-z]+$/.test(e.target.value))){
+        this.setState({ lastNameErrorText : "Only letters allowed!" });
+        this.setState({ lastNameOK: '0' });
+      }
+      else {
+        this.setState({ lastNameErrorText : "" });
+        this.setState({ lastNameOK: '1' });
+      }
     }
 
     // update the value of the passwordSU state variable
     onChangePasswordSU = (e) => {
       e.preventDefault();
       this.setState({ passwordSU : e.target.value });
-      console.log(e.target.value)
 
       // password should be between 6 to 15 characters long
       if ((e.target.value.length >= 6) && (e.target.value.length <= 15)){
@@ -91,7 +134,6 @@ class VerifyEmail extends React.Component {
     onChangeVerifyPasswordSU = (e) => {
       e.preventDefault();
       this.setState({ verifyPasswordSU : e.target.value });
-      console.log(e.target.value)
 
       // password should be between 6 to 15 characters long
       if ((e.target.value.length >= 6) && (e.target.value.length <= 15)){
@@ -126,39 +168,48 @@ class VerifyEmail extends React.Component {
     // handle the onClick event for account creation
     onSignUpClick = (e) => {
       e.preventDefault();
-      console.log("sign up clicked!")
 
       // check boolean flags
-
-      // post the data to the API url if everything is good
-      this.props.userSignupRequest(this.state);
-
+      if ((this.state.emailOK == 1) && (this.state.firstNameOK == 1) && (this.state.lastNameOK == 1) && (this.state.passwordOK == 1)){
+        // post the data to the API url if everything is good
+        this.props.userSignupRequest(this.state);
+      }
+      else {
+        // set error messages
+        if ((this.state.emailOK == 0)){
+          this.setState({ emailErrorText : "This field is required" });
+        }
+        if ((this.state.firstNameOK == 0)){
+          this.setState({ firstNameErrorText : "This field is required" });
+        }
+        if ((this.state.lastNameOK == 0)){
+          this.setState({ lastNameErrorText : "This field is required" });
+        }
+        if ((this.state.passwordOK == 0)){
+          this.setState({ passwordErrorText1 : "This field is required" });
+          this.setState({ passwordErrorText2 : "This field is required" });
+        }
+      }
     }
-
-    // log in fields
 
     // update the value of the email state variable for Log In
     onChangeSignInEmail = (e) => {
       e.preventDefault();
       this.setState({ logInEmail : e.target.value });
-      console.log(this.state.logInEmail)
     }
 
     // update the value of the password state variable for Log in
     onChangeSignInPassword = (e) => {
       e.preventDefault();
       this.setState({ logInPassword : e.target.value });
-      console.log(this.state.logInPassword)
     }
 
     // handle the onClick event for account Log In
     onLogInClick = (e) => {
       e.preventDefault();
-      console.log("Log In clicked!")
 
       // post the data to the API to get the auth token back
       this.props.userLogInRequest(this.state);
-
     }
 
 
@@ -189,7 +240,7 @@ class VerifyEmail extends React.Component {
       }
 
       var button_style = {
-        marginTop: '30px',
+        marginTop: '20px',
         textAlign: 'center'
       }
 
@@ -208,18 +259,21 @@ class VerifyEmail extends React.Component {
                       <input style={email_size} type='text' onChange={this.onChangeEmailSU.bind(this)} name= 'emailAddressSU' placeholder='e.g. phil.j.hanlon.77'/>
                       <Label>@dartmouth.edu</Label>
                     </Input>
+                    <label style={label_color}>{this.state.emailErrorText}</label>
                   </Form.Field>
                   <Form.Field>
                     <label style={vertical_offset}>First Name</label>
                     <Input style= {field_length}>
                       <input style={style_centered} onChange={this.onChangeFirstName.bind(this)} name= 'firstName' placeholder='e.g. Phil' type='text' />
                     </Input>
+                    <label style={label_color}>{this.state.firstNameErrorText}</label>
                   </Form.Field>
                   <Form.Field>
                     <label style={vertical_offset}>Last Name</label>
                     <Input style= {field_length}>
                       <input style={style_centered} onChange={this.onChangeLastName.bind(this)} name= 'lastName' placeholder='e.g. Hanlon' type='text' />
                     </Input>
+                    <label style={label_color}>{this.state.lastNameErrorText}</label>
                   </Form.Field>
                   <Form.Field>
                     <label style={vertical_offset}>Password</label>
