@@ -203,8 +203,10 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
     @list_route()
     def get_for_user(self, request):
-        name = str(request.GET['user'])
-        serializer = ConversationSerializer(Conversation.objects.filter(users__in=name), many=True)
+        name = request.GET['user']
+        user_arr = []
+        user_arr.append(name)
+        serializer = ConversationSerializer(Conversation.objects.filter(users__in=user_arr), many=True)
 
         return Response(serializer.data)
 
