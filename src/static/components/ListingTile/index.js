@@ -11,10 +11,12 @@ class ListingTile extends React.Component {
 
     componentWillUpdate(nextProps, nextState) {
         var submit = document.getElementById('messageSubmit');
-        if(nextState && nextState.text != '') {
-            submit.disabled = false;
-        } else {
-            submit.disabled = true;
+        if(submit) {
+            if(nextState && nextState.text != '') {
+                submit.disabled = false;
+            } else {
+                submit.disabled = true;
+            }
         }
     }
 
