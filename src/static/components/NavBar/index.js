@@ -24,6 +24,7 @@ class NavBar extends React.Component {
     onLogOut(e){
       e.preventDefault();
       this.props.logInActions.logout();
+      window.location = '/';
     }
 
     render() {
@@ -80,7 +81,7 @@ class NavBar extends React.Component {
                  <Input className='icon' icon='search' placeholder='Search listings...' />
               </Menu.Item>
               <Menu.Item>
-                <Button href="/verify" color='teal'>Log In</Button>
+                <Button href="/verify" color='teal'>Log In/Sign Up</Button>
               </Menu.Item>
           </Menu.Menu>
 

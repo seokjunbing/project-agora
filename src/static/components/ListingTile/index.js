@@ -53,9 +53,13 @@ class ListingTile extends React.Component {
             margin: 'auto',
             textAlign: 'center',
         }
+        var style4 = {
+            minHeight: '200px',
+            maxHeight: '200px',
+        }
         return (
             <Card style={style1}>
-                <Image src={this.props.images ? this.props.images[0] : ''}/>
+                <Image style={style4} src={this.props.images ? this.props.images[0] : ''}/>
                 <Modal trigger={<Button><h2>{this.props.title}</h2></Button>}>
                     <Modal.Header>
                         <Image wrapped size='medium' src={this.props.images ? this.props.images[0] : ''}/>
@@ -76,7 +80,8 @@ class ListingTile extends React.Component {
                 <Card.Content extra>
                     <Button.Group style={style3}>
                         <Button>${this.props.price}{this.props.extraPriceInfo}</Button>
-                        <Modal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact' />} basic>
+                        {this.props.user_id &&
+                            <Modal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact' />} basic>
                             <Modal.Header>
                                 <h1>Contact Seller</h1>
                                 <h4>Write your first message below.</h4>
@@ -90,7 +95,8 @@ class ListingTile extends React.Component {
                             </Modal.Content>
                             <Modal.Actions>
                               </Modal.Actions>
-                          </Modal>
+                          </Modal>}
+
                     </Button.Group>
                 </Card.Content>
               </Card>
