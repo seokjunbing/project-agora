@@ -1,17 +1,25 @@
 import React from 'react';
-import { Message } from 'semantic-ui-react';
+import { Message, Popup } from 'semantic-ui-react';
 
 class MessageFrom extends React.Component {
     render() {
         var style = {
             maxWidth: '60%',
             float: 'right',
+            clear: 'both',
             textAlign: 'right',
+            margin: '0.2em 0',
         }
         return (
-            <Message compact style={style} inverted color='blue' tertiary>
-                {this.props.text}
-            </Message>
+            <div>
+                <Popup
+                     trigger={<Message color='blue' style={style}>
+                                 {this.props.text}
+                             </Message>}
+                     content={this.props.date}
+                     positioning='left center'
+                 />
+            </div>
         );
     }
 }

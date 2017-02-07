@@ -6,6 +6,9 @@ from rest_framework.authtoken.models import Token
 from django.core.exceptions import ObjectDoesNotExist
 import hashlib
 from rest_framework.exceptions import APIException
+from django.core import serializers as ser
+import json
+# from rest_framework.serializers import
 import httplib2
 import os
 # from .helpers import do_something
@@ -57,30 +60,34 @@ class ListingSerializer(serializers.ModelSerializer):
     # Useful for visualization; breaks browsable API.
     # author = serializers.StringRelatedField()
 
-    author = serializers.SerializerMethodField('get_author_func')
-    author_name = serializers.SerializerMethodField('get_author_name_func')
+    # author_id = serializers.SerializerMethodField('get_author_func')
+    # author_name = serializers.SerializerMethodField('get_author_name_func')
 
-    def get_author_func(self, obj):
-        user = self.context['request'].user
-        print('User: ' + str(user))
-        logged_in = user.is_authenticated()
-        if user.is_authenticated() and user.profile.verified:
-            return obj.author.pk
-        else:
-            return -1  # For now, to keep it an integer
-            # return self.context['request'].user # access the request object
-
-    def get_author_name_func(self, obj):
-        user = self.context['request'].user
-        logged_in = user.is_authenticated()
-        if user.is_authenticated() and user.profile.verified:
-            return '%s %s' % (obj.author.first_name, obj.author.last_name)
-        else:
-            return 'Anonymous'
+    # def get_author_func(self, obj):
+    #     user = self.context['request'].user
+    #     print('User: ' + str(user))
+    #     logged_in = user.is_authenticated()
+    #     if user.is_authenticated() and user.profile.verified:
+    #         return obj.author.pk
+    #     else:
+    #         return -1  # For now, to keep it an integer
+    ##         return self.context['request'].user # access the request object
+    #
+    # def get_author_name_func(self, obj):
+    #     user = self.context['request'].user
+    #     logged_in = user.is_authenticated()
+    #     if user.is_authenticated() and user.profile.verified:
+    #         return '%s %s' % (obj.author.first_name, obj.author.last_name)
+    #     else:
+    #         return 'Anonymous'
 
     class Meta:
         model = Listing
+        # fields = ('sale_type', 'price', 'price_type', 'sale_type', 'category', 'description', 'title',
+        #           'images', 'flags', 'listing_date', 'views', 'number_of_inquiries', 'author_id', 'author_name',
+        #           'author', 'pk')
         fields = '__all__'
+        # extra_kwargs = {'author': {'write_only': True}}
         # fields = ('price_type', 'get_sr_price')
 
 
@@ -178,12 +185,42 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ConversationSerializer(serializers.ModelSerializer):
-    title = serializers.SerializerMethodField('get_title_func')
+class MessageField(serializers.RelatedField):
+    def to_representation(self, value):
+        return '%s' % (value.text)
 
-    def get_title_func(self, obj):
-        listing_pk = obj.listing.pk
-        return Listing.objects.filter(pk=listing_pk)[0].title
+
+class ConversationSerializer(serializers.ModelSerializer):
+    # title = serializers.SerializerMethodField('get_title_func')
+    all_messages = serializers.SerializerMethodField('get_messages_func')
+    related_listing = serializers.SerializerMethodField('get_listing_func')
+    # messages_all = serializers.ManyRelatedField(source='messages', child_relation='messages')
+    #  THIS KIND OF WORKS
+    # messages = MessageField(many=True, read_only=True)
+    # messages = serializers.HyperlinkedRelatedField(many=True, queryset=Message.objects.all())
+
+    # messages = serializers.ReadOnlyField()
+
+    # m = serializers.ModelSerializer(data=Conversation.listing)
+    # m = ListingSerializer(source='conversation_set')
+
+    def get_listing_func(self, obj):
+        return ListingSerializer(obj.listing).data
+        # listing_pk = obj.listing.pk
+        # return ListingSerializer(Listing.objects.get(pk=listing_pk)).data
+
+    def get_messages_func(self, obj):
+        conversation_pk = obj.pk
+        queryset = Message.objects.filter(conversation=conversation_pk)
+        l = []
+        if len(queryset) > 0:
+            for q in queryset:
+                l.append(MessageSerializer(q).data)
+        return l
+
+    # def get_listing_func(self, obj):
+    #     obj.
+
 
     class Meta:
         model = Conversation

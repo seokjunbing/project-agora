@@ -30,7 +30,6 @@ from django.http import HttpRequest
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 from django.shortcuts import redirect
 
-
 class ForbiddenException(APIException):
     status_code = 403
     default_detail = 'You are not authorized to perform that action.'
@@ -70,6 +69,27 @@ def verify_user(request):
                 user.profile.save()
                 return redirect('/confirmed')
     return Response(data={"detail": "User email not verified."}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def start_conversation(request):
+    req = request.body.decode('unicode-escape')
+    req = json.loads(req)
+    if req['listing'] and req['users'] and req['user'] and req['text']:
+        try:
+            l = Listing.objects.get(pk=req['listing'])
+            c = Conversation(listing=l)
+            c.save()
+            for user in req['users']:
+                u = User.objects.get(pk=user)
+                c.users.add(u)
+            u = User.objects.get(pk=req['user'])
+            m = Message(text=req['text'], user=u, conversation=c)
+            m.save()
+            return Response(data={"detail": "Created conversation."}, status=status.HTTP_201_CREATED)
+        except Exception:
+            return Response(data={"detail": "Unable to create conversation."}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(data={"detail": "Invalid input."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class IndexView(View):
@@ -140,7 +160,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         user = request.user
         instance = self.get_object()
-        if user.is_authenticated() and user == instance.author and user.profile.verified:
+        if user.is_admin or (user.is_authenticated() and user == instance.author and user.profile.verified):
             viewsets.ModelViewSet.perform_destroy(self, instance)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
@@ -157,20 +177,19 @@ class ConversationPagination(PageNumberPagination):
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    # TODO figure out permissions
-    queryset = Message.objects.all().order_by('date')
+    queryset = Message.objects.all().order_by('-date')
     permission_classes = (MessagePermission,)
     serializer_class = MessageSerializer
     pagination_class = MessagePagination
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('conversation',)
 
-    def list(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_superuser:
-            viewsets.ModelViewSet.list(self, request, *args, **kwargs)
-        else:
-            return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
+    # def list(self, request, *args, **kwargs):
+    #     user = request.user
+    #     if user.is_superuser:
+    #         viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+    #     else:
+    #         return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
@@ -187,12 +206,13 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-    def list(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_superuser:
-            viewsets.ModelViewSet.list(self, request, *args, **kwargs)
-        else:
-            return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
+    # def list(self, request, *args, **kwargs):
+    #     user = request.user
+    #     if user.is_superuser:
+    #         viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+    #
+    #     else:
+    #         return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -219,7 +239,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         user = request.user
         if user.is_superuser:
-            viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+            return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
         else:
             return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 

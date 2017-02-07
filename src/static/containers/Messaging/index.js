@@ -4,19 +4,21 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/messaging';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
-import Conversation from '../../components/Conversation';
+import MessagingWrapper from '../../components/MessagingWrapper';
 
 class MessagingView extends React.Component {
     componentDidMount() {
-        this.props.actions.fetchConversations('/api/conversations/get_for_user/?user=1');
+        this.props.actions.fetchConversations('/api/conversations/get_for_user/?user=' + this.props.user.toString());
+        var self = this;
+        setInterval(function() {
+          self.props.actions.fetchConversations('/api/conversations/get_for_user/?user=' + self.props.user.toString());
+      }, 1000);
     }
 
     render() {
         return (
             <div>
-                {this.props.conversations && this.props.conversations.map(conversation => {
-                    return <Conversation key={conversation.id} listing={conversation.listing} messages={conversation.messages}/>;
-                })}
+                {this.props.conversations && <MessagingWrapper/>}
             </div>
         );
     }
@@ -25,8 +27,9 @@ class MessagingView extends React.Component {
 const mapStateToProps = (state) => {
     return {
         isFetching : state.messaging.isFetching,
-        conversations: state.messaging.conversations,
+        conversations : state.messaging.conversations,
         statusText : state.messaging.statusText,
+        user : state.user.user_id,
     };
 };
 

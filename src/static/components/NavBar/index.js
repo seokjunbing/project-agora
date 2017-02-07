@@ -2,15 +2,28 @@ import React from 'react';
 import { Menu, Input, Button, Popup, Icon, List, Image, Dropdown, Divider, Label } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import logInReducers from '../../reducers/logInReducers';
-import { logout } from '../../actions/logInActions';
+import { bindActionCreators } from 'redux';
+import * as messagingActionCreators from '../../actions/messaging';
+import * as logInActionCreators from '../../actions/logInActions';
 
 
 class NavBar extends React.Component {
+    componentDidMount() {
+        if(this.props.user.user_id) {
+            this.props.messagingActions.fetchConversations('/api/conversations/get_for_user/?user=' + this.props.user.user_id.toString());
+        }
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        if(nextProps.user.user_id != this.props.user.user_id) {
+            this.props.messagingActions.fetchConversations('/api/conversations/get_for_user/?user=' + nextProps.user.user_id.toString());
+        }
+    }
 
     // logout
     onLogOut(e){
       e.preventDefault();
-      this.props.logout();
+      this.props.logInActions.logout();
     }
 
     render() {
@@ -31,32 +44,24 @@ class NavBar extends React.Component {
               <Menu.Item>
                   <Popup
                     trigger={ <div><Icon name='mail' /> Messages</div>}
-                    content={<List verticalAlign='middle'>
+                    content={<div>
+                        <List verticalAlign='middle'>
+                                {this.props.conversations && this.props.conversations.map((conversation, index) => {
+                                    if(index <= 4) {
+                                        return <List.Item key={conversation.id}>
+                                                  <Image avatar src={conversation.related_listing.images[0]} />
+                                                  <List.Content>
+                                                    <List.Header>{conversation.related_listing.title}</List.Header>
+                                                    <List.Description>{conversation.all_messages[conversation.all_messages.length-1].text}</List.Description>
+                                                  </List.Content>
+                                                </List.Item>
+                                    }
+                                })}
                                 <List.Item>
-                                  <Image avatar src='http://semantic-ui.com/images/avatar/small/helen.jpg' />
-                                  <List.Content>
-                                    <List.Header as='a'>Black leather couch</List.Header>
-                                    <List.Header>Unread message...</List.Header>
-                                  </List.Content>
+                                  <Button href='/messaging' basic color='black'>See all conversations</Button>
                                 </List.Item>
-                                <List.Item>
-                                  <Image avatar src='http://semantic-ui.com/images/avatar/small/christian.jpg' />
-                                  <List.Content>
-                                    <List.Header as='a'>LG 40-in TV</List.Header>
-                                    <List.Description>So can we agree on $20?</List.Description>
-                                  </List.Content>
-                                </List.Item>
-                                <List.Item>
-                                  <Image avatar src='http://semantic-ui.com/images/avatar/small/daniel.jpg' />
-                                  <List.Content>
-                                    <List.Header as='a'>Air Jordan 10</List.Header>
-                                    <List.Description>Thanks for buying from me!</List.Description>
-                                  </List.Content>
-                                </List.Item>
-                                <List.Item>
-                                  <Button href='/messages' basic color='black'>See all conversations</Button>
-                                </List.Item>
-                              </List>}
+                                 </List>
+                                </div>}
                     on='click'
                     positioning='bottom right'
                   />
@@ -96,15 +101,19 @@ class NavBar extends React.Component {
     }
 }
 
-NavBar.propTypes = {
-  user: React.PropTypes.object.isRequired,
-  logout: React.PropTypes.func.isRequired
-}
-
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    conversations: state.messaging.conversations,
   };
 };
 
-export default connect(mapStateToProps, { logout })(NavBar);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch,
+        messagingActions: bindActionCreators(messagingActionCreators, dispatch),
+        logInActions: bindActionCreators(logInActionCreators, dispatch),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

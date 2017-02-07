@@ -6,12 +6,18 @@ class MessageTo extends React.Component {
         var style = {
             maxWidth: '60%',
             float: 'left',
+            clear: 'both',
             textAlign: 'left',
+            margin: '0.2em 0',
         }
         return (
-            <Message compact style={style}>
-                {this.props.text}
-            </Message>
+            <Popup
+                 trigger={<Message style={style}>
+                             {this.props.text}
+                         </Message>}
+                 content={this.props.date}
+                 positioning='right center'
+             />
         );
     }
 }
