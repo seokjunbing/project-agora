@@ -1,35 +1,33 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actionCreators from '../../actions/auth';
+import * as signUpActionCreators from '../../actions/signUpActions';
+import * as logInActionCreators from '../../actions/logInActions';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
 import VerifyEmail from '../../components/VerifyEmail';
-import { userSignupRequest } from '../../actions/signUpActions';
-import { userLogInRequest } from '../../actions/logInActions';
 
 
 
 class VerifyEmailView extends React.Component {
 
   render() {
-
-      const { userSignupRequest } = this.props;
-      const { userLogInRequest } = this.props;
-
       return (
         <div>
-          <VerifyEmail userSignupRequest={userSignupRequest} userLogInRequest={userLogInRequest}/>
+          <VerifyEmail userSignupRequest={this.props.signUpActions.userSignupRequest} userLogInRequest={this.props.logInActions.userLogInRequest}/>
         </div>
       );
   }
 
 }
 
-VerifyEmailView.propTypes = {
-  userSignupRequest: React.PropTypes.func.isRequired,
-  userLogInRequest: React.PropTypes.func.isRequired
-}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch,
+        signUpActions: bindActionCreators(signUpActionCreators, dispatch),
+        logInActions: bindActionCreators(logInActionCreators, dispatch),
+    };
+};
 
-export default connect(null, { userSignupRequest, userLogInRequest })(VerifyEmailView);
+export default connect(null, mapDispatchToProps)(VerifyEmailView);
 export { VerifyEmailView as VerifyEmailViewNotConnected };
