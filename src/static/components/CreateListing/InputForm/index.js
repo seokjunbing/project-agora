@@ -35,7 +35,6 @@ class InputForm extends Component {
       e.preventDefault();
       if (isNaN(e.target.value) == false) {
         this.setState({ price : e.target.value, priceValid : 1, priceChanged : 1});
-        console.log('price valid');
       } else {
         this.setState({ priceValid : 0, priceChanged : 1});
       }
@@ -49,7 +48,6 @@ class InputForm extends Component {
   handleCategoryChange = (e, selection) => {
       e.preventDefault();
       this.setState({ category : selection.value, categoryValid : 1, categoryChanged : 1});
-      console.log('changed category');
   }
 
   handleDescriptionChange = (e) => {
@@ -63,8 +61,12 @@ class InputForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.postActions.postListing(this.state);
-    window.location = '/listing';
+    this.setState({
+        author: this.props.user,
+    }, function() {
+        this.props.postActions.postListing(this.state);
+        window.location = '/listing';
+    });
   }
 
   componentDidMount() {
@@ -72,7 +74,6 @@ class InputForm extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-      console.log(nextState);
   }
 
   processCategories() {
@@ -89,7 +90,6 @@ class InputForm extends Component {
   titleError() {
     if (this.state) {
       if (this.state.titleValid) {
-        console.log('title valid')
         return (true);
 
       } else if (this.state.titleChanged) {
@@ -153,8 +153,6 @@ class InputForm extends Component {
         var images_copy = this.state.images.slice();
         var first_image = images_copy.shift();
         images_copy.push(first_image);
-        console.log('images below:');
-        console.log(images_copy);
         this.setState({images : images_copy});
       }
     }
@@ -165,7 +163,6 @@ class InputForm extends Component {
     this.setState({imageUploadStatus : 2});
     this.setState({imagePresent : 1});
 
-    console.log('Upload Finished');
     var images_copy;
     if (this.state.images) {
       images_copy = this.state.images.slice();
@@ -179,7 +176,6 @@ class InputForm extends Component {
   }
 
   onImageUploadError(message) {
-    console.log('Upload error: ' + message);
     this.setState({imageUploadStatus : 3});
   }
 
@@ -187,7 +183,6 @@ class InputForm extends Component {
     if (this.state) {
       if (this.state.images && this.state.images.length > 0) {
         var primary = [this.state.images[0]];
-        console.log('rendering primary image');
         return (
           primary.map((image)=> {
           return (
@@ -205,7 +200,6 @@ class InputForm extends Component {
     if (this.state) {
       if (this.state.images)
         if (this.state.images.length > 1) {
-          console.log('rendering secondary images');
           var images_copy = this.state.images.slice();
           images_copy.shift();
           var secondary = images_copy;
@@ -228,8 +222,6 @@ class InputForm extends Component {
   }
 
   onProgress(percent, message) {
-    console.log(percent);
-    console.log(message);
     this.setState({imageUploadPercent : percent});
   }
 
@@ -355,6 +347,7 @@ const mapStateToProps = (state) => {
         isPosting : state.postListing.isPosting,
         categories : state.categories.categories,
         statusText : state.postListing.statusText,
+        user : state.user.user_id,
     };
 };
 

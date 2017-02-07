@@ -24,14 +24,19 @@ class ListingTile extends React.Component {
         });
     }
 
-    handleSubmit() {
-        // this.setState({
-        //     text: this.state.text,
-        //     conversation: this.props.convo_id,
-        //     user: this.props.user,
-        // }, function() {
-        //     this.props.actions.sendMessage(this.state);
-        // });
+    handleSubmit(e) {
+        e.preventDefault();
+        var users = [];
+        users.push(this.props.user_id);
+        users.push(this.props.author);
+        this.setState({
+            listing: this.props.listingId,
+            users: users,
+            user: this.props.user_id,
+        }, function() {
+            this.props.actions.createConversation(this.state);
+            window.location = '/messaging';
+        });
     }
 
     render() {
@@ -92,7 +97,9 @@ class ListingTile extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    return {};
+    return {
+        user_id : state.user.user_id,
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {
