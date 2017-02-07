@@ -17,6 +17,7 @@ from .models import Listing, Category, Profile, Message, Conversation, create_au
 
 # verification email
 from .send_email import construct_and_send_verification_email
+from django.conf import settings
 
 EMAIL_SUFFIX = '@dartmouth.edu'
 
@@ -164,8 +165,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             user_profile.verification_code = verification_code
             user_profile.save()
 
+            # print(settings.HOSTURL)
             # TODO send email on backend, change domain.
-            construct_and_send_verification_email(user)
+            construct_and_send_verification_email(user, domain=settings.HOSTURL)
 
             return user
         else:
