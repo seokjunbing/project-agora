@@ -124,6 +124,7 @@ class Listing(models.Model):
 messaging classes adapted from: http://pydoc.net/Python/django-conversation/1.2/conversation.models/
 """
 
+
 class Conversation(models.Model):
     users = models.ManyToManyField(
         'auth.User',
@@ -204,8 +205,10 @@ def user_str(self):
 def listing_str(self):
     return 'Title: %s, price: %.2f' % (self.title, self.price)
 
+
 def conversation_str(self):
     return 'Title: %s' % (self.listing.title)
+
 
 User.__str__ = user_str
 Listing.__str__ = listing_str

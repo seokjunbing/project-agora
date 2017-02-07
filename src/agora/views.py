@@ -14,7 +14,7 @@ from .serializers import CategorySerializer, ListingSerializer, MessageSerialize
 from .permissions import CanEditProfile, MessagePermission, UserPermission, ConversationPermission
 
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
 from rest_framework.decorators import list_route, api_view
@@ -142,12 +142,14 @@ class ListingFilter(django_filters.rest_framework.FilterSet):
 class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     # uncomment to require authentication for listings
     # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     filter_class = ListingFilter
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
+    search_fields = ('title', 'description')
+
 
     # def create(self, request, *args, **kwargs):
     #     user = request.user
