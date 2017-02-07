@@ -3,6 +3,7 @@ import { Menu, Button } from 'semantic-ui-react';
 import CategoryDropdown from '../CategoryDropdown';
 import SaleTypeDropdown from '../SaleTypeDropdown';
 import PriceInput from '../PriceInput';
+import SearchBar from '../SearchBar';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as filActionCreators from '../../actions/filters';
@@ -29,7 +30,7 @@ class FilterBar extends React.Component {
         var style1 = { marginBottom: '20px', };
         return (
             <div style={style1}>
-                <Menu stackable fluid widths={5}>
+                <Menu stackable fluid widths={6}>
                     <Menu.Item>
                         <CategoryDropdown/>
                     </Menu.Item>
@@ -41,6 +42,9 @@ class FilterBar extends React.Component {
                     </Menu.Item>
                     <Menu.Item>
                         <PriceInput placeholder='Max Price' filterName='max_price'/>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <SearchBar placeholder='Search listings...'/>
                     </Menu.Item>
                     <Menu.Item>
                         <Button.Group>

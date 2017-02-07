@@ -10,6 +10,7 @@ const initialState = {
     price_type: null,
     sale_type: null,
     category__name: '',
+    search: '',
 };
 
 export default createReducer(initialState, {
@@ -24,7 +25,8 @@ export default createReducer(initialState, {
             max_price: null,
             price_type: null,
             sale_type: null,
-            category__name: null
+            category__name: null,
+            search: '',
         });
     },
 });

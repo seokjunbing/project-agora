@@ -78,9 +78,6 @@ class NavBar extends React.Component {
 
           <Menu.Menu position='right'>
               <Menu.Item>
-                 <Input className='icon' icon='search' placeholder='Search listings...' />
-              </Menu.Item>
-              <Menu.Item>
                 <Button href="/verify" color='teal'>Log In/Sign Up</Button>
               </Menu.Item>
           </Menu.Menu>
@@ -94,7 +91,7 @@ class NavBar extends React.Component {
                     <h2>AGORA</h2>
                   </Menu.Item>
                   <Menu.Item href="/listing">Listings</Menu.Item>
-                  <Menu.Item href="/createlisting">Create Listing</Menu.Item>
+                  { isAuthenticated && <Menu.Item href="/createlisting">Create Listing</Menu.Item>}
                   { isAuthenticated ? userLinks : guestLinks }
                 </Menu>
             </div>
