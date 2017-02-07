@@ -13,53 +13,23 @@ import {
     SEND_MESSAGE_REQUEST,
     SEND_MESSAGE_SUCCESS,
     SEND_MESSAGE_FAILURE,
+    CREATE_CONVERSATION_REQUEST,
+    CREATE_CONVERSATION_SUCCESS,
+    CREATE_CONVERSATION_FAILURE,
 } from '../constants';
 
 const initialState = {
-    isFetching : false,
+    isFetching : true,
     isSending : false,
+    isCreating : false,
     conversations: null,
+    createdConvo: null,
+    selectedConversation: 0,
     statusText : '',
     messageData : '',
 };
 
 export default createReducer(initialState, {
-    [FETCH_MESSAGES_REQUEST]: (state, payload) => {
-        return Object.assign({}, state, {
-            isFetching: true,
-            statusText: 'Fetching messages...'
-        });
-    },
-    [FETCH_MESSAGES_SUCCESS]: (state, payload) => {
-        // take convos, make into hash table
-        var conversations = {};
-        for (var i = 0; i < state.conversations.length; i++) {
-            var conversation = state.conversations[i];
-            conversations[conversation.id] = conversation;
-            conversations[conversation.id].messages = [];
-        }
-        // loop through messages and insert messages
-        for (var i = 0; i < payload.messages.length; i++) {
-            conversation = conversations[payload.messages[i].conversation];
-            conversation.messages.push(payload.messages[i]);
-        }
-        var convos = [];
-        // turn back into regular array
-        for(var conversation in conversations) {
-            convos.push(conversations[conversation]);
-        }
-        return Object.assign({}, state, {
-            isFetching: false,
-            conversations: convos,
-            statusText: 'Successfully fetched messages.'
-        });
-    },
-    [FETCH_MESSAGES_FAILURE]: (state, payload) => {
-        return Object.assign({}, state, {
-            isFetching: false,
-            statusText: `Messages Fetch Error: ${payload.statusText}`
-        });
-    },
     [FETCH_CONVERSATIONS_REQUEST]: (state, payload) => {
         return Object.assign({}, state, {
             isFetching: true,
@@ -85,35 +55,6 @@ export default createReducer(initialState, {
             selectedConversation: payload.conversation
         });
     },
-    [FETCH_LISTING_REQUEST]: (state, payload) => {
-        return Object.assign({}, state, {
-            isFetching: true,
-            statusText: 'Fetching listing...'
-        });
-    },
-    [FETCH_LISTING_SUCCESS]: (state, payload) => {
-        // find convo linked to listing
-        for (var i = 0; i < state.conversations.length; i++) {
-            if(state.conversations[i].listing == payload.listing.id) {
-                state.conversations[i].listing_title = payload.listing.title;
-                state.conversations[i].listing_images = payload.listing.images;
-                break;
-            }
-        }
-        var conversations = state.conversations;
-
-        return Object.assign({}, state, {
-            isFetching: false,
-            conversations: conversations,
-            statusText: 'Successfully fetched listing.'
-        });
-    },
-    [FETCH_LISTING_FAILURE]: (state, payload) => {
-        return Object.assign({}, state, {
-            isFetching: false,
-            statusText: `Listing Fetch Error: ${payload.statusText}`
-        });
-    },
     [SEND_MESSAGE_REQUEST]: (state, payload) => {
         return Object.assign({}, state, {
             isSending: true,
@@ -124,7 +65,6 @@ export default createReducer(initialState, {
     [SEND_MESSAGE_SUCCESS]: (state, payload) => {
         return Object.assign({}, state, {
             isSending: false,
-            postdata: payload.data,
             statusText: 'Successfully sent message.'
         });
     },
@@ -133,6 +73,27 @@ export default createReducer(initialState, {
             isSending: false,
             postdata: null,
             statusText: `Message Send Error: ${payload.statusText}`
+        });
+    },
+    [CREATE_CONVERSATION_REQUEST]: (state, payload) => {
+        return Object.assign({}, state, {
+            isCreating: true,
+            statusText: 'Creating conversation...',
+            messageData: payload,
+        });
+    },
+    [CREATE_CONVERSATION_SUCCESS]: (state, payload) => {
+        return Object.assign({}, state, {
+            isCreating: false,
+            createdConvo: payload,
+            statusText: 'Successfully created conversation.'
+        });
+    },
+    [CREATE_CONVERSATION_FAILURE]: (state, payload) => {
+        return Object.assign({}, state, {
+            isCreating: false,
+            postdata: null,
+            statusText: `Conversation Creation Error: ${payload.statusText}`
         });
     },
 });

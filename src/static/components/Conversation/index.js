@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/messaging';
 
-class Conversation extends React.Component {
+class MessagingWrapper extends React.Component {
     componentWillUpdate(nextProps, nextState) {
         var submit = document.getElementById('messageSubmit');
         if(nextState && nextState.text != '') {
@@ -62,7 +62,7 @@ class Conversation extends React.Component {
                             <img src={this.props.listing_images ? this.props.listing_images[0] : ''} style={style}/>
                             <Step.Content>
                               <Step.Title>{this.props.listing_title}</Step.Title>
-                              <Step.Description>{this.props.messages ? this.props.messages[this.props.messages.length-1].text : ''}</Step.Description>
+                              <Step.Description>{this.props.messages ? this.props.messages[0].text : ''}</Step.Description>
                             </Step.Content>
                         </Step>
                     </Step.Group>
@@ -70,11 +70,13 @@ class Conversation extends React.Component {
                 <Grid.Column width={7}>
                     {
                         this.props.messages && this.props.messages.slice(0).reverse().map(message => {
-                            if(message.user == this.props.user) {
-                                return <MessageFrom key={message.id} text={message.text}/>;
-                            }
-                            else {
-                                return <MessageTo key={message.id} text={message.text}/>;
+                            if(message) {
+                                if(message.user == this.props.user) {
+                                    return <MessageFrom key={message.id} text={message.text}/>;
+                                }
+                                else {
+                                    return <MessageTo key={message.id} text={message.text}/>;
+                                }
                             }
                         })
                     }
@@ -101,4 +103,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Conversation);
+export default connect(mapStateToProps, mapDispatchToProps)(MessagingWrapper);

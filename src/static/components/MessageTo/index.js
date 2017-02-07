@@ -11,9 +11,13 @@ class MessageTo extends React.Component {
             margin: '0.2em 0',
         }
         return (
-            <Message style={style}>
-                {this.props.text}
-            </Message>
+            <Popup
+                 trigger={<Message style={style}>
+                             {this.props.text}
+                         </Message>}
+                 content={this.props.date}
+                 positioning='right center'
+             />
         );
     }
 }

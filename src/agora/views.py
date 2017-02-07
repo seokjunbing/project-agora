@@ -28,6 +28,7 @@ from django.core.cache import cache
 from django.http import HttpRequest
 
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
+import json
 
 
 class ForbiddenException(APIException):
@@ -69,6 +70,27 @@ def verify_user(request):
                 user.profile.save()
                 return Response({"message": "Thank you for verifying your email."})
     return Response(data={"detail": "User email not verified."}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def start_conversation(request):
+    req = request.body.decode('unicode-escape')
+    req = json.loads(req)
+    if req['listing'] and req['users'] and req['user'] and req['text']:
+        try:
+            l = Listing.objects.get(pk=req['listing'])
+            c = Conversation(listing=l)
+            c.save()
+            for user in req['users']:
+                u = User.objects.get(pk=user)
+                c.users.add(u)
+            u = User.objects.get(pk=req['user'])
+            m = Message(text=req['text'], user=u, conversation=c)
+            m.save()
+            return Response(data={"detail": "Created conversation."}, status=status.HTTP_201_CREATED)
+        except Exception:
+            return Response(data={"detail": "Unable to create conversation."}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(data={"detail": "Invalid input."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class IndexView(View):
