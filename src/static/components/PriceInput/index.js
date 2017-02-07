@@ -24,10 +24,7 @@ class PriceInput extends React.Component {
 
     render() {
         return (
-            <Input labelPosition='right'>
-                <Label basic>$</Label>
-                <input type='text' placeholder={this.props.placeholder} onChange={this.filterListings.bind(this)} value={this.buildOption(this.props.filters[this.props.filterName])}/>
-            </Input>
+            <Input icon='dollar' iconPosition='left' placeholder={this.props.placeholder} value={this.buildOption(this.props.filters[this.props.filterName])} onChange={this.filterListings.bind(this)}/>
         )
     }
 }

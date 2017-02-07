@@ -16,7 +16,7 @@ class FilterBar extends React.Component {
         var style1 = { marginBottom: '20px', };
         return (
             <div style={style1}>
-                <Menu stackable>
+                <Menu stackable fluid widths={5}>
                     <Menu.Item>
                         <CategoryDropdown/>
                     </Menu.Item>
