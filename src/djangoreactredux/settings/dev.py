@@ -5,6 +5,8 @@ DEBUG = True
 
 PAGE_CACHE_SECONDS = 1
 
+HOSTURL = 'http://127.0.0.1:8000/'
+
 DATABASES = {}
 DATABASES['default'] = {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -54,6 +56,8 @@ LOGGING = {
         },
     },
 }
+
+
 
 DEFAULT_LOGGER = 'django_rest_logger'
 
