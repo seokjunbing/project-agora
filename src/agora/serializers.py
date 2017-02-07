@@ -165,9 +165,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             user_profile.verification_code = verification_code
             user_profile.save()
 
-            print(settings.hosturl)
+            # print(settings.HOSTURL)
             # TODO send email on backend, change domain.
-            construct_and_send_verification_email(user, domain=settings.hosturl)
+            construct_and_send_verification_email(user, domain=settings.HOSTURL)
 
             return user
         else:
