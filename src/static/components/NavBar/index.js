@@ -40,9 +40,6 @@ class NavBar extends React.Component {
 
           <Menu.Menu position='right'>
               <Menu.Item>
-                 <Input className='icon' icon='search' placeholder='Search listings...' />
-              </Menu.Item>
-              <Menu.Item>
                   <Popup
                     trigger={ <div><Icon name='mail' /> Messages</div>}
                     content={<div>
