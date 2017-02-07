@@ -28,6 +28,7 @@ from django.core.cache import cache
 from django.http import HttpRequest
 
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
+from django.shortcuts import redirect
 
 
 class ForbiddenException(APIException):
@@ -67,7 +68,7 @@ def verify_user(request):
             if user.profile.verification_code == verification_code:  # match
                 user.profile.verified = True
                 user.profile.save()
-                return Response({"message": "Thank you for veryfing your email."})
+                return redirect('/confirmed')
     return Response(data={"detail": "User email not verified."}, status=status.HTTP_400_BAD_REQUEST)
 
 
