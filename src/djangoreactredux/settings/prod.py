@@ -19,6 +19,8 @@ DATABASES['default'] = dj_database_url.config()
 
 WSGI_APPLICATION = 'djangoreactredux.wsgi.application'
 
+HOSTURL = 'http://agora-react.herokuapp.com/'
+
 # Note turned off sentry. We're going to use the default debugging
 
 # LOGGING = {
