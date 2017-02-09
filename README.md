@@ -10,6 +10,8 @@ It is adapted to be deployed on Heroku. There's a couple other changes I've made
 We're using Django for our backend with a Postgres local database (on Heroku), and then react-redux for our frontend component. We have also implemented an Amazon S3 bucket for image storage related to listings. Caching of the website and search queries is implemented using memcached. 
 
 ## Setup
+
+
 Use setup instructions found on [django-react-redux-jwt-base boilerplate project](https://github.com/Seedstars/django-react-redux-jwt-base)
 
 In addition, make sure to install postrges and jpeg in your virtualenv:
@@ -32,8 +34,29 @@ And set the `DJANGO_SETTINGS_MODULE` environment variable:
 ```
 heroku config:set DJANGO_SETTINGS_MODULE=djangoreactredux.settings.prod
 ```
+Upon completion of the above, run the following:
+
+ Frontend
+
+```npm install```
+
+ Backend
+
+```pip install -r requirements.txt```
 
 ## Deployment
+
+Frontend
+
+```npm install```
+
+
+```npm run dev```
+
+Backend
+
+```python manage.py runserver```
+
 
 ## Authors
 Seok Jun Bing, Jasper Bingham, Elizabeth Brissie, Audyn Curless, Odon Orzsik, Juan Torres
