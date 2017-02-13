@@ -35,7 +35,8 @@ class VerifyEmail extends React.Component {
     // update the value of the email sign up state variable
     onChangeEmailSU = (e) => {
       e.preventDefault();
-      this.setState({ emailAddressSU : e.target.value });
+      // set it automatically to lowercase
+      this.setState({ emailAddressSU : e.target.value.toLowerCase() });
 
       // basic error checking
       if ((e.target.value.length < 7) || (e.target.value.length >= 40)){
@@ -195,7 +196,8 @@ class VerifyEmail extends React.Component {
     // update the value of the email state variable for Log In
     onChangeSignInEmail = (e) => {
       e.preventDefault();
-      this.setState({ logInEmail : e.target.value });
+      // automatically convert it to lowercase
+      this.setState({ logInEmail : e.target.value.toLowerCase() });
     }
 
     // update the value of the password state variable for Log in
