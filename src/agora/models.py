@@ -110,6 +110,8 @@ class Listing(models.Model):
 
     flags = models.PositiveIntegerField(default=0)
 
+    new = models.BooleanField(default=True)
+
     listing_date = models.DateField(auto_now_add=True)
 
     # views(internal for popularity filtering)
