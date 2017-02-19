@@ -42,6 +42,39 @@ def construct_email_msg(receiver, email_subject, html_body=None, plain_text_body
     return msg
 
 
+def construct_and_send_admin_contact_email(customer_name, customer_email, title, content):
+    recv = 'agoradartmouth@gmail.com'
+
+    subject = "Admin contact form from: %s Title: %s" % (customer_name, title)
+
+    html_content = """\
+    <html>
+      <head></head>
+      <body>
+        <p>
+           Content:<br>
+           %s <br>
+           <br>
+            Sender email:<br>
+           %s<br>
+        </p>
+      </body>
+    </html>
+    """ % (content, customer_email)
+
+    text_content = """\
+    Content:\n
+    %s\n
+    \n
+    Sender email:\n
+    %s
+    """ % (content, customer_email)
+
+    msg = construct_email_msg(receiver=recv, email_subject=subject, html_body=html_content,
+                              plain_text_body=text_content)
+    send_email(recipient=recv, message=msg)
+
+
 def construct_and_send_verification_email(userprofile, domain='http://127.0.0.1:8000/'):
     recv = userprofile.email
     name = userprofile.first_name
@@ -82,6 +115,7 @@ def construct_and_send_verification_email(userprofile, domain='http://127.0.0.1:
     msg = construct_email_msg(receiver=recv, email_subject=subject, html_body=html_content, plain_text_body=text_content)
     send_email(recipient=recv, message=msg)
 
-    pass
 
 # example of how to construct and send an email
+# if __name__ == '__main__':
+#     construct_and_send_admin_contact_email("John Doe", "random.person@dartmouth.edu", "can't log in", "This is my concern")
