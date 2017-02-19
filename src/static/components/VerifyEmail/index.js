@@ -39,8 +39,8 @@ class VerifyEmail extends React.Component {
       this.setState({ emailAddressSU : e.target.value.toLowerCase() });
 
       // basic error checking
-      if ((e.target.value.length < 7) || (e.target.value.length >= 40)){
-        this.setState({ emailErrorText : "Email should be 7 to 40 characters long!" });
+      if ((e.target.value.length < 4) || (e.target.value.length >= 40)){
+        this.setState({ emailErrorText : "Email should be 4 to 40 characters long!" });
         this.setState({ emailOK: '0' });
       }
       else if (e.target.value.includes(" ")){
