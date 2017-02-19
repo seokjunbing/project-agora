@@ -33,6 +33,14 @@ class NavBar extends React.Component {
             marginBottom: '20px'
         }
 
+        var style2 = {
+            fontWeight: 'normal',
+        }
+
+        var style3 = {
+            fontWeight: 'bold',
+        }
+
         const { isAuthenticated } = this.props.user;
 
         // conditional links determining what to show when the user is authenticated vs not
@@ -41,7 +49,7 @@ class NavBar extends React.Component {
           <Menu.Menu position='right'>
               <Menu.Item>
                   <Popup
-                    trigger={ <div><Icon name='mail' /> Messages</div>}
+                    trigger={ <div><Icon name='mail' />Messages</div>}
                     content={<div>
                         <List verticalAlign='middle'>
                                 {this.props.conversations && this.props.conversations.map((conversation, index) => {
@@ -50,7 +58,7 @@ class NavBar extends React.Component {
                                                   <Image avatar src={conversation.related_listing.images[0]} />
                                                   <List.Content>
                                                     <List.Header>{conversation.related_listing.title}</List.Header>
-                                                    <List.Description>{conversation.all_messages[conversation.all_messages.length-1].text}</List.Description>
+                                                    <List.Description style={conversation.read_by.indexOf(this.props.user.user_id) != -1 ? style2 : style3}>{conversation.all_messages[conversation.all_messages.length-1].text}</List.Description>
                                                   </List.Content>
                                                 </List.Item>
                                     }
@@ -60,6 +68,18 @@ class NavBar extends React.Component {
                                 </List.Item>
                                  </List>
                                 </div>}
+                    on='click'
+                    positioning='bottom left'
+                  />
+              </Menu.Item>
+              <Menu.Item>
+                  <Popup
+                    trigger={ <div><Icon name='user icon' />Profile</div>}
+                    content={<div>
+                          <List.Item>
+                            <Button href='/profile' basic color='black'>View or edit profile</Button>
+                          </List.Item>
+                          </div>}
                     on='click'
                     positioning='bottom right'
                   />
