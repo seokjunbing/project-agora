@@ -22,8 +22,7 @@ class ProfilePage extends React.Component {
 
         return (
             <div style= {center_style} className="ui raised very padded text container segment">
-              <h2 className="ui header">profile</h2>
-              <p>page</p>
+              <h2 className="ui header">Test Profile</h2>
             </div>
         );
     }
