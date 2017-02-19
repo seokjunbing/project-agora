@@ -58,48 +58,45 @@ def get_username(validated_email):
 
 
 class ListingSerializer(serializers.ModelSerializer):
+    author_pk = serializers.SerializerMethodField('get_author_func')
+    author_name = serializers.SerializerMethodField('get_author_name_func')
     category_name = serializers.SerializerMethodField('get_category_name_func')
-    author_str = serializers.SerializerMethodField('get_author_str_func')
+
+    def get_author_func(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated() and user.profile.verified:
+            return obj.author.pk
+        else:
+            return -1  # To keep it an integer
+
+    def get_author_name_func(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated() and user.profile.verified:
+            return '%s %s' % (obj.author.first_name, obj.author.last_name)
+        else:
+            return 'Anonymous'
 
     def get_category_name_func(self, obj):
         return obj.category.name
-
-    def get_author_str_func(self, obj):
-        return '%s %s' % (obj.author.first_name, obj.author.last_name)
-
-        # Useful for visualization; breaks browsable API.
-
-    # author = serializers.StringRelatedField()
-
-    # author_id = serializers.SerializerMethodField('get_author_func')
-    # author_name = serializers.SerializerMethodField('get_author_name_func')
-
-    # def get_author_func(self, obj):
-    #     user = self.context['request'].user
-    #     print('User: ' + str(user))
-    #     logged_in = user.is_authenticated()
-    #     if user.is_authenticated() and user.profile.verified:
-    #         return obj.author.pk
-    #     else:
-    #         return -1  # For now, to keep it an integer
-    ##         return self.context['request'].user # access the request object
-    #
-    # def get_author_name_func(self, obj):
-    #     user = self.context['request'].user
-    #     logged_in = user.is_authenticated()
-    #     if user.is_authenticated() and user.profile.verified:
-    #         return '%s %s' % (obj.author.first_name, obj.author.last_name)
-    #     else:
-    #         return 'Anonymous'
 
     class Meta:
         model = Listing
         # fields = ('sale_type', 'price', 'price_type', 'sale_type', 'category', 'description', 'title',
         #           'images', 'flags', 'listing_date', 'views', 'number_of_inquiries', 'author_id', 'author_name',
         #           'author', 'pk')
-        fields = '__all__'
-        # extra_kwargs = {'author': {'write_only': True}}
+        exclude = ('author',)
+        # fields = '__all__'
+        # extra_kwargs = {'author': {'write_only': True}, }
         # fields = ('price_type', 'get_sr_price')
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        overwritten_data = self.validated_data
+        overwritten_data['author'] = user  # set the user to whoever made the request
+        listing = Listing.objects.create(**overwritten_data)
+        listing.save()
+
+        return listing
 
 
 class AnonymousListingSerializer(serializers.ModelSerializer):
@@ -169,12 +166,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             user_profile.verification_code = verification_code
             user_profile.save()
 
-            # print(settings.HOSTURL)
-            # TODO send email on backend, change domain.
-            construct_and_send_verification_email(user, domain=settings.HOSTURL)
+            try:
+                construct_and_send_verification_email(user, domain=settings.HOSTURL)
+            except Exception:
+                print('Something went wrong when sending an email verification message.')
             return user
         else:
-            raise InvalidDataException("Please enter a Dartmouth email")
+            raise InvalidDataException('Please enter a Dartmouth email.')
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -188,11 +186,6 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = '__all__'
-
-
-class MessageField(serializers.RelatedField):
-    def to_representation(self, value):
-        return '%s' % (value.text)
 
 
 class ConversationSerializer(serializers.ModelSerializer):
@@ -211,9 +204,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     # m = ListingSerializer(source='conversation_set')
 
     def get_listing_func(self, obj):
-        return ListingSerializer(obj.listing).data
-        # listing_pk = obj.listing.pk
-        # return ListingSerializer(Listing.objects.get(pk=listing_pk)).data
+        return ListingSerializer(obj.listing, context=self.context).data
 
     def get_messages_func(self, obj):
         conversation_pk = obj.pk
@@ -223,10 +214,6 @@ class ConversationSerializer(serializers.ModelSerializer):
             for q in queryset:
                 l.append(MessageSerializer(q).data)
         return l
-
-    # def get_listing_func(self, obj):
-    #     obj.
-
 
     class Meta:
         model = Conversation
