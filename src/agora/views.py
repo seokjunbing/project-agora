@@ -76,8 +76,7 @@ def verify_user(request):
 def send_contact_admin_email(request):
     data = request.data # request.POST.get('email') or request.data['email'] or request.data.get('email')
 
-    print(data)
-    # print('\n\nin send contact.....\n\n')
+    # print(data)
 
     email = data.get('email')
     customer_name = data.get('name')
