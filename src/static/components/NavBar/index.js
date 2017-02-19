@@ -33,6 +33,14 @@ class NavBar extends React.Component {
             marginBottom: '20px'
         }
 
+        var style2 = {
+            fontWeight: 'normal',
+        }
+
+        var style3 = {
+            fontWeight: 'bold',
+        }
+
         const { isAuthenticated } = this.props.user;
 
         // conditional links determining what to show when the user is authenticated vs not
@@ -50,7 +58,7 @@ class NavBar extends React.Component {
                                                   <Image avatar src={conversation.related_listing.images[0]} />
                                                   <List.Content>
                                                     <List.Header>{conversation.related_listing.title}</List.Header>
-                                                    <List.Description>{conversation.all_messages[conversation.all_messages.length-1].text}</List.Description>
+                                                    <List.Description style={conversation.read_by.indexOf(this.props.user.user_id) != -1 ? style2 : style3}>{conversation.all_messages[conversation.all_messages.length-1].text}</List.Description>
                                                   </List.Content>
                                                 </List.Item>
                                     }

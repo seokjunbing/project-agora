@@ -18,6 +18,7 @@ from .models import Listing, Category, Profile, Message, Conversation, create_au
 # verification email
 from .send_email import construct_and_send_verification_email
 from django.conf import settings
+from datetime import date
 
 EMAIL_SUFFIX = '@dartmouth.edu'
 
@@ -199,6 +200,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     # title = serializers.SerializerMethodField('get_title_func')
     all_messages = serializers.SerializerMethodField('get_messages_func')
     related_listing = serializers.SerializerMethodField('get_listing_func')
+    most_recent_msg = serializers.SerializerMethodField('get_most_recent_msg_func')
 
     # messages_all = serializers.ManyRelatedField(source='messages', child_relation='messages')
     #  THIS KIND OF WORKS
@@ -212,8 +214,6 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     def get_listing_func(self, obj):
         return ListingSerializer(obj.listing).data
-        # listing_pk = obj.listing.pk
-        # return ListingSerializer(Listing.objects.get(pk=listing_pk)).data
 
     def get_messages_func(self, obj):
         conversation_pk = obj.pk
@@ -224,9 +224,11 @@ class ConversationSerializer(serializers.ModelSerializer):
                 l.append(MessageSerializer(q).data)
         return l
 
-    # def get_listing_func(self, obj):
-    #     obj.
-
+    def get_most_recent_msg_func(self, obj):
+        conversation_pk = obj.pk
+        queryset = Message.objects.filter(conversation=conversation_pk)
+        most_recent_msg = queryset[len(queryset) - 1].date
+        return most_recent_msg
 
     class Meta:
         model = Conversation
