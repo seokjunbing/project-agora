@@ -5,7 +5,7 @@ from rest_framework.request import Request
 class CanEditProfile(BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user.pk == obj.user.pk
-      
+
 
 class ReadOnlyIfNotLoggedIn(BasePermission):
     def has_permission(self, request, view):
@@ -36,4 +36,6 @@ class UserPermission(BasePermission):
 
 class ConversationPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
-        return request.user in obj.users.all() or request.user == obj.user
+        print(request.data)
+        print(request.auth)
+        return request.user in obj.users.all()

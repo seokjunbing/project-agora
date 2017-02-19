@@ -2,7 +2,8 @@ import fetch from 'isomorphic-fetch';
 import { checkHttpStatus, parseJSON } from '../utils';
 import { FETCH_CONVERSATIONS_REQUEST, FETCH_CONVERSATIONS_SUCCESS, FETCH_CONVERSATIONS_FAILURE,
         SET_SELECTED_CONVERSATION, SEND_MESSAGE_REQUEST, SEND_MESSAGE_SUCCESS, SEND_MESSAGE_FAILURE,
-        CREATE_CONVERSATION_REQUEST, CREATE_CONVERSATION_SUCCESS, CREATE_CONVERSATION_FAILURE } from '../constants';
+        CREATE_CONVERSATION_REQUEST, CREATE_CONVERSATION_SUCCESS, CREATE_CONVERSATION_FAILURE,
+        UPDATE_CONVERSATION_REQUEST, UPDATE_CONVERSATION_SUCCESS, UPDATE_CONVERSATION_FAILURE, } from '../constants';
 
 export function fetchConversationsSuccess(conversations) {
     return {
@@ -85,6 +86,31 @@ export function createConversationRequest(data) {
     };
 };
 
+export function updateConversationSuccess(conversation) {
+    return {
+        type: UPDATE_CONVERSATION_SUCCESS,
+        payload: {
+            postdata: conversation,
+        }
+    };
+};
+
+export function updateConversationFailure(error) {
+    return {
+        type: UPDATE_CONVERSATION_FAILURE,
+        payload: {
+            status: error.response.status,
+            statusText: error.response.statusText
+        }
+    };
+};
+
+export function updateConversationRequest(data) {
+    return {
+        type: UPDATE_CONVERSATION_REQUEST
+    };
+};
+
 export function fetchConversations(url) {
     return (dispatch) => {
         dispatch(fetchConversationsRequest());
@@ -94,7 +120,7 @@ export function fetchConversations(url) {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authentication': 'JWT ' + token,
+                'Authorization': 'JWT ' + token,
             },
         })
             .then(checkHttpStatus)
@@ -145,7 +171,7 @@ export function createConversation(data) {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authentication': 'JWT ' + token,
+                'Authorization': 'JWT ' + token,
             },
 
             body: JSON.stringify(data),
@@ -157,6 +183,32 @@ export function createConversation(data) {
             })
             .catch(error => {
                 dispatch(createConversationFailure(error));
+            });
+    };
+};
+
+export function updateConversation(data) {
+    return (dispatch) => {
+        dispatch(updateConversationRequest());
+        var url = '/api/conversations/' + data.id.toString() + '/';
+        var token = localStorage.getItem("LOCAL_TOKEN");
+        return fetch(url, {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'JWT ' + token,
+            },
+
+            body: JSON.stringify(data),
+        })
+            .then(checkHttpStatus)
+            .then(parseJSON)
+            .then(response => {
+                dispatch(updateConversationSuccess(response));
+            })
+            .catch(error => {
+                dispatch(updateConversationFailure(error));
             });
     };
 };

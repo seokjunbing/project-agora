@@ -11,8 +11,10 @@ class MessagingView extends React.Component {
         this.props.actions.fetchConversations('/api/conversations/get_for_user/?user=' + this.props.user.toString());
         var self = this;
         setInterval(function() {
-          self.props.actions.fetchConversations('/api/conversations/get_for_user/?user=' + self.props.user.toString());
-      }, 1000);
+            if(!self.props.isFetching) {
+                self.props.actions.fetchConversations('/api/conversations/get_for_user/?user=' + self.props.user.toString());
+            }
+        }, 1000);
     }
 
     render() {

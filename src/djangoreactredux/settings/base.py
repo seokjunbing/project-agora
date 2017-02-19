@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'agora',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     # 'django.middleware.cache.UpdateCacheMiddleware', # cache
     # 'django.middleware.common.CommonMiddleware',     # cache
     # 'django.middleware.cache.FetchFromCacheMiddleware', #cache
