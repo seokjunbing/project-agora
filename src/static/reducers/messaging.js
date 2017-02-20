@@ -16,17 +16,23 @@ import {
     CREATE_CONVERSATION_REQUEST,
     CREATE_CONVERSATION_SUCCESS,
     CREATE_CONVERSATION_FAILURE,
+    UPDATE_CONVERSATION_REQUEST,
+    UPDATE_CONVERSATION_SUCCESS,
+    UPDATE_CONVERSATION_FAILURE,
 } from '../constants';
 
 const initialState = {
-    isFetching : true,
+    isFetching : false,
     isSending : false,
     isCreating : false,
+    isUpdating : false,
     conversations: null,
     createdConvo: null,
+    updatedConvo: null,
     selectedConversation: 0,
     statusText : '',
     messageData : '',
+    convoData: '',
 };
 
 export default createReducer(initialState, {
@@ -37,6 +43,16 @@ export default createReducer(initialState, {
         });
     },
     [FETCH_CONVERSATIONS_SUCCESS]: (state, payload) => {
+        function compare(a,b) {
+            var dateA = new Date(a.most_recent_msg);
+            var dateB = new Date(b.most_recent_msg);
+            if (dateA < dateB)
+                return 1;
+            if (dateA > dateB)
+                return -1;
+            return 0;
+        }
+        payload.conversations.sort(compare);
         return Object.assign({}, state, {
             isFetching: false,
             conversations: payload.conversations,
@@ -94,6 +110,27 @@ export default createReducer(initialState, {
             isCreating: false,
             postdata: null,
             statusText: `Conversation Creation Error: ${payload.statusText}`
+        });
+    },
+    [UPDATE_CONVERSATION_REQUEST]: (state, payload) => {
+        return Object.assign({}, state, {
+            isUpdating: true,
+            statusText: 'Updating conversation...',
+            convoData: payload,
+        });
+    },
+    [UPDATE_CONVERSATION_SUCCESS]: (state, payload) => {
+        return Object.assign({}, state, {
+            isUpdating: false,
+            updatedConvo: payload,
+            statusText: 'Successfully updated conversation.'
+        });
+    },
+    [UPDATE_CONVERSATION_FAILURE]: (state, payload) => {
+        return Object.assign({}, state, {
+            isUpdating: false,
+            postdata: null,
+            statusText: `Conversation Update Error: ${payload.statusText}`
         });
     },
 });

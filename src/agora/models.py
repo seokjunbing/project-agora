@@ -106,7 +106,11 @@ class Listing(models.Model):
 
     images = ArrayField(models.CharField(max_length=500, blank=True), blank=True, null=True, )
 
+    image_captions = ArrayField(models.CharField(max_length=500, blank=True), blank=True, null=True, )
+
     flags = models.PositiveIntegerField(default=0)
+
+    new = models.BooleanField(default=True)
 
     listing_date = models.DateField(auto_now_add=True)
 

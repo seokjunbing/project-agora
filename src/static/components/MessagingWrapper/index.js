@@ -26,13 +26,17 @@ class MessagingWrapper extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        var convo = this.props.conversations[this.props.selectedConversation].id;
+        var convo = this.props.conversations[this.props.selectedConversation];
         this.setState({
             text: this.state.text,
-            conversation: convo,
+            conversation: convo.id,
             user: this.props.user,
         }, function() {
             this.props.actions.sendMessage(this.state);
+            var readBy = [];
+            readBy.push(this.props.user);
+            convo.read_by = readBy;
+            this.props.actions.updateConversation(convo);
             this.setState({
                 text: '',
             });
@@ -62,7 +66,8 @@ class MessagingWrapper extends React.Component {
                         <Step.Group vertical style={style1}>
                             { this.props.conversations && this.props.conversations.map((conversation, index) => {
                                 return <ConversationTab key={conversation.id} index={index} listing_title={conversation.related_listing.title}
-                                                listing_images={conversation.related_listing.images} messages={conversation.all_messages}/>
+                                                listing_images={conversation.related_listing.images} messages={conversation.all_messages}
+                                                read_by={conversation.read_by}/>
                             })}
                         </Step.Group>
                     </Grid.Column>

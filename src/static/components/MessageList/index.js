@@ -4,9 +4,22 @@ import MessageFrom from '../MessageFrom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/messaging';
+import ReactDOM from 'react-dom';
 
 class MessageList extends React.Component {
+    scrollToBottom = () => {
+        const node = ReactDOM.findDOMNode(this.messagesEnd);
+        node.scrollIntoView({behavior: "smooth"});
+    }
 
+    componentDidMount() {
+        this.scrollToBottom();
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
+    
     render() {
         var style = {
             overflowY: 'scroll',
@@ -29,6 +42,8 @@ class MessageList extends React.Component {
                         }
                     })
                 }
+                <div style={ {float:"left", clear: "both"} }
+                ref={(el) => { this.messagesEnd = el; }}></div>
             </div>
         )
     }
