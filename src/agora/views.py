@@ -12,6 +12,7 @@ from .models import Category, Listing, Message, Conversation, Profile
 from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
     UserSerializer, ProfileSerializer
 from .permissions import *
+from .send_email import construct_and_send_admin_contact_email
 
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -72,6 +73,23 @@ def verify_user(request):
     return Response(data={"detail": "User email not verified."}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+@api_view(['POST'])
+def send_contact_admin_email(request):
+    data = request.data # request.POST.get('email') or request.data['email'] or request.data.get('email')
+
+    # print(data)
+
+    email = data.get('email')
+    customer_name = data.get('name')
+    title = data.get('title')
+    content = data.get('content')
+
+    construct_and_send_admin_contact_email(customer_name, email, title, content)
+
+    return redirect('/contact_sent')
+
+  
 @api_view(['POST'])
 def start_conversation(request):
     req = request.body.decode('unicode-escape')
