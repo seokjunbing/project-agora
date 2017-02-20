@@ -227,7 +227,8 @@ class ConversationViewSet(viewsets.ModelViewSet):
         name = request.GET['user']
         user_arr = []
         user_arr.append(name)
-        serializer = ConversationSerializer(Conversation.objects.filter(users__in=user_arr), many=True)
+        serializer = ConversationSerializer(Conversation.objects.filter(users__in=user_arr), many=True,
+                                            context=self.get_serializer_context())
 
         return Response(serializer.data)
 
