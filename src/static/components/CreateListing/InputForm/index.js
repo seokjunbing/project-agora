@@ -355,7 +355,39 @@ class InputForm extends Component {
     }
   }
 
-
+  imageCountText() {
+    if (this.state) {
+      if (this.state.images) {
+        if (this.state.images.length < 5) {
+          return (
+            <Message info>
+              <Message.Header>You can upload up to {5 - this.state.images.length} more images.</Message.Header>
+              <p>You set the primary image that will be displayed on the home page using the star button above each image</p>
+            </Message>
+          );
+        } else {
+          return (
+            <Message info>
+              <Message.Header>You have uploaded the maximum amount of images!</Message.Header>
+              <p>You can delete images using the red button to make room for more.</p>
+            </Message>
+          );
+        }
+      } else {
+        return (
+          <Message info>
+            <p>Upload up to 5 images to enhance your listing!</p>
+          </Message>
+        );
+      }
+    } else {
+      return (
+        <Message info>
+          <p>Upload up to 5 images to enhance your listing!</p>
+        </Message>
+      );
+    }
+  }
 
   render() {
     return (
@@ -373,7 +405,7 @@ class InputForm extends Component {
               <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' onChange={this.handleCategoryChange.bind(this)} onSelect={this.onCategorySelect.bind(this)}/>
               <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' onChange={this.handleDescriptionChange.bind(this)} onSelect={this.onDescriptionSelect.bind(this)}/>
               {this.descriptionError()}
-              {this.uploadProgress()}
+
               <ReactS3Uploader
                   signingUrl="/api/get_s3_url"
                   accept="image/*"
@@ -381,9 +413,12 @@ class InputForm extends Component {
                   onProgress={this.onProgress.bind(this)}
                   onError={this.onImageUploadError.bind(this)}
                   onFinish={this.onUploadFinish.bind(this)}/>
-              <Button color='teal' disabled={this.submitActive()} type='submit'>Submit</Button>
 
+              {this.uploadProgress()}
+              {this.imageCountText()}
+              <Button fluid compact color='teal' disabled={this.submitActive()} type='submit'>Submit</Button>
             </Form>
+
           </Grid.Column>
           <Grid.Column width={1}>
 
