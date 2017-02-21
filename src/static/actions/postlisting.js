@@ -34,11 +34,13 @@ export function postListingRequest(postdata) {
 export function postListing(postdata) {
     return (dispatch) => {
         dispatch(postListingRequest(postdata));
+        var token = localStorage.getItem("LOCAL_TOKEN");
         return fetch(`${SERVER_URL}/api/listings/`, {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'JWT ' + token
             },
 
             body: JSON.stringify(postdata),
