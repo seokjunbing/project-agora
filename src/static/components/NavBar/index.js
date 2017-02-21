@@ -49,7 +49,7 @@ class NavBar extends React.Component {
           <Menu.Menu position='right'>
               <Menu.Item>
                   <Popup
-                    trigger={ <div><Icon name='mail' /> Messages</div>}
+                    trigger={ <div><Icon name='mail' />Messages</div>}
                     content={<div>
                         <List verticalAlign='middle'>
                                 {this.props.conversations && this.props.conversations.map((conversation, index) => {
@@ -68,6 +68,18 @@ class NavBar extends React.Component {
                                 </List.Item>
                                  </List>
                                 </div>}
+                    on='click'
+                    positioning='bottom left'
+                  />
+              </Menu.Item>
+              <Menu.Item>
+                  <Popup
+                    trigger={ <div><Icon name='user icon' />Profile</div>}
+                    content={<div>
+                          <List.Item>
+                            <Button href='/profile' basic color='black'>View or edit profile</Button>
+                          </List.Item>
+                          </div>}
                     on='click'
                     positioning='bottom right'
                   />

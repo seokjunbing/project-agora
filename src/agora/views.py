@@ -11,7 +11,8 @@ from django.contrib.auth.models import User
 from .models import Category, Listing, Message, Conversation, Profile
 from .serializers import CategorySerializer, ListingSerializer, MessageSerializer, ConversationSerializer, \
     UserSerializer, ProfileSerializer
-from .permissions import CanEditProfile, MessagePermission, UserPermission, ConversationPermission
+from .permissions import *
+from .send_email import construct_and_send_admin_contact_email
 
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -29,6 +30,7 @@ from django.http import HttpRequest
 
 from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 from django.shortcuts import redirect
+
 
 class ForbiddenException(APIException):
     status_code = 403
@@ -70,6 +72,24 @@ def verify_user(request):
                 return redirect('/confirmed')
     return Response(data={"detail": "User email not verified."}, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+@api_view(['POST'])
+def send_contact_admin_email(request):
+    data = request.data # request.POST.get('email') or request.data['email'] or request.data.get('email')
+
+    # print(data)
+
+    email = data.get('email')
+    customer_name = data.get('name')
+    title = data.get('title')
+    content = data.get('content')
+
+    construct_and_send_admin_contact_email(customer_name, email, title, content)
+
+    return redirect('/contact_sent')
+
+  
 @api_view(['POST'])
 def start_conversation(request):
     req = request.body.decode('unicode-escape')
@@ -132,40 +152,32 @@ class ProfileViewSet(viewsets.ModelViewSet):
 class ListingFilter(django_filters.rest_framework.FilterSet):
     min_price = django_filters.NumberFilter(name="price", lookup_expr='gte')
     max_price = django_filters.NumberFilter(name="price", lookup_expr='lte')
+    author_pk = django_filters.CharFilter(name='author_pk')
 
     class Meta:
         model = Listing
         fields = ['price_type', 'sale_type', 'category__name', 'min_price', 'max_price', 'description', 'title',
-                  'listing_date', 'views', 'number_of_inquiries']
+                  'listing_date', 'views', 'number_of_inquiries', 'author_pk']
 
 
 class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    # uncomment to require authentication for listings
-    # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+    permission_classes = (ListingOwnerCanEdit,)
     filter_class = ListingFilter
     ordering_filter = OrderingFilter()
     ordering_fields = ('price', 'views')
     search_fields = ('title', 'description')
 
-
-    # def create(self, request, *args, **kwargs):
-    #     user = request.user
-    #     instance = self.get_object()
-    #     if user.is_authenticated() and user.profile.verified:
-    #         viewsets.ModelViewSet.perform_create(self, instance)
-    #     else:
-    #         return Response(status=status.HTTP_403_FORBIDDEN)
-
-    def destroy(self, request, *args, **kwargs):
-        user = request.user
-        instance = self.get_object()
-        if user.is_admin or (user.is_authenticated() and user == instance.author and user.profile.verified):
-            viewsets.ModelViewSet.perform_destroy(self, instance)
+    def perform_create(self, serializer):
+        # drf does NOT call check_object_permissions on create(). Need to handle explicitly here.
+        user = self.request.user
+        if user.is_authenticated() and user.profile.verified:
+            # if self.check_object_permissions(request=self.request, obj=Listing(serializer.data)):
+            serializer.save()
         else:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+            raise ForbiddenException
 
 
 class MessagePagination(PageNumberPagination):
@@ -185,6 +197,15 @@ class MessageViewSet(viewsets.ModelViewSet):
     pagination_class = MessagePagination
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('conversation',)
+
+    # TODO do this. How do you check the object, though?
+    # def perform_create(self, serializer):
+    #     user = self.request.user
+    # # can I check Message(serializer.data).conversation?
+    #     if user.is_authenticated() and user.profile.verified :
+    #         serializer.save()
+    #     else:
+    #         raise ForbiddenException
 
     # def list(self, request, *args, **kwargs):
     #     user = request.user
@@ -206,17 +227,18 @@ class ConversationViewSet(viewsets.ModelViewSet):
         name = request.GET['user']
         user_arr = []
         user_arr.append(name)
-        serializer = ConversationSerializer(Conversation.objects.filter(users__in=user_arr), many=True)
+        serializer = ConversationSerializer(Conversation.objects.filter(users__in=user_arr), many=True,
+                                            context=self.get_serializer_context())
 
         return Response(serializer.data)
 
-    # def list(self, request, *args, **kwargs):
-    #     user = request.user
-    #     if user.is_superuser:
-    #         viewsets.ModelViewSet.list(self, request, *args, **kwargs)
-    #
-    #     else:
-    #         return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
+        # def list(self, request, *args, **kwargs):
+        #     user = request.user
+        #     if user.is_superuser:
+        #         viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+        #
+        #     else:
+        #         return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -240,23 +262,9 @@ class UserViewSet(viewsets.ModelViewSet):
         #     raise ForbiddenException()
         # return Response(status=status.HTTP_403_FORBIDDEN)
 
-    def list(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_superuser:
-            return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
-        else:
-            return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
-
-
-class ListingList(generics.ListAPIView):
-    serializer_class = ListingSerializer
-
-    def get_queryset(self):
-        """
-        This view should return a list of all the purchases for
-        the user as determined by the username portion of the URL.
-        """
-        title = self.kwargs['title']
-
-        # a hyphen "-" in front of "check_in" indicates descending order; ascending order is implied
-        return Listing.objects.filter(title=title).order_by('-check_in')
+        # def list(self, request, *args, **kwargs):
+        #     user = request.user
+        #     if user.is_superuser:
+        #         return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+        #     else:
+        #         return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)

@@ -5,6 +5,7 @@ import * as catActionCreators from '../../../actions/categories';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CategoryDropdown from '../../CategoryDropdown';
+import ImageTile from './ImageTile';
 import ReactS3Uploader from 'react-s3-uploader';
 
 import { Button, Checkbox, Form, Input, Message, Radio, Select, TextArea } from 'semantic-ui-react';
@@ -21,6 +22,51 @@ const title_length = 20;
 const description_length = 40;
 
 class InputForm extends Component {
+
+  constructor(props) {
+    super(props);
+    this.deleteImage = this.deleteImage.bind(this);
+    this.makePrimary = this.makePrimary.bind(this);
+    this.onTitleChange = this.onTitleChange.bind(this);
+  }
+
+
+  deleteImage(id) {
+    if (this.state) {
+      if (this.state.images && this.state.imagetitles) {
+        var images_copy = this.state.images.slice();
+        var imagetitles_copy = this.state.imagetitles.slice();
+        images_copy.splice(id,1);
+        imagetitles_copy.splice(id,1);
+        this.setState({ images : images_copy, imagetitles : imagetitles_copy});
+      }
+    }
+  }
+
+  makePrimary(id) {
+    if (this.state) {
+      if (this.state.images && this.state.imagetitles) {
+        if (id > 0) {
+          var images_copy = this.state.images.slice();
+          var imagetitles_copy = this.state.imagetitles.slice();
+          var star_img = images_copy[id];
+          var star_title = imagetitles_copy[id];
+          images_copy.splice(id,1);
+          imagetitles_copy.splice(id,1);
+          images_copy.unshift(star_img);
+          imagetitles_copy.unshift(star_title);
+          this.setState({images : images_copy, imagetitles : imagetitles_copy});
+        }
+      }
+    }
+  }
+
+  onTitleChange(id, text) {
+    var imagetitles_copy = this.state.imagetitles.slice();
+    imagetitles_copy[id] = text;
+    this.setState({ imagetitles : imagetitles_copy});
+    console.log(this.state.imagetitles);
+  }
 
   handleTitleChange = (e) => {
       e.preventDefault();
@@ -172,6 +218,17 @@ class InputForm extends Component {
 
     images_copy.push(signResult.signedUrl.split("?")[0]);
     this.setState({images:images_copy});
+
+    var imagetitles_copy;
+    if (this.state.imagetitles) {
+      imagetitles_copy = this.state.imagetitles.slice();
+    } else {
+      imagetitles_copy = [];
+    }
+
+    imagetitles_copy.push('');
+    this.setState({imagetitles:imagetitles_copy});
+
   }
 
   onImageUploadError(message) {
@@ -181,14 +238,20 @@ class InputForm extends Component {
   renderPrimaryImage() {
     if (this.state) {
       if (this.state.images && this.state.images.length > 0) {
-        var primary = [this.state.images[0]];
-        return (
-          primary.map((image)=> {
-          return (
+        var primary_image = [this.state.images[0]];
 
-            <Image fluid src={image}/>
-          );
-        }));
+        if (this.state.imagetitles && this.state.imagetitles.length > 0) {
+          var primary_imagetitle = [this.state.imagetitles[0]];
+          return (
+            this.state.images.map((image, i) => {
+            return (
+              <ImageTile imageurl={image} imagetitle={this.state.imagetitles[i]} id={i} deleteImage={this.deleteImage} onTitleChange={this.onTitleChange} makePrimary={this.makePrimary}/>
+            );
+          }));
+        } else {
+          return (true);
+        }
+
       } else {
         return (true);
       }
@@ -292,7 +355,39 @@ class InputForm extends Component {
     }
   }
 
-
+  imageCountText() {
+    if (this.state) {
+      if (this.state.images) {
+        if (this.state.images.length < 5) {
+          return (
+            <Message info>
+              <Message.Header>You can upload up to {5 - this.state.images.length} more images.</Message.Header>
+              <p>You set the primary image that will be displayed on the home page using the star button above each image</p>
+            </Message>
+          );
+        } else {
+          return (
+            <Message info>
+              <Message.Header>You have uploaded the maximum amount of images!</Message.Header>
+              <p>You can delete images using the red button to make room for more.</p>
+            </Message>
+          );
+        }
+      } else {
+        return (
+          <Message info>
+            <p>Upload up to 5 images to enhance your listing!</p>
+          </Message>
+        );
+      }
+    } else {
+      return (
+        <Message info>
+          <p>Upload up to 5 images to enhance your listing!</p>
+        </Message>
+      );
+    }
+  }
 
   render() {
     return (
@@ -310,7 +405,7 @@ class InputForm extends Component {
               <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' onChange={this.handleCategoryChange.bind(this)} onSelect={this.onCategorySelect.bind(this)}/>
               <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' onChange={this.handleDescriptionChange.bind(this)} onSelect={this.onDescriptionSelect.bind(this)}/>
               {this.descriptionError()}
-              {this.uploadProgress()}
+
               <ReactS3Uploader
                   signingUrl="/api/get_s3_url"
                   accept="image/*"
@@ -318,22 +413,20 @@ class InputForm extends Component {
                   onProgress={this.onProgress.bind(this)}
                   onError={this.onImageUploadError.bind(this)}
                   onFinish={this.onUploadFinish.bind(this)}/>
-              <Button color='teal' disabled={this.submitActive()} type='submit'>Submit</Button>
 
+              {this.uploadProgress()}
+              {this.imageCountText()}
+              <Button fluid compact color='teal' disabled={this.submitActive()} type='submit'>Submit</Button>
             </Form>
+
           </Grid.Column>
           <Grid.Column width={1}>
 
           </Grid.Column>
           <Grid.Column width={7}>
-            {this.state && this.state.images && this.state.images.length > 0 && <Label color='red' icon='close' attached='top right' onClick={this.removePrimary.bind(this)}>Delete</Label>}
-            <Image.Group size='medium' centered='true'>
-              {this.renderPrimaryImage()}
-            </Image.Group>
-            {this.state && this.state.images && this.state.images.length > 1 && <Label color='blue' icon='chevron down' attached='top left' onClick={this.rotateImageOrder.bind(this)}>Rotate Order</Label>}
-            <Image.Group size='small' centered='true'>
-              {this.renderSecondaryImages()}
-            </Image.Group>
+
+            {this.renderPrimaryImage()}
+
           </Grid.Column>
         </Grid>
       </Segment>
