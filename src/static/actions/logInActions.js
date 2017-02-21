@@ -49,6 +49,13 @@ export function setCurrentUser(token){
   };
 }
 
+// set the error message
+export function setErrorMessage(data){
+  return dispatch => {
+    dispatch({type: SET_FEEDBACK, payload: data});
+  }
+}
+
 export function executeLogout(data){
   return {
     type: EXECUTE_LOGOUT,
