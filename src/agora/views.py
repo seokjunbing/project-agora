@@ -161,6 +161,13 @@ class ListingViewSet(viewsets.ModelViewSet):
         else:
             raise ForbiddenException
 
+    @list_route()
+    def get_for_user(self, request):
+        user = request.user
+        queryset = Listing.objects.filter(author=user)
+        serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
+
 
 class MessagePagination(PageNumberPagination):
     page_size = 100
