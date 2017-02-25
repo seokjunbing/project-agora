@@ -8,7 +8,6 @@ const initialState = {
 // put the token into store
 export default createReducer(initialState, {
     [SET_FEEDBACK]: (state, payload) => {
-      console.log(`promptmessage: ${payload}`);
         return {
             promptMessage: payload
         };

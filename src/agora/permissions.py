@@ -50,7 +50,7 @@ class OwnerCanEdit(BasePermission):
 class ListingOwnerCanEdit(BasePermission):
     def has_object_permission(self, request, view, obj):
         user = request.user
-        if request.method in SAFE_METHODS:
+        if request.method in SAFE_METHODS or request.method == 'create':
             return user.is_authenticated and user.profile.verified
         else:
             return user.profile.verified and obj.author == user
