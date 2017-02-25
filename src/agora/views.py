@@ -18,10 +18,11 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
-from rest_framework.decorators import list_route, api_view
+from rest_framework.decorators import list_route, api_view, detail_route
 from rest_framework.exceptions import APIException, PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 import rest_framework.status as status
+import datetime
 
 # caching
 from django.utils.cache import get_cache_key
@@ -71,6 +72,7 @@ def verify_user(request):
                 user.profile.save()
                 return redirect('/confirmed')
     return Response(data={"detail": "User email not verified."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
@@ -178,6 +180,25 @@ class ListingViewSet(viewsets.ModelViewSet):
             serializer.save()
         else:
             raise ForbiddenException
+
+    @detail_route(methods=['get'])
+    def close_listing(request):
+        data = request.GET
+
+        l = Listing.objects.get(pk=data.get['listing'])
+        user = request.user
+
+        if user.is_authenticated() and user.profile.verified and l.author == user:
+            l.closed = True
+            l.closing_date = datetime.datetime.now()
+            l.save()
+            serializer = ListingSerializer(l, context=self.get_serializer_context())
+            return serializer.data
+
+        else:
+            Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
+
+        pass
 
 
 class MessagePagination(PageNumberPagination):
