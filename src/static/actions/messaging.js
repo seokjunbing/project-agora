@@ -140,12 +140,14 @@ export function fetchConversations(url) {
 export function sendMessage(data) {
     return (dispatch) => {
         dispatch(sendMessageRequest());
+        var token = localStorage.getItem("LOCAL_TOKEN");
         var url = '/api/messages/';
         return fetch(url, {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'JWT ' + token,
             },
 
             body: JSON.stringify(data),
