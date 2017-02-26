@@ -82,6 +82,11 @@ Lists the listings made by users on the site. *Deleting* a listing can only be d
 Unauthenticated requests and requests coming from unverified users will not receive the `author` of a Listing so
  as to preserve anonymity and trust of users within the Dartmouth community.
  
+###### Close a listing
+`http://[ site_url ]/api/listings/[pk]/close_listing/`<br>
+Close a listing by calling this api end point with the pk of the listing that is being closed. You must be the owner of
+listing to be able to close it.
+ 
 ##### Categories
 `http://[ site_url ]/api/categories/`
 
