@@ -179,24 +179,21 @@ class ListingViewSet(viewsets.ModelViewSet):
         else:
             raise ForbiddenException
 
-            # @detail_route(methods=['get'])
-            # def close_listing(self, request):
-            #     data = request.GET
-            #
-            #     l = Listing.objects.get(pk=data.get['listing'])
-            #     user = request.user
-            #
-            #     if user.is_authenticated() and user.profile.verified and l.author == user:
-            #         l.closed = True
-            #         l.closing_date = datetime.datetime.now()
-            #         l.save()
-            #         serializer = ListingSerializer(l, context=self.get_serializer_context())
-            #         return serializer.data
-            #
-            #     else:
-            #         Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
-            #
-            #     pass
+    @detail_route(methods=['get'])
+    def close_listing(self, request, pk=None):
+        l = Listing.objects.get(pk=pk)
+        user = request.user
+
+        if user.is_authenticated() and user.profile.verified and l.author == user:
+            l.closed = True
+            l.closing_date = datetime.datetime.now()
+            l.save()
+            return Response(data={"detail": "Closed listing."}, status=status.HTTP_202_ACCEPTED)
+
+        else:
+            return Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
+
+        pass
 
 
 class MessagePagination(PageNumberPagination):
@@ -232,30 +229,6 @@ class MessageViewSet(viewsets.ModelViewSet):
     #         viewsets.ModelViewSet.list(self, request, *args, **kwargs)
     #     else:
     #         return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
-
-
-@api_view(['get'])
-def close_listing(request):
-    pk = request.GET.get('listing')
-    print(pk)
-    print(type(pk))
-    # sth = request.GET.decode('unicode-escape')
-    # print(sth)
-    pk_sth = request.body.decode('unicode-escape')
-    print(pk_sth)
-    return Response(status=status.HTTP_403_FORBIDDEN)
-    # user = request.user
-    # l = Listing.objects.get(pk=pk)
-    # if user.is_authenticated() and user.profile.verified and l.author == user:
-    #     l.closed = True
-    #     l.closing_date = datetime.datetime.now()
-    #     l.save()
-    #     serializer = ListingSerializer(l, request=request)
-    #     return serializer.data
-    # else:
-    #     Response(status=status.HTTP_403_FORBIDDEN)
-    #
-        #     pass
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
