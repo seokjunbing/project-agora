@@ -18,10 +18,11 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework import viewsets, generics, renderers, permissions
-from rest_framework.decorators import list_route, api_view
+from rest_framework.decorators import list_route, api_view, detail_route
 from rest_framework.exceptions import APIException, PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 import rest_framework.status as status
+import datetime
 
 # caching
 from django.utils.cache import get_cache_key
@@ -73,10 +74,9 @@ def verify_user(request):
     return Response(data={"detail": "User email not verified."}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['POST'])
 def send_contact_admin_email(request):
-    data = request.data # request.POST.get('email') or request.data['email'] or request.data.get('email')
+    data = request.data  # request.POST.get('email') or request.data['email'] or request.data.get('email')
 
     # print(data)
 
@@ -89,7 +89,7 @@ def send_contact_admin_email(request):
 
     return redirect('/contact_sent')
 
-  
+
 @api_view(['POST'])
 def start_conversation(request):
     req = request.body.decode('unicode-escape')
@@ -179,12 +179,29 @@ class ListingViewSet(viewsets.ModelViewSet):
         else:
             raise ForbiddenException
 
+    @detail_route(methods=['get'])
+    def close_listing(self, request, pk=None):
+        l = Listing.objects.get(pk=pk)
+        user = request.user
+
+        if user.is_authenticated() and user.profile.verified and l.author == user:
+            l.closed = True
+            l.closing_date = datetime.datetime.now()
+            l.save()
+            return Response(data={"detail": "Closed listing."}, status=status.HTTP_202_ACCEPTED)
+
+        else:
+            return Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
+
+        pass
+      
     @list_route()
     def get_for_user(self, request):
         user = request.user
         queryset = Listing.objects.filter(author=user)
         serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
+
 
 
 class MessagePagination(PageNumberPagination):

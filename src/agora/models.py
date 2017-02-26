@@ -112,7 +112,14 @@ class Listing(models.Model):
 
     new = models.BooleanField(default=True)
 
+    # date of creation
     listing_date = models.DateField(auto_now_add=True)
+
+    # date of closing
+    closing_date = models.DateField(null=True)
+
+    # boolean to indicate if this listing is closed.
+    closed = models.BooleanField(default=False)
 
     # views(internal for popularity filtering)
     views = models.PositiveIntegerField(default=0)

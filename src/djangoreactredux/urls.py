@@ -2,8 +2,8 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.views.decorators.cache import cache_page
 from django.contrib import admin
-from agora.views import IndexView, CategoryViewSet, ListingViewSet, MessageViewSet, ConversationViewSet, UserViewSet, \
-    sign_s3_upload, ProfileViewSet, verify_user, start_conversation, send_contact_admin_email
+from agora.views import IndexView, CategoryViewSet, ListingViewSet, MessageViewSet, ConversationViewSet, UserViewSet, sign_s3_upload, ProfileViewSet, verify_user, start_conversation, send_contact_admin_email
+
 from rest_framework import routers
 from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     # url(r'^api/verify/(?P<code>.*)/', verify_user),
     url(r'^api/verify/', verify_user),
+    url(r'^api/close/', close_listing),
     url(r'^api/start_convo/', start_conversation),
     url(r'^api/contact/', send_contact_admin_email),
 
