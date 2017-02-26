@@ -179,29 +179,28 @@ class ListingViewSet(viewsets.ModelViewSet):
         else:
             raise ForbiddenException
 
-    @detail_route(methods=['get'])
+    @detail_route()
     def close_listing(self, request, pk=None):
-        l = Listing.objects.get(pk=pk)
+        listing = Listing.objects.get(pk=pk)
         user = request.user
 
-        if user.is_authenticated() and user.profile.verified and l.author == user:
-            l.closed = True
-            l.closing_date = datetime.datetime.now()
-            l.save()
-            return Response(data={"detail": "Closed listing."}, status=status.HTTP_202_ACCEPTED)
-
+        if user.is_authenticated() and user.profile.verified and listing.author == user:
+            if not listing.closed:
+                listing.closed = True
+                listing.closing_date = datetime.datetime.now()
+                listing.save()
+                return Response(data={'detail": "Closed listing.'}, status=status.HTTP_202_ACCEPTED)
+            else:
+                return Response(data={'detail': 'Listing already closed'}, status=status.HTTP_409_CONFLICT)
         else:
             return Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
 
-        pass
-      
     @list_route()
     def get_for_user(self, request):
         user = request.user
         queryset = Listing.objects.filter(author=user)
         serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
-
 
 
 class MessagePagination(PageNumberPagination):
