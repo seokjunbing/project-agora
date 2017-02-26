@@ -2,7 +2,7 @@ import dj_database_url
 
 from djangoreactredux.settings.base import *  # NOQA (ignore all errors on this line)
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 PAGE_CACHE_SECONDS = 60

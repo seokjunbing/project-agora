@@ -5,6 +5,7 @@ import logInReducers from '../../reducers/logInReducers';
 import { bindActionCreators } from 'redux';
 import * as messagingActionCreators from '../../actions/messaging';
 import * as logInActionCreators from '../../actions/logInActions';
+import { numUnreadSelector } from '../../selectors/messaging';
 
 
 class NavBar extends React.Component {
@@ -12,12 +13,12 @@ class NavBar extends React.Component {
         if(this.props.user.user_id) {
             this.props.messagingActions.fetchConversations('/api/conversations/get_for_user/?user=' + this.props.user.user_id.toString());
         }
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-        if(nextProps.user.user_id != this.props.user.user_id) {
-            this.props.messagingActions.fetchConversations('/api/conversations/get_for_user/?user=' + nextProps.user.user_id.toString());
-        }
+        var self = this;
+        setInterval(function() {
+            if(!self.props.isFetching && self.props.user.user_id) {
+                self.props.messagingActions.fetchConversations('/api/conversations/get_for_user/?user=' + self.props.user.user_id.toString());
+            }
+        }, 1000);
     }
 
     // logout
@@ -49,22 +50,23 @@ class NavBar extends React.Component {
           <Menu.Menu position='right'>
               <Menu.Item>
                   <Popup
-                    trigger={ <div><Icon name='mail' />Messages</div>}
+                    trigger={ <div><Icon name='mail' />Messages {this.props.numUnread > 0 && <Label color='red' horizontal>{this.props.numUnread}</Label>}</div>}
                     content={<div>
                         <List verticalAlign='middle'>
-                                {this.props.conversations && this.props.conversations.map((conversation, index) => {
+                                {this.props.conversations != null && this.props.conversations.map((conversation, index) => {
                                     if(index <= 4) {
                                         return <List.Item key={conversation.id}>
                                                   <Image avatar src={conversation.related_listing.images[0]} />
                                                   <List.Content>
                                                     <List.Header>{conversation.related_listing.title}</List.Header>
-                                                    <List.Description style={conversation.read_by.indexOf(this.props.user.user_id) != -1 ? style2 : style3}>{conversation.all_messages[conversation.all_messages.length-1].text}</List.Description>
+                                                    <List.Description style={conversation.read_by.indexOf(this.props.user.user_id) != -1 ? style2 : style3}>{conversation.all_messages[conversation.all_messages.length-1] && conversation.all_messages[conversation.all_messages.length-1].text}</List.Description>
                                                   </List.Content>
                                                 </List.Item>
                                     }
                                 })}
                                 <List.Item>
-                                  <Button href='/messaging' basic color='black'>See all conversations</Button>
+                                  {this.props.conversations && <Button href='/messaging' basic color='black'>See all conversations</Button>}
+                                  {!this.props.conversations && <p>No conversations.</p>}
                                 </List.Item>
                                  </List>
                                 </div>}
@@ -120,6 +122,8 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
     conversations: state.messaging.conversations,
+    isFetching: state.messaging.isFetching,
+    numUnread : numUnreadSelector(state),
   };
 };
 

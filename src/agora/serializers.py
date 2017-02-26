@@ -211,11 +211,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     def get_messages_func(self, obj):
         conversation_pk = obj.pk
         queryset = Message.objects.filter(conversation=conversation_pk)
-        l = []
-        if len(queryset) > 0:
-            for q in queryset:
-                l.append(MessageSerializer(q).data)
-        return l
+        return [MessageSerializer(q).data for q in queryset]
 
     def get_most_recent_msg_func(self, obj):
         conversation_pk = obj.pk
