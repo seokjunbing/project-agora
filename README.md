@@ -81,6 +81,14 @@ some backwards compatibility, but this is not guaranteed.
 Lists the listings made by users on the site. *Deleting* a listing can only be done by its author. 
 Unauthenticated requests and requests coming from unverified users will not receive the `author` of a Listing so
  as to preserve anonymity and trust of users within the Dartmouth community.
+
+###### Getting all of a user's listings
+`http://[ site_url ]/api/listings/get_for_user/`
+
+Lists all the listings created by a user. The user must be authenticated and is therefore read from the request.
+ Do **NOT** simply filter the main listing endpoint by `author` or `author_pk`,
+ as this may give you inaccurate or no results at all due to these fields not 
+ being static in order to accomplish anonymityfor the listing's author.
  
 ##### Categories
 `http://[ site_url ]/api/categories/`
