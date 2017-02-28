@@ -40,12 +40,16 @@ class ConversationTab extends React.Component {
         var style4 = {
             fontWeight: 'bold',
         }
+        var style5 = {
+            fontStyle: 'italic',
+            color: 'grey',
+        }
         return (
             <Step style={style2} active={this.props.selected == this.props.index ? true : false} onClick={this.setConvo.bind(this)}>
                 <img src={(this.props.listing_images && this.props.listing_images.length > 0) ? this.props.listing_images[0] : ''} style={style}/>
                 <Step.Content>
                   <Step.Title>{this.props.listing_title}</Step.Title>
-
+                  <Step.Description style={style5}>{this.props.recipient}</Step.Description>
                   <Step.Description style={this.props.read_by.indexOf(this.props.user) != -1 ? style3 : style4}>{(this.props.messages && this.props.messages.length > 0) ? this.props.messages[this.props.messages.length-1].text : ''}</Step.Description>
                 </Step.Content>
             </Step>
