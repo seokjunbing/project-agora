@@ -194,6 +194,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     all_messages = serializers.SerializerMethodField('get_messages_func')
     related_listing = serializers.SerializerMethodField('get_listing_func')
     most_recent_msg = serializers.SerializerMethodField('get_most_recent_msg_func')
+    buyer_name = serializers.SerializerMethodField('get_buyer_name_func')
 
     # messages_all = serializers.ManyRelatedField(source='messages', child_relation='messages')
     #  THIS KIND OF WORKS
@@ -212,6 +213,12 @@ class ConversationSerializer(serializers.ModelSerializer):
         conversation_pk = obj.pk
         queryset = Message.objects.filter(conversation=conversation_pk)
         return [MessageSerializer(q).data for q in queryset]
+
+    def get_buyer_name_func(self, obj):
+        for user in obj.users.all():
+            if user != obj.listing.author:
+                buyer = user
+        return buyer.first_name + ' ' + buyer.last_name
 
     def get_most_recent_msg_func(self, obj):
         conversation_pk = obj.pk
