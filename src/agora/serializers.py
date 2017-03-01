@@ -86,9 +86,8 @@ class ListingSerializer(serializers.ModelSerializer):
         #           'images', 'flags', 'listing_date', 'views', 'number_of_inquiries', 'author_id', 'author_name',
         #           'author', 'pk')
         exclude = ('author',)
-        # fields = '__all__'
+        read_only_fields = ('closed', 'closing_date')
         # extra_kwargs = {'author': {'write_only': True}, }
-        # fields = ('price_type', 'get_sr_price')
 
     def create(self, validated_data):
         user = self.context['request'].user
