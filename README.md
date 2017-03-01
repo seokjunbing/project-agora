@@ -90,6 +90,15 @@ Lists all the listings created by a user. The user must be authenticated and is 
  as this may give you inaccurate or no results at all due to these fields not 
  being static in order to accomplish anonymityfor the listing's author.
  
+###### Filtering listings
+
+You can filter listings by the following fields: `price_type`, `sale_type`,
+ `category__name`, `min_price`, `max_price`, `description`, `title`,
+ `listing_date`, `views`, `number_of_inquiries`, `author_pk`, `closed`, `closing_date`. 
+ 
+ To do so, include the field in the querystring, e.g., `http://[ site_url ]/api/listings/?min_price=100`. 
+ 
+ 
 ##### Categories
 `http://[ site_url ]/api/categories/`
 
