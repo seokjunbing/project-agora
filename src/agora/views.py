@@ -165,7 +165,7 @@ class ListingFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = Listing
         fields = ['price_type', 'sale_type', 'category__name', 'min_price', 'max_price', 'description', 'title',
-                  'listing_date', 'views', 'number_of_inquiries', 'author_pk']
+                  'listing_date', 'views', 'number_of_inquiries', 'author_pk', 'closed', 'closing_date']
 
 
 class ListingViewSet(viewsets.ModelViewSet):
