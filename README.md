@@ -11,7 +11,6 @@ We're using Django for our backend with a Postgres local database (on Heroku), a
 
 ## Setup
 
-
 Use setup instructions found on [django-react-redux-jwt-base boilerplate project](https://github.com/Seedstars/django-react-redux-jwt-base)
 
 In addition, make sure to install postrges and jpeg in your virtualenv:
@@ -90,10 +89,19 @@ Lists all the listings created by a user. The user must be authenticated and is 
  as this may give you inaccurate or no results at all due to these fields not 
  being static in order to accomplish anonymityfor the listing's author.
  
-###### Close a listing
+###### Filtering listings
+
+You can filter listings by the following fields: `price_type`, `sale_type`,
+ `category__name`, `min_price`, `max_price`, `description`, `title`,
+ `listing_date`, `views`, `number_of_inquiries`, `author_pk`, `closed`, `closing_date`. 
+ 
+ To do so, include the field in the querystring, e.g., `http://[ site_url ]/api/listings/?min_price=100`. 
+ 
+###### Closing a listing
 `http://[ site_url ]/api/listings/[pk]/close_listing/`<br>
 Close a listing by calling this api end point with the pk of the listing that is being closed. You must be the owner of
 listing to be able to close it.
+
  
 ##### Categories
 `http://[ site_url ]/api/categories/`
