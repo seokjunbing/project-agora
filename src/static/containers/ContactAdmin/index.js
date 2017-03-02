@@ -4,8 +4,9 @@ import { browserHistory } from 'react-router';
 import { Router } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { push } from 'react-router-redux';
 import classNames from 'classnames';
-
+import * as contactAdminActionCreators from '../../actions/contactActions';
 
 
 class ContactAdminView extends React.Component {
@@ -17,15 +18,18 @@ class ContactAdminView extends React.Component {
   render() {
       return (
         <div>
-          <ContactAdmin/>
+          <ContactAdmin adminContactRequest={this.props.contactActions.adminContactRequest}/>
         </div>
       );
   }
 }
 
-const mapDispatchToProps = () => {
-    return {};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch,
+        contactActions: bindActionCreators(contactAdminActionCreators, dispatch)
+    };
 };
 
-export default connect(mapDispatchToProps)(ContactAdminView);
+export default connect(null, mapDispatchToProps)(ContactAdminView);
 export { ContactAdminView as ContactAdminViewNotConnected };
