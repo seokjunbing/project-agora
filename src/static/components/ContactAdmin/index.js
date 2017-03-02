@@ -116,9 +116,15 @@ class ContactAdmin extends React.Component {
         textAlign: 'center'
       }
 
+      var style_header = {
+        textAlign: 'center',
+        height: '110px'
+      }
+
       var button_style = {
         marginTop: '5px',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginBottom: '20px'
       }
 
       var vertical_offset = {
@@ -143,12 +149,15 @@ class ContactAdmin extends React.Component {
       }
 
         return (
-
             // contact form
             <Container textAlign='center'>
+            <div style= {style_header} className="ui raised padded text container segment">
+              <h2 className="ui header">Have a question?</h2>
+              <p>Get in touch!</p>
+            </div>
               <Form>
                 <Form.Field>
-                  <label style={vertical_offset}>Email</label>
+                  <label style={vertical_offset}>Personal Email</label>
                   <Input style= {style_block}>
                     <input style={box_size} type='text' onChange={this.onChangeUserEmail.bind(this)} name= 'userEmail' placeholder='e.g. dead.pikachu2002@hotmail.com'/>
                   </Input>
@@ -170,7 +179,7 @@ class ContactAdmin extends React.Component {
                 </Form.Field>
                 <Form.Field>
                   <label style={vertical_offset}>Questions/Comments/Concerns</label>
-                  <TextArea onChange={this.onChangeIssueText.bind(this)} name= 'issueText' style={text_box_size} />
+                  <TextArea onChange={this.onChangeIssueText.bind(this)} name= 'issueText' style={text_box_size} placeholder="Let us hear from you..." />
                   <label style={label_color}>{this.state.textErrorText}</label>
                 </Form.Field>
                 <Button style={button_style} onClick={this.onContactClick.bind(this)} color='teal' content='Contact Us' />
