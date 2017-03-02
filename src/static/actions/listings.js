@@ -40,13 +40,16 @@ export function fetchListings(url) {
     return (dispatch) => {
         dispatch(fetchListingsRequest());
         var token = localStorage.getItem("LOCAL_TOKEN");
-        console.log(token);
+        var auth = '';
+        if(token != null) {
+            auth = 'JWT ' + token;
+        }
         return fetch(url, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'JWT ' + token,
+                'Authorization': auth,
             },
         })
             .then(checkHttpStatus)

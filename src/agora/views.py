@@ -97,11 +97,19 @@ def start_conversation(request):
     if req['listing'] and req['users'] and req['user'] and req['text']:
         try:
             l = Listing.objects.get(pk=req['listing'])
-            c = Conversation(listing=l)
-            c.save()
+            users = []
             for user in req['users']:
                 u = User.objects.get(pk=user)
-                c.users.add(u)
+                users.append(u)
+            c = Conversation.objects.filter(listing=l, users__in=users).distinct() # check if convo exists
+            if not c:
+                c = Conversation(listing=l)
+                c.save()
+                for user in req['users']:
+                    u = User.objects.get(pk=user)
+                    c.users.add(u)
+            else:
+                c = c[0]
             u = User.objects.get(pk=req['user'])
             m = Message(text=req['text'], user=u, conversation=c)
             m.save()

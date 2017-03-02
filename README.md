@@ -11,7 +11,6 @@ We're using Django for our backend with a Postgres local database (on Heroku), a
 
 ## Setup
 
-
 Use setup instructions found on [django-react-redux-jwt-base boilerplate project](https://github.com/Seedstars/django-react-redux-jwt-base)
 
 In addition, make sure to install postrges and jpeg in your virtualenv:
@@ -98,6 +97,11 @@ You can filter listings by the following fields: `price_type`, `sale_type`,
  
  To do so, include the field in the querystring, e.g., `http://[ site_url ]/api/listings/?min_price=100`. 
  
+###### Closing a listing
+`http://[ site_url ]/api/listings/[pk]/close_listing/`<br>
+Close a listing by calling this api end point with the pk of the listing that is being closed. You must be the owner of
+listing to be able to close it.
+
  
 ##### Categories
 `http://[ site_url ]/api/categories/`

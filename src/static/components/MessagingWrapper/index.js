@@ -67,7 +67,7 @@ class MessagingWrapper extends React.Component {
                             { this.props.conversations && this.props.conversations.map((conversation, index) => {
                                 return <ConversationTab key={conversation.id} index={index} listing_title={conversation.related_listing.title}
                                                 listing_images={conversation.related_listing.images} messages={conversation.all_messages}
-                                                read_by={conversation.read_by}/>
+                                                read_by={conversation.read_by} recipient={this.props.user == conversation.related_listing.author_pk ? conversation.buyer_name : conversation.related_listing.author_name}/>
                             })}
                         </Step.Group>
                     </Grid.Column>
