@@ -6,24 +6,36 @@ import classNames from 'classnames';
 import { push } from 'react-router-redux';
 import Account from '../../components/Account';
 import CreateListing from '../../components/CreateListing';
+import ErrorPanel from '../../components/ErrorPanel';
+
 
 
 class CreateListingView extends React.Component {
 
     render() {
+
+      const { isAuthenticated } = this.props.user;
+
         return (
           <div>
-            <CreateListing/>
+            { isAuthenticated ? <CreateListing/> : <ErrorPanel/> }
           </div>
         );
     }
 }
 
-const mapDispatchToProps = () => {
+// get the user
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
     return {};
 };
 
 
 
-export default connect(mapDispatchToProps)(CreateListingView);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateListingView);
 export { CreateListingView as CreateListingViewNotConnected };

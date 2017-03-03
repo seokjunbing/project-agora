@@ -5,6 +5,8 @@ import * as actionCreators from '../../actions/messaging';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
 import MessagingWrapper from '../../components/MessagingWrapper';
+import ErrorPanel from '../../components/ErrorPanel';
+
 
 class MessagingView extends React.Component {
     componentDidMount() {
