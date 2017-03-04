@@ -106,6 +106,8 @@ class Listing(models.Model):
 
     images = ArrayField(models.CharField(max_length=500, blank=True), blank=True, null=True, )
 
+    image_dimensions = ArrayField( ArrayField(models.IntegerField(), blank=True), blank=True, null=True, )
+
     image_captions = ArrayField(models.CharField(max_length=500, blank=True), blank=True, null=True, )
 
     flags = models.PositiveIntegerField(default=0)
