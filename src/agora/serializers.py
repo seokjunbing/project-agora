@@ -11,7 +11,6 @@ import json
 # from rest_framework.serializers import
 import httplib2
 import os
-# from .helpers import do_something
 
 from .models import Listing, Category, Profile, Message, Conversation, create_auth_token
 
@@ -117,17 +116,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         # fields = '__all__'
         fields = ('verified',)
         read_only_fields = ('verified',)
-
-
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         profile = ProfileSerializer(source='profile_set')
-#         fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name', 'profile')
-#         depth = 1
-#         extra_kwargs = {'password': {'write_only': True}}
-#         write_only_fields = ('password',)
-#         read_only_fields = ('id', 'username', 'profile')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
