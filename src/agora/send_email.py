@@ -2,6 +2,12 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+"""
+Example of how to construct and send an email:
+
+construct_and_send_admin_contact_email("John Doe", "random@dartmouth.edu", "can't log in", "This is my concern")
+"""
+
 
 def send_email(recipient, message, sender='agoradartmouth@gmail.com', pwd='agora123'):
     gmail_user = sender
@@ -16,6 +22,7 @@ def send_email(recipient, message, sender='agoradartmouth@gmail.com', pwd='agora
         server.login(gmail_user, gmail_pwd)
         server.sendmail(FROM, TO, message.as_string())
         server.quit()
+        print('email sent')
     except Exception as e:
         print(e)
 
@@ -113,6 +120,3 @@ def construct_and_send_verification_email(userprofile, domain='http://127.0.0.1:
     send_email(recipient=recv, message=msg)
 
 
-# example of how to construct and send an email
-# if __name__ == '__main__':
-#     construct_and_send_admin_contact_email("John Doe", "random.person@dartmouth.edu", "can't log in", "This is my concern")

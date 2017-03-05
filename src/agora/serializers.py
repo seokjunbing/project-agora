@@ -3,7 +3,8 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-import hashlib
+from hashlib import sha256
+from random import sample
 from rest_framework.exceptions import APIException
 
 from .models import Listing, Category, Profile, Message, Conversation
@@ -138,9 +139,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
             user_profile = Profile(user=user)
             user_email = validated_data['email'].encode('utf-8')
+            salted_email = '%s%s'.encode() % (user_email, ''.join(map(str, sample(range(65, 122), 3))))
 
             # TODO salt the user's email - easily guessable right now.
-            verification_code = hashlib.sha256(user_email).hexdigest()
+            verification_code = sha256(salted_email).hexdigest()
             user_profile.verification_code = verification_code
             user_profile.save()
 
