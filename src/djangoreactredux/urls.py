@@ -24,10 +24,8 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'api/auth-token', views.obtain_auth_token),  # TODO Temporary fix. Move to routers at some point.
     url(r'^api/get_s3_url', sign_s3_upload),
-    url(r'^api/clients/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^api/token-auth/', obtain_jwt_token),
     url(r'^api/token-refresh/', refresh_jwt_token),
-    url(r'^accounts/', include('allauth.urls')),
     # url(r'^api/verify/(?P<code>.*)/', verify_user),
     url(r'^api/verify/', verify_user),
     url(r'^api/start_convo/', start_conversation),

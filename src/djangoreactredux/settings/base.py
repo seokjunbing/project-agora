@@ -44,12 +44,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework_jwt',
 
-    'oauth2_provider',
-
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-
     'agora',
 ]
 
