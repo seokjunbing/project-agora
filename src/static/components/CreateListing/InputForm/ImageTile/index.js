@@ -45,7 +45,6 @@ class ImageTile extends Component {
   onImageTitleChange = (e) => {
       e.preventDefault();
       if (e.target.value.length < image_title_length) {
-        this.setState({ title : e.target.value} );
         this.props.onTitleChange(this.props.id, e.target.value);
       }
   }
@@ -85,6 +84,34 @@ class ImageTile extends Component {
     }
   }
 
+  makePrimaryIconDisplay() {
+    if (this.props.id == 0) {
+      return (true);
+    } else {
+
+      return (
+        <div>
+          <Modal
+            trigger={<Label color={this.starColor()} style={{top : 0, left : 0}} icon='star' corner='left' onClick={this.makePrimaryModalOpen}></Label>}
+            size='small'
+            open={this.state.makePrimaryModal}
+            onClose={this.makePrimaryModalClose}
+          >
+            <Header content='Make this the primary image?' />
+            <Modal.Actions>
+              <Button color='grey' onClick={this.makePrimaryModalClose}>
+                <Icon name='chevron left' /> No
+              </Button>
+              <Button color='blue' onClick={this.makePrimaryModalClose2}>
+                <Icon name='star' /> Yes
+              </Button>
+            </Modal.Actions>
+          </Modal>
+        </div>
+      );
+    }
+  }
+
 
   render() {
     return (
@@ -107,26 +134,11 @@ class ImageTile extends Component {
           </Modal.Actions>
         </Modal>
 
-        <Modal
-          trigger={<Label color={this.starColor()} style={{top : 0, left : 0}} icon='star' corner='left' onClick={this.makePrimaryModalOpen}></Label>}
-          size='small'
-          open={this.state.makePrimaryModal}
-          onClose={this.makePrimaryModalClose}
-        >
-          <Header content='Make this the primary image?' />
-          <Modal.Actions>
-            <Button color='grey' onClick={this.makePrimaryModalClose}>
-              <Icon name='chevron left' /> No
-            </Button>
-            <Button color='blue' onClick={this.makePrimaryModalClose2}>
-              <Icon name='star' /> Yes
-            </Button>
-          </Modal.Actions>
-        </Modal>
+        {this.makePrimaryIconDisplay()}
 
         {this.displayImage()}
 
-        <Input fluid placeholder='Image description' name='image_title' onChange={this.onImageTitleChange.bind(this)}/>
+        <Input fluid value={this.props.caption} placeholder='Image description' name='image_title' onChange={this.onImageTitleChange.bind(this)}/>
       </Segment>
     )
   }
