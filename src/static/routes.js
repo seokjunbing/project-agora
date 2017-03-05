@@ -6,7 +6,7 @@ import { requireAuthentication } from './utils/requireAuthentication';
 
 export default(
     <Route path="/" component={App}>
-        <IndexRoute component={HomeView}/>
+        <IndexRoute component={ListingView}/>
         <Route path="verify" component={VerifyEmailView}/>
         <Route path="createlisting" component={CreateListingView}/>
         <Route path="listing" component={ListingView}/>
