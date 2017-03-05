@@ -5,6 +5,7 @@ import * as actionCreators from '../../actions/auth';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
 import About from '../../components/About';
+import WelcomeBanner from '../../components/WelcomeBanner';
 
 
 class AboutView extends React.Component {
@@ -12,7 +13,7 @@ class AboutView extends React.Component {
   render() {
       return (
         <div>
-          <About/>
+          <WelcomeBanner/>
         </div>
       );
   }

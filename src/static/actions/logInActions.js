@@ -25,7 +25,7 @@ export function userLogInRequest(userData){
       dispatch({type: SET_FEEDBACK, payload: "Logged in!"});
 
       // take the person to the main page
-      browserHistory.push('/');
+      browserHistory.push('/about');
     })
     .catch(error => {
 
@@ -33,7 +33,7 @@ export function userLogInRequest(userData){
       dispatch({type: SET_FEEDBACK, payload: "Oooops! Login failed! Check your credentials!"});
 
       // take the person to the main page
-      browserHistory.push('/');
+      browserHistory.push('/about');
 
 
     });
