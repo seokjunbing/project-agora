@@ -113,7 +113,7 @@ class ListingModal extends React.Component {
                               {this.state && <Image style={style7} height={this.state.main_img_height} width={this.state.main_img_width} src={this.state.images[this.state.curr_image]} />}
                             </div>
 
-                            {this.state && <Container fluid style={style8}><p>{this.state.image_captions[this.state.curr_image]}</p></Container>}
+                            {(this.state && this.state.image_captions) && <Container fluid style={style8}><p>{this.state.image_captions[this.state.curr_image]}</p></Container>}
 
                           </Segment>
                         </Grid.Column>
@@ -123,7 +123,9 @@ class ListingModal extends React.Component {
                         </Grid.Column>
 
                         <Grid.Column width={2}>
-                          {this.displaySecondaryImages()}
+                          <div>
+                            {this.displaySecondaryImages()}
+                          </div>
                         </Grid.Column>
                       </Grid>
                 </Modal.Header>
