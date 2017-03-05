@@ -8,5 +8,6 @@ export ProfilePageView from './ProfilePage/index';
 export ContactAdminView from './ContactAdmin/index';
 export CreateListingView from './CreateListing/index';
 export AboutView from './About/index';
+export AboutUsView from './AboutUs/index';
 export VerifyEmailView from './VerifyEmail/index';
 export MessagingView from './Messaging/index';
