@@ -35,42 +35,45 @@ class InputForm extends Component {
 
   storeImageSize(img_width, img_height) {
     if (this.state) {
-
       var dim_copy = this.state.image_dimensions;
       dim_copy.push([img_height,img_width])
       this.setState({image_dimensions : dim_copy}, function() {console.log(this.state) });
 
     }
-
   }
 
 
   deleteImage(id) {
     if (this.state) {
-      if (this.state.images && this.state.image_captions) {
+      if (this.state.images && this.state.image_captions && this.state.image_dimensions) {
         var images_copy = this.state.images.slice();
         var image_captions_copy = this.state.image_captions.slice();
+        var dim_copy = this.state.image_dimensions.slice();
         images_copy.splice(id,1);
         image_captions_copy.splice(id,1);
-        this.setState({ images : images_copy, image_captions : image_captions_copy});
+        dim_copy.splice(id,1);
+        this.setState({ images : images_copy, image_captions : image_captions_copy, image_dimensions : dim_copy});
       }
     }
   }
 
   makePrimary(id) {
     if (this.state) {
-      if (this.state.images && this.state.image_captions) {
-        console.log(this.state);
+      if (this.state.images && this.state.image_captions && this.state.image_dimensions) {
         if (id > 0) {
           var images_copy = this.state.images.slice();
           var image_captions_copy = this.state.image_captions.slice();
+          var dim_copy = this.state.image_dimensions.slice();
           var star_img = images_copy[id];
           var star_title = image_captions_copy[id];
+          var star_dims = dim_copy[id];
           images_copy.splice(id,1);
           image_captions_copy.splice(id,1);
+          dim_copy.splice(id,1);
           images_copy.unshift(star_img);
           image_captions_copy.unshift(star_title);
-          this.setState({images : images_copy, image_captions : image_captions_copy});
+          dim_copy.unshift(star_dims);
+          this.setState({images : images_copy, image_captions : image_captions_copy, image_dimensions : dim_copy});
         }
       }
     }
@@ -200,26 +203,6 @@ class InputForm extends Component {
 
   }
 
-  removePrimary() {
-    if (this.state) {
-      if (this.state.images) {
-        var images_copy = this.state.images.slice();
-        images_copy.shift();
-        this.setState({ images : images_copy});
-      }
-    }
-  }
-
-  rotateImageOrder() {
-    if (this.state) {
-      if (this.state.images) {
-        var images_copy = this.state.images.slice();
-        var first_image = images_copy.shift();
-        images_copy.push(first_image);
-        this.setState({images : images_copy});
-      }
-    }
-  }
 
   onUploadFinish(signResult) {
 
