@@ -22,7 +22,7 @@ def send_email(recipient, message, sender='agoradartmouth@gmail.com', pwd='agora
         server.login(gmail_user, gmail_pwd)
         server.sendmail(FROM, TO, message.as_string())
         server.quit()
-        print('email sent')
+        # print('email sent')
     except Exception as e:
         print(e)
 
