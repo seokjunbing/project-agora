@@ -101,7 +101,7 @@ def start_conversation(request):
             for user in req['users']:
                 u = User.objects.get(pk=user)
                 users.append(u)
-            c = Conversation.objects.filter(listing=l, users__in=users).distinct() # check if convo exists
+            c = Conversation.objects.filter(listing=l, users__in=users).distinct()  # check if convo exists
             if not c:
                 c = Conversation(listing=l)
                 c.save()
@@ -169,9 +169,8 @@ class ListingFilter(django_filters.rest_framework.FilterSet):
 
 
 class ListingViewSet(viewsets.ModelViewSet):
-
     # disable listing after 5 flags
-    queryset = Listing.objects.filter(flags__lt = 5)
+    queryset = Listing.objects.filter(flags__lt=5)
 
     serializer_class = ListingSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -206,7 +205,8 @@ class ListingViewSet(viewsets.ModelViewSet):
         else:
             return Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
 
-    @list_route(permission_classes=(IsAuthenticated,))  # IsAuthenticated should suffice, as you need to be verified to create a listing
+    @list_route(permission_classes=(
+            IsAuthenticated,))  # IsAuthenticated should suffice, as you need to be verified to create a listing
     def get_for_user(self, request):
         user = request.user
         # if user.is_authenticated() and user.profile.verified:
@@ -287,19 +287,9 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
-        # def destroy(self, request, *args, **kwargs):
-        #     user = request.user
-        #     instance = self.get_object()
-        #     if user.is_authenticated() and user == instance:
-        #         viewsets.ModelViewSet.perform_destroy(self, instance)
-        #         return Response(
-        #             {"message": "You have successfully deleted your profile on Agora. We hope to see you back soon."})
-        #     raise ForbiddenException()
-        # return Response(status=status.HTTP_403_FORBIDDEN)
-
-        # def list(self, request, *args, **kwargs):
-        #     user = request.user
-        #     if user.is_superuser:
-        #         return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
-        #     else:
-        #         return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_superuser:
+            return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+        else:
+            raise ForbiddenException
