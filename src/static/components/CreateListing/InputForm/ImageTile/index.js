@@ -28,10 +28,17 @@ class ImageTile extends Component {
   deleteModalOpen = (e) => this.setState({deleteModal : true});
   deleteModalClose = (e) => this.setState({deleteModal : false});
 
+  deleteModalClose2 = (e) => {
+    this.props.deleteImage(this.props.id);
+    this.deleteModalClose();
+  }
+
   makePrimaryModalOpen = (e) => this.setState({makePrimaryModal : true});
   makePrimaryModalClose = (e) => this.setState({makePrimaryModal : false});
+
   makePrimaryModalClose2 = (e) => {
     this.props.makePrimary(this.props.id);
+    console.log('closing');
     this.makePrimaryModalClose();
   }
 
@@ -40,7 +47,6 @@ class ImageTile extends Component {
       if (e.target.value.length < image_title_length) {
         this.setState({ title : e.target.value} );
         this.props.onTitleChange(this.props.id, e.target.value);
-
       }
   }
 
@@ -95,7 +101,7 @@ class ImageTile extends Component {
             <Button color='grey' onClick={this.deleteModalClose}>
               <Icon name='chevron left' /> No
             </Button>
-            <Button color='red' onClick={() => this.props.deleteImage(this.props.id)}>
+            <Button color='red' onClick={this.deleteModalClose2}>
               <Icon name='remove' /> Yes
             </Button>
           </Modal.Actions>
@@ -119,7 +125,6 @@ class ImageTile extends Component {
         </Modal>
 
         {this.displayImage()}
-
 
         <Input fluid placeholder='Image description' name='image_title' onChange={this.onImageTitleChange.bind(this)}/>
       </Segment>
