@@ -52,7 +52,9 @@ export default createReducer(initialState, {
                 return -1;
             return 0;
         }
-        payload.conversations.sort(compare);
+        if(payload.conversations) {
+          payload.conversations.sort(compare);
+        }
         return Object.assign({}, state, {
             isFetching: false,
             conversations: payload.conversations,
