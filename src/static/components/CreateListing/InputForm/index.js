@@ -20,6 +20,7 @@ const price_units = [
 
 const title_length = 20;
 const description_length = 40;
+const max_price = 9999.99;
 
 class InputForm extends Component {
 
@@ -28,6 +29,19 @@ class InputForm extends Component {
     this.deleteImage = this.deleteImage.bind(this);
     this.makePrimary = this.makePrimary.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
+    this.storeImageSize = this.storeImageSize.bind(this);
+    this.state = {image_dimensions : []};
+  }
+
+  storeImageSize(img_width, img_height) {
+    if (this.state) {
+
+      var dim_copy = this.state.image_dimensions;
+      dim_copy.push([img_height,img_width])
+      this.setState({image_dimensions : dim_copy}, function() {console.log(this.state) });
+
+    }
+
   }
 
 
@@ -46,6 +60,7 @@ class InputForm extends Component {
   makePrimary(id) {
     if (this.state) {
       if (this.state.images && this.state.image_captions) {
+        console.log(this.state);
         if (id > 0) {
           var images_copy = this.state.images.slice();
           var image_captions_copy = this.state.image_captions.slice();
@@ -79,7 +94,7 @@ class InputForm extends Component {
 
   handlePriceChange = (e) => {
       e.preventDefault();
-      if (isNaN(e.target.value) == false && ((e.target.value*100 % 1) == 0)) {
+      if (isNaN(e.target.value) == false && (e.target.value < max_price) && ((e.target.value*100 % 1) == 0)) {
         this.setState({ price : e.target.value, priceValid : 1, priceChanged : 1});
       } else {
         this.setState({ priceValid : 0, priceChanged : 1});
@@ -110,7 +125,8 @@ class InputForm extends Component {
     this.setState({
         author: this.props.user,
     }, function() {
-        console.log(this.state);
+
+        console.log('this is submitted')
         this.props.postActions.postListing(this.state);
         window.location = '/listing';
     });
@@ -174,9 +190,10 @@ class InputForm extends Component {
   submitActive() {
 
     if (this.state) {
-      if (this.state.titleValid && this.state.priceValid && this.state.pricetypeValid && this.state.categoryValid && this.state.descriptionValid && this.state.imagePresent) {
+      if (this.state.titleValid && this.state.priceValid && this.state.pricetypeValid && this.state.categoryValid && this.state.descriptionValid && this.state.imagePresent && this.state.image_dimensions) {
         return (false);
       } else {
+
         return (true);
       }
     } return (true);
@@ -246,7 +263,7 @@ class InputForm extends Component {
           return (
             this.state.images.map((image, i) => {
             return (
-              <ImageTile imageurl={image} imagetitle={this.state.image_captions[i]} id={i} deleteImage={this.deleteImage} onTitleChange={this.onTitleChange} makePrimary={this.makePrimary}/>
+              <ImageTile imageurl={image} imagetitle={this.state.image_captions[i]} id={i} deleteImage={this.deleteImage} onTitleChange={this.onTitleChange} makePrimary={this.makePrimary} storeImageSize={this.storeImageSize}/>
             );
           }));
         } else {
@@ -280,6 +297,9 @@ class InputForm extends Component {
 
 
   onUploadStart(file, next) {
+    console.log(file);
+    console.log('this was the file');
+
     this.setState({imageUploadStatus : 1});
     next(file);
   }

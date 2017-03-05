@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CategoryDropdown from '../../../CategoryDropdown';
 import ReactS3Uploader from 'react-s3-uploader';
+import ImageSizer from '../../../ImageSizer';
 
 import { Button, Checkbox, Form, Input, Message, Radio, Select, TextArea, Container, Dropdown, Modal, Header, Icon } from 'semantic-ui-react';
 
@@ -16,11 +17,12 @@ class ImageTile extends Component {
 
   constructor(props) {
     super(props);
+    this.storeImageSize = this.storeImageSize.bind(this);
   }
 
   componentWillMount() {
     this.setState({title : this.props.imagetitle});
-    this.setState({deleteModal : false, makePrimaryModal : false});
+    this.setState({deleteModal : false, makePrimaryModal : false, correct_size : false });
   }
 
   deleteModalOpen = (e) => this.setState({deleteModal : true});
@@ -58,13 +60,32 @@ class ImageTile extends Component {
     }
   }
 
+  storeImageSize(img_width, img_height) {
+    this.props.storeImageSize(img_width, img_height);
+    this.setState({correct_size : true});
+  }
+
+  displayImage() {
+    if (this.state) {
+      if (this.state.correct_size == false) {
+        console.log('preview');
+        return (<ImageSizer image={this.props.imageurl} storeImageSize={this.storeImageSize} id={this.props.id}/>);
+      } else {
+        console.log('real');
+        return (
+          <Image src={this.props.imageurl} fluid />
+        );
+      }
+    }
+  }
+
 
   render() {
     return (
-      <Segment basic>
+      <Segment basic style={{padding : 0, border : 0}}>
 
         <Modal
-          trigger={<Label color='red' icon='close' corner='right' onClick={this.deleteModalOpen}></Label>}
+          trigger={<Label style={{top : 0, right : 0}} color='red' icon='close' corner='right' onClick={this.deleteModalOpen}></Label>}
           size='small'
           open={this.state.deleteModal}
           onClose={this.deleteModalClose}
@@ -81,7 +102,7 @@ class ImageTile extends Component {
         </Modal>
 
         <Modal
-          trigger={<Label color={this.starColor()} icon='star' corner='left' onClick={this.makePrimaryModalOpen}></Label>}
+          trigger={<Label color={this.starColor()} style={{top : 0, left : 0}} icon='star' corner='left' onClick={this.makePrimaryModalOpen}></Label>}
           size='small'
           open={this.state.makePrimaryModal}
           onClose={this.makePrimaryModalClose}
@@ -97,7 +118,9 @@ class ImageTile extends Component {
           </Modal.Actions>
         </Modal>
 
-        <Image shape='rounded' src={this.props.imageurl}/>
+        {this.displayImage()}
+
+
         <Input fluid placeholder='Image description' name='image_title' onChange={this.onImageTitleChange.bind(this)}/>
       </Segment>
     )
