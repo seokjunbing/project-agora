@@ -16,7 +16,6 @@ def send_email(recipient, message, sender='agoradartmouth@gmail.com', pwd='agora
         server.login(gmail_user, gmail_pwd)
         server.sendmail(FROM, TO, message.as_string())
         server.quit()
-        # print('Successfully sent the email')
     except Exception as e:
         print(e)
 
@@ -89,7 +88,6 @@ def construct_and_send_verification_email(userprofile, domain='http://127.0.0.1:
       <head></head>
       <body>
         <p>Hi %s!<br>
-           How are you?<br>
            This is a message to let you know that you should verify your email address to have full access to Agora.<br>
            Please click this <a href="%s">link</a> or paste in the following link to your browser:<br>
            %s<br>
@@ -103,7 +101,6 @@ def construct_and_send_verification_email(userprofile, domain='http://127.0.0.1:
 
     text_content = """\
     Hi %s!\n
-    How are you?\n
     This is a message to let you know that you should verify your email address to have full access to Agora.\n
     This is the url to verify your Agora account:\n
     %s\n

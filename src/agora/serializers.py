@@ -1,23 +1,16 @@
 from __future__ import print_function
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User, AnonymousUser
-from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 import hashlib
 from rest_framework.exceptions import APIException
-from django.core import serializers as ser
-import json
-# from rest_framework.serializers import
-import httplib2
-import os
 
-from .models import Listing, Category, Profile, Message, Conversation, create_auth_token
+from .models import Listing, Category, Profile, Message, Conversation
 
 # verification email
 from .send_email import construct_and_send_verification_email
 from django.conf import settings
-from datetime import date
 
 EMAIL_SUFFIX = '@dartmouth.edu'
 
@@ -81,9 +74,6 @@ class ListingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Listing
-        # fields = ('sale_type', 'price', 'price_type', 'sale_type', 'category', 'description', 'title',
-        #           'images', 'flags', 'listing_date', 'views', 'number_of_inquiries', 'author_id', 'author_name',
-        #           'author', 'pk')
         exclude = ('author',)
         read_only_fields = ('closed', 'closing_date')
         # extra_kwargs = {'author': {'write_only': True}, }
@@ -177,21 +167,10 @@ class MessageSerializer(serializers.ModelSerializer):
 
 
 class ConversationSerializer(serializers.ModelSerializer):
-    # title = serializers.SerializerMethodField('get_title_func')
     all_messages = serializers.SerializerMethodField('get_messages_func')
     related_listing = serializers.SerializerMethodField('get_listing_func')
     most_recent_msg = serializers.SerializerMethodField('get_most_recent_msg_func')
     buyer_name = serializers.SerializerMethodField('get_buyer_name_func')
-
-    # messages_all = serializers.ManyRelatedField(source='messages', child_relation='messages')
-    #  THIS KIND OF WORKS
-    # messages = MessageField(many=True, read_only=True)
-    # messages = serializers.HyperlinkedRelatedField(many=True, queryset=Message.objects.all())
-
-    # messages = serializers.ReadOnlyField()
-
-    # m = serializers.ModelSerializer(data=Conversation.listing)
-    # m = ListingSerializer(source='conversation_set')
 
     def get_listing_func(self, obj):
         return ListingSerializer(obj.listing, context=self.context).data
