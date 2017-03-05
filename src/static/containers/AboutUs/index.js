@@ -4,16 +4,15 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/auth';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
-import About from '../../components/About';
 import WelcomeBanner from '../../components/WelcomeBanner';
 
 
-class AboutView extends React.Component {
+class AboutUsView extends React.Component {
 
   render() {
       return (
         <div>
-          <About/>
+          <WelcomeBanner/>
         </div>
       );
   }
@@ -25,5 +24,5 @@ const mapDispatchToProps = () => {
 
 
 
-export default connect(mapDispatchToProps)(AboutView);
-export { AboutView as AboutViewNotConnected };
+export default connect(mapDispatchToProps)(AboutUsView);
+export { AboutUsView as AboutUsViewNotConnected };
