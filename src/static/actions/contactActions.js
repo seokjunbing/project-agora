@@ -18,7 +18,7 @@ export function adminContactRequest(userData){
       dispatch({type: SET_FEEDBACK, payload: "Thank you for contacting us!"});
 
       // take the person to the main page
-      browserHistory.push('/');
+      browserHistory.push('/about');
     })
     .catch(error => {
 
@@ -26,7 +26,7 @@ export function adminContactRequest(userData){
       dispatch({type: SET_FEEDBACK, payload: "Oooops! Something went wrong!"});
 
       // take the person to the main page
-      browserHistory.push('/');
+      browserHistory.push('/about');
 
     });
   }

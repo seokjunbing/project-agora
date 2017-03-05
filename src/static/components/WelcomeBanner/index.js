@@ -21,7 +21,7 @@ class WelcomeBanner extends React.Component {
       }
 
         return (
-            <div style= {center_style} className="ui raised very padded text container segment">
+            <div style= {center_style} className="ui raised padded text container segment">
               <h2 className="ui header">Welcome to Agora!</h2>
               <p>The Dartmouth student marketplace</p>
               <label style= {error_color}>{this.props.promptMessage}</label>

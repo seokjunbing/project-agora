@@ -6,12 +6,13 @@ import { requireAuthentication } from './utils/requireAuthentication';
 
 export default(
     <Route path="/" component={App}>
-        <IndexRoute component={HomeView}/>
+        <IndexRoute component={ListingView}/>
         <Route path="verify" component={VerifyEmailView}/>
         <Route path="createlisting" component={CreateListingView}/>
         <Route path="listing" component={ListingView}/>
         <Route path="messaging" component={MessagingView}/>
         <Route path="confirmed" component={ConfirmationPageView}/>
+        <Route path="about" component={AboutView}/>
         <Route path="profile" component={ProfilePageView}/>
         <Route path="contactAdmin" component={ContactAdminView}/>
         <Route path="protected" component={requireAuthentication(ProtectedView)}/>

@@ -109,7 +109,8 @@ class NavBar extends React.Component {
                   <Menu.Item href="/">
                     <h2>AGORA</h2>
                   </Menu.Item>
-                  <Menu.Item href="/contactAdmin">Contact Us</Menu.Item>
+                  <Menu.Item href="/about">About Us</Menu.Item>
+                  <Menu.Item href="/contactAdmin">Contact</Menu.Item>
                   <Menu.Item href="/listing">Listings</Menu.Item>
                   { isAuthenticated && <Menu.Item href="/createlisting">Create Listing</Menu.Item>}
                   { isAuthenticated ? userLinks : guestLinks }
