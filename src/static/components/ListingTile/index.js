@@ -11,38 +11,6 @@ class ListingTile extends React.Component {
       super(props);
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        var submit = document.getElementById('messageSubmit');
-        if(submit) {
-            if(nextState && nextState.text != '') {
-                submit.disabled = false;
-            } else {
-                submit.disabled = true;
-            }
-        }
-    }
-
-    updateMessage = (e) => {
-        this.setState({
-            text: e.target.value,
-        });
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-        var users = [];
-        users.push(this.props.user_id);
-        users.push(this.props.author_id);
-        this.setState({
-            listing: this.props.listingId,
-            users: users,
-            user: this.props.user_id,
-        }, function() {
-            this.props.actions.createConversation(this.state);
-            window.location = '/messaging';
-        });
-    }
-
     render() {
         var style1 = {
             marginLeft: '15px',
