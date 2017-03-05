@@ -246,7 +246,7 @@ class InputForm extends Component {
           return (
             this.state.images.map((image, i) => {
             return (
-              <ImageTile imageurl={image} imagetitle={this.state.image_captions[i]} id={i} deleteImage={this.deleteImage} onTitleChange={this.onTitleChange} makePrimary={this.makePrimary} storeImageSize={this.storeImageSize}/>
+              <ImageTile imageurl={image} imagetitle={this.state.image_captions[i]} id={i} deleteImage={this.deleteImage} onTitleChange={this.onTitleChange} makePrimary={this.makePrimary} storeImageSize={this.storeImageSize} caption={this.state.image_captions[i]}/>
             );
           }));
         } else {
