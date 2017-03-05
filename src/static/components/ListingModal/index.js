@@ -6,12 +6,19 @@ import MessageModal from '../MessageModal';
 import ImageDisplay from './ImageDisplay';
 
 const max_img_height = 300;
+const max_img_width = 800;
 
 class ListingModal extends React.Component {
     constructor(props) {
         super(props);
         this.resizeImage = this.resizeImage.bind(this);
-        this.state = {images : this.props.listing.images, image_captions : this.props.listing.image_captions, image_dimensions : this.props.listing.image_dimensions, main_img_height : 1, main_img_width : 1, correct_size : false};
+        this.state = {images : this.props.listing.images,
+                    image_captions : this.props.listing.image_captions,
+                    image_dimensions : this.props.listing.image_dimensions,
+                    main_img_height : 1,
+                    main_img_width : 1,
+                    curr_image: 0,
+                    correct_size : false};
     }
 
     componentDidMount() {
@@ -27,7 +34,7 @@ class ListingModal extends React.Component {
            return (
              this.props.listing.images.map((image, i) => {
              return (
-               <ImageDisplay imageurl={image} caption={this.props.listing.image_captions[i]} index={i} />
+               <ImageDisplay imageurl={image} caption={this.props.listing.image_captions[i]} index={i} key={i}/>
              );
            }));
          } else {
@@ -42,67 +49,21 @@ class ListingModal extends React.Component {
    }
 
    resizeImage(img_width, img_height) {
-
-     var ratio = (img_height / max_img_height);
-     if (img_height > max_img_height) {
-       this.setState({main_img_width : img_width/ratio, main_img_height : '100%', correct_size : true});
-     } else {
-       this.setState({main_img_width : '100%', main_img_height : img_height*ratio, correct_size : true});
-     }
-   }
-
-   displayMainImage() {
-     if (this.state) {
-       if (this.state.images && this.state.images.length > 0) {
-         if (this.state.main_img_height && this.state.main_img_width) {
-           return (
-               <Image verticalAlign='middle' height={this.state.main_img_height} width={this.state.main_img_width} src={this.state.images[0]} />
-           );
-         } else {
-           return (true);
-         }
-       } else {
-         return (true);
-       }
-     } else {
-       return (true);
-     }
-   }
-
-   displayMainCaption() {
-     if (this.state) {
-       if (this.state.image_captions && this.state.image_captions.length > 0) {
-         return (
-           <Container fluid><p>{this.state.image_captions[0]}</p></Container>
-         );
-       } else {
-         return (true);
-       }
-     } else {
-       return (true);
-     }
+       var widthRatio = max_img_width/img_width;
+       var heightRatio = max_img_height/img_height;
+       var scaleFactor = Math.min(widthRatio, heightRatio);
+       this.setState({main_img_width : img_width * scaleFactor, main_img_height : img_height * scaleFactor, correct_size : true});
    }
 
    nextImage() {
      if (this.state) {
        if (this.state.images && this.state.image_captions && this.state.image_dimensions) {
-         if (this.state.images.length > 1 && this.state.image_captions.length > 1 && this.state.image_dimensions.length > 1) {
-           var images_copy = this.state.images.slice();
-           var first_image = images_copy.shift();
-           images_copy.push(first_image);
-
-           var image_captions_copy = this.state.image_captions.slice();
-           var first_caption = image_captions_copy.shift();
-           image_captions_copy.push(first_caption);
-
-           var dim_copy = this.state.image_dimensions.slice();
-           var main_dim = dim_copy.shift();
-           dim_copy.push(main_dim);
-
-           this.resizeImage(main_dim[0],main_dim[1]);
-
-           this.setState({images : images_copy, image_captions : image_captions_copy, image_dimensions : dim_copy, correct_size : false});
-         }
+           var next_image = null;
+           if(this.state.curr_image == this.state.images.length - 1) {
+               next_image = 0
+           } else { next_image = this.state.curr_image + 1; }
+           this.resizeImage(this.props.listing.image_dimensions[next_image][0],this.props.listing.image_dimensions[next_image][1]);
+           this.setState({curr_image: next_image, correct_size : false});
        }
      }
    }
@@ -123,28 +84,45 @@ class ListingModal extends React.Component {
             width: '10%',
             float: 'right'
         }
-        var style6 = {
+        var style5 = {
             height: '43%',
         }
+        var style6 = {
+            marginLeft: '25%',
+        }
+        var style7 = {
+            display: 'block',
+            margin: 'auto',
+        }
+        var style8 = {
+            textAlign: 'center',
+            paddingTop: '10px',
+            fontWeight: 'normal',
+        }
+        var style9 = {
+            marginBottom: '10px',
+        }
+
         return (
             <Modal trigger={this.props.trigger}>
                 <Modal.Header>
-                    <Grid columns={2}>
-                        <Grid.Column width={8}>
+                    <Grid columns={3} style={style9}>
+                        <Grid.Column width={12}>
                           <Segment basic style={{padding : 0, border : 0, height : max_img_height}}>
                             <div style={{overflow : 'hidden'}}>
-                              {this.displayMainImage()}
+                              {this.state && <Image style={style7} height={this.state.main_img_height} width={this.state.main_img_width} src={this.state.images[this.state.curr_image]} />}
                             </div>
 
-                            {this.displayMainCaption()}
-                            <Rail internal style={{margin:'0px', padding:'0px'}} position='right'>
-                              <div style={style6}></div>
-                              <Button floated='right' icon='angle right' onClick={this.nextImage.bind(this)}></Button>
-                            </Rail>
+                            {this.state && <Container fluid style={style8}><p>{this.state.image_captions[this.state.curr_image]}</p></Container>}
 
                           </Segment>
                         </Grid.Column>
-                        <Grid.Column width={8}>
+                        <Grid.Column width={2}>
+                          <div style={style5}></div>
+                          {this.props.listing.images.length > 1 && <Button style={style6} icon='angle right' onClick={this.nextImage.bind(this)}></Button>}
+                        </Grid.Column>
+
+                        <Grid.Column width={2}>
                           {this.displaySecondaryImages()}
                         </Grid.Column>
                       </Grid>
