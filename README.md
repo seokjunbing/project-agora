@@ -64,24 +64,27 @@ Seok Jun Bing, Jasper Bingham, Elizabeth Brissie, Audyn Curless, Odon Orzsik, Ju
 
 For some reason, Heroku doesn't like the node & npm versions set on the first commit. The `postinstall` command will fail. So on the first commit, comment those out. Put them back in (and make sure they match the versions on your dev environment) from the second commit onwards.
 
-## Documentation
+## API Documentation
 
-### Backend
-
-#### API endpoints
+### API endpoints
 
 At this moment, the following API endpoints are accepting either GET or POST requests. They are still in a provisional
 state and are likely to change somewhat. We strive to not rename fields in our responses as to maintain
 some backwards compatibility, but this is not guaranteed.
 
-##### Listings
+#### Listings
 `http://[ site_url ]/api/listings/`
 
 Lists the listings made by users on the site. *Deleting* a listing can only be done by its author. 
 Unauthenticated requests and requests coming from unverified users will not receive the `author` of a Listing so
  as to preserve anonymity and trust of users within the Dartmouth community.
 
-###### Getting all of a user's listings
+##### Listing detail
+`http://[ site_url ]/api/listings/[ pk ]`
+###### Accepted methods
+`GET`, `POST`, `PUT`, `DELETE`
+
+##### Getting all of a user's listings
 `http://[ site_url ]/api/listings/get_for_user/`
 
 Lists all the listings created by a user. The user must be authenticated and is therefore read from the request.
@@ -89,7 +92,7 @@ Lists all the listings created by a user. The user must be authenticated and is 
  as this may give you inaccurate or no results at all due to these fields not 
  being static in order to accomplish anonymityfor the listing's author.
  
-###### Filtering listings
+##### Filtering listings
 
 You can filter listings by the following fields: `price_type`, `sale_type`,
  `category__name`, `min_price`, `max_price`, `description`, `title`,
@@ -97,43 +100,58 @@ You can filter listings by the following fields: `price_type`, `sale_type`,
  
  To do so, include the field(s) in the querystring, e.g., `http://[ site_url ]/api/listings/?min_price=100&max_price=200`. 
  
-###### Closing a listing
-`http://[ site_url ]/api/listings/[pk]/close_listing/`<br>
+##### Closing a listing
+`http://[ site_url ]/api/listings/[ pk ]/close_listing/`<br>
 Close a listing by calling this api end point with the pk of the listing that is being closed. You must be the owner of
 listing to be able to close it.
 
-##### Categories
+###### Accepted methods
+`GET`
+
+#### Categories
 `http://[ site_url ]/api/categories/`
 
-Lists the available categories for users to post items on. This is a read-only endpoint. If you need to add categories,
+Lists the available categories for users to post items on. This is a **read-only** endpoint. If you need to add categories,
 do so via the admin site.
 
-##### Messages
+###### Accepted methods
+`GET`
+
+#### Messages
 `http://[ site_url ]/api/messages/`
 
 Lists the messages on the site's database.
 
-##### Conversations
+###### Accepted methods
+`GET`, `POST`
+
+#### Conversations
 `http://[ site_url ]/api/conversations/`
 
 Lists the conversations on the site's database.
 
-##### Users
+###### Accepted methods
+`GET`, `POST`
+
+#### Users
 `http://[ site_url ]/api/users/`
 
 Lists the users on the site's database and allows for the creation of new users. You will receive either a confirmation
-in the form of the created `User` object or a response with a 4XX status code specifying why the request failed. 
+in the form of the created `User` object or a response with a 4XX status code specifying why the request failed.
 
-###### Creating users
+###### Accepted methods
+`GET`, `POST`, `PUT`, `PATCH`
+
+##### Creating users
 
 Make a POST request with the following fields: `email`, `password`, `first_name`, `last_name`.
-###### Retrieving users
+##### Retrieving users
 
 Make a GET request. You will receive the following fields: `id`, `username`, `email`, `first_name`, `last_name`. 
 You will also receive a nested object, `profile`, containing a sole field, `verified`, specifying whether a user
  has verified their email. 
 
-##### Authentication token
+#### Authentication token
 
 `http://[ site_url ]/api/auth-token/`
 
@@ -141,14 +159,14 @@ You will also receive a nested object, `profile`, containing a sole field, `veri
 authenticate a user. If the user is successfully authenticated, you will receive a `token`, which you can use to 
 authenticate a user. See **AUTH** section for more details on this.
 
-##### Refreshing an authentication token
+#### Refreshing an authentication token
 
 `http://[ site_url ]/api/token-refresh/`
 
 **Accepts POST requests only**. Send a POST request containing the field `token`, which must be an **unexpired** user token.
 You will receive a newer `token` in return.
 
-##### Verifying user emails
+#### Verifying user emails
 
 `http://[ site_url ]/api/verify/`
 

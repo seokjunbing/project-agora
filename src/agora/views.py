@@ -205,7 +205,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         else:
             return Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
 
-    # IsAuthenticated should suffice, as you need to be verified to create a listing
+    # IsAuthenticated should suffice, as you need to be verified to create a listing. User is gotten from the auth token
     @list_route(permission_classes=(IsAuthenticated,))
     def get_for_user(self, request):
         user = request.user
