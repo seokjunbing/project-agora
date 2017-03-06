@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/auth';
 import classNames from 'classnames';
 import { push } from 'react-router-redux';
-import WelcomeBanner from '../../components/WelcomeBanner';
+import EditListing from '../../components/EditListing';
 import ErrorPanel from '../../components/ErrorPanel';
 
 
@@ -18,7 +18,7 @@ class EditListingView extends React.Component {
 
       return (
         <div>
-          { isAuthenticated ? <WelcomeBanner/> : <ErrorPanel/> }
+          { isAuthenticated ? <EditListing/> : <ErrorPanel/> }
         </div>
       );
   }

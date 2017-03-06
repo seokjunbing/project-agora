@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Segment, Image, Grid, Label, Progress } from 'semantic-ui-react';
-import * as postActionCreators from '../../../actions/postlisting';
-import * as catActionCreators from '../../../actions/categories';
+import * as putActionCreators from '../../actions/putlisting';
+import * as catActionCreators from '../../actions/categories';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import CategoryDropdown from '../../CategoryDropdown';
+import CategoryDropdown from '../CategoryDropdown';
 import ImageTile from './ImageTile';
 import ReactS3Uploader from 'react-s3-uploader';
+import { browserHistory } from 'react-router';
 
 import { Button, Checkbox, Form, Input, Message, Radio, Select, TextArea } from 'semantic-ui-react';
 
@@ -22,7 +23,7 @@ const title_length = 20;
 const description_length = 40;
 const max_price = 9999.99;
 
-class InputForm extends Component {
+class EditListing extends Component {
 
   constructor(props) {
     super(props);
@@ -33,16 +34,11 @@ class InputForm extends Component {
     this.state = {image_dimensions : []};
   }
 
-  storeImageSize(img_width, img_height, id) {
+  storeImageSize(img_width, img_height) {
     if (this.state) {
       var dim_copy = this.state.image_dimensions;
-      if (this.state.image_dimensions.length == id) {
-        dim_copy[id] = [img_height, img_width];
-        this.setState({image_dimensions : dim_copy}, function() {console.log(this.state) });
-      } else {
-        console.log("WRONG IMAGE STUFF");
-      }
-
+      dim_copy.push([img_height,img_width])
+      this.setState({image_dimensions : dim_copy}, function() {console.log(this.state) });
 
     }
   }
@@ -133,15 +129,52 @@ class InputForm extends Component {
     this.setState({
         author: this.props.user,
     }, function() {
-
-        console.log('this is submitted')
-        this.props.postActions.postListing(this.state);
-        window.location = '/listing';
+        console.log('submitted')
+        this.props.putActions.putListing(this.state);
+        browserHistory.push('/profile');
     });
   }
 
+  cancelEdit() {
+    this.props.putActions.putListing(null);
+    browserHistory.push('/profile');
+  }
+
   componentDidMount() {
-      this.props.catActions.fetchCategories();
+    this.props.catActions.fetchCategories();
+    var num_images = this.props.current_listing.images.length;
+    this.setState({
+      category : this.props.current_listing.category,
+      categoryChanged : 1,
+      categoryValid : 1,
+      description : this.props.current_listing.description,
+      descriptionChanged : 1,
+      descriptionTouched : 1,
+      descriptionValid : 1,
+      imagePresent : 1,
+      imageUploadStatus : 2,
+      imageUploadPercent : 0,
+      image_captions : this.props.current_listing.image_captions,
+      image_dimensions : this.props.current_listing.image_dimensions.slice(0,num_images),
+      images : this.props.current_listing.images,
+      price : this.props.current_listing.price,
+      priceChanged : 1,
+      priceTouched : 1,
+      priceValid : 1,
+      price_type : this.props.current_listing.price_type,
+      pricetypeChanged : 1,
+      pricetypeValid : 1,
+      title : this.props.current_listing.title,
+      titleChanged : 1,
+      titleValid : 1,
+      closed : this.props.current_listing.closed,
+      closing_date : this.props.current_listing.closing_date,
+      flags : this.props.current_listing.flags,
+      id : this.props.current_listing.id,
+      listing_date : this.props.current_listing.listing_date,
+      number_of_inquiries : this.props.current_listing.number_of_inquiries,
+      views : this.props.current_listing.views,
+    });
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -198,7 +231,6 @@ class InputForm extends Component {
   submitActive() {
 
     if (this.state) {
-      console.log(this.state);
       if (this.state.titleValid && this.state.priceValid && this.state.pricetypeValid && this.state.categoryValid && this.state.descriptionValid && this.state.imagePresent && this.state.image_dimensions) {
         return (false);
       } else {
@@ -401,19 +433,19 @@ class InputForm extends Component {
 
   render() {
     return (
-      <Segment padded='very'>
+      <Segment basic padded='very'>
         <Grid>
           <Grid.Column width={8}>
             <Form onSubmit={this.handleSubmit.bind(this)}>
-              <Form.Input label='Title' name='title' placeholder='e.g. 42 inch LG TV' onChange={this.handleTitleChange.bind(this)} onSelect={this.onTitleSelect.bind(this)}/>
+              <Form.Input value={this.state.title} label='Title' name='title' placeholder='e.g. 42 inch LG TV' onChange={this.handleTitleChange.bind(this)} onSelect={this.onTitleSelect.bind(this)}/>
               {this.titleError()}
               <Form.Group widths='equal'>
-                <Form.Input label='Price' name='price' placeholder='$50' onChange={this.handlePriceChange.bind(this)} onSelect={this.onPriceSelect.bind(this)}/>
-                <Form.Field control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' onChange={this.handlePriceTypeChange.bind(this)} onSelect={this.onPriceTypeSelect.bind(this)}/>
+                <Form.Input value={this.state.price} label='Price' name='price' placeholder='$50' onChange={this.handlePriceChange.bind(this)} onSelect={this.onPriceSelect.bind(this)}/>
+                <Form.Field value={this.state.price_type} control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' onChange={this.handlePriceTypeChange.bind(this)} onSelect={this.onPriceTypeSelect.bind(this)}/>
               </Form.Group>
               {this.priceError()}
-              <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' onChange={this.handleCategoryChange.bind(this)} onSelect={this.onCategorySelect.bind(this)}/>
-              <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' onChange={this.handleDescriptionChange.bind(this)} onSelect={this.onDescriptionSelect.bind(this)}/>
+              <Form.Field value={this.state.category} control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' onChange={this.handleCategoryChange.bind(this)} onSelect={this.onCategorySelect.bind(this)}/>
+              <Form.TextArea value={this.state.description} name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' onChange={this.handleDescriptionChange.bind(this)} onSelect={this.onDescriptionSelect.bind(this)}/>
               {this.descriptionError()}
 
               <ReactS3Uploader
@@ -426,7 +458,15 @@ class InputForm extends Component {
 
               {this.uploadProgress()}
               {this.imageCountText()}
-              <Button fluid compact color='teal' disabled={this.submitActive()} type='submit'>Submit</Button>
+              <Grid columns={2}>
+                <Grid.Column>
+                  <Button fluid compact color='grey' onClick={() => this.cancelEdit()}>Cancel</Button>
+                  </Grid.Column>
+                <Grid.Column>
+                  <Button fluid compact color='blue' disabled={this.submitActive()} type='submit'>Save</Button>
+                </Grid.Column>
+              </Grid>
+
             </Form>
 
           </Grid.Column>
@@ -446,19 +486,20 @@ class InputForm extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        isPosting : state.postListing.isPosting,
+        isPutting : state.putListing.isPuting,
         categories : state.categories.categories,
-        statusText : state.postListing.statusText,
+        statusText : state.putListing.statusText,
         user : state.user.user_id,
+        current_listing : state.editListing.current_listing,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         dispatch,
-        postActions: bindActionCreators(postActionCreators, dispatch),
+        putActions: bindActionCreators(putActionCreators, dispatch),
         catActions: bindActionCreators(catActionCreators, dispatch),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(InputForm);
+export default connect(mapStateToProps, mapDispatchToProps)(EditListing);

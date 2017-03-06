@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Segment, Image, Grid, Label, Progress } from 'semantic-ui-react';
-import * as postActionCreators from '../../../../actions/postlisting';
-import * as catActionCreators from '../../../../actions/categories';
+import * as postActionCreators from '../../../actions/postlisting';
+import * as catActionCreators from '../../../actions/categories';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import CategoryDropdown from '../../../CategoryDropdown';
+import CategoryDropdown from '../../CategoryDropdown';
 import ReactS3Uploader from 'react-s3-uploader';
-import ImageSizer from '../../../ImageSizer';
+import ImageSizer from '../../ImageSizer';
 
 import { Button, Checkbox, Form, Input, Message, Radio, Select, TextArea, Container, Dropdown, Modal, Header, Icon } from 'semantic-ui-react';
 
@@ -66,7 +66,7 @@ class ImageTile extends Component {
   }
 
   storeImageSize(img_width, img_height) {
-    this.props.storeImageSize(img_width, img_height, this.props.id);
+    this.props.storeImageSize(img_width, img_height);
     this.setState({correct_size : true});
   }
 
@@ -144,21 +144,5 @@ class ImageTile extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        isPosting : true,
-        categories : true,
-        statusText : true,
-        user : true,
-    };
-};
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        dispatch,
-        postActions: bindActionCreators(postActionCreators, dispatch),
-        catActions: bindActionCreators(catActionCreators, dispatch),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ImageTile);
+export default (ImageTile);
