@@ -26,7 +26,6 @@ urlpatterns = [
     url(r'^api/get_s3_url', sign_s3_upload),
     url(r'^api/token-auth/', obtain_jwt_token),
     url(r'^api/token-refresh/', refresh_jwt_token),
-    # url(r'^api/verify/(?P<code>.*)/', verify_user),
     url(r'^api/verify/', verify_user),
     url(r'^api/start_convo/', start_conversation),
     url(r'^api/contact/', send_contact_admin_email),
