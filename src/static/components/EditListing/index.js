@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import CategoryDropdown from '../CategoryDropdown';
 import ImageTile from './ImageTile';
 import ReactS3Uploader from 'react-s3-uploader';
+import { browserHistory } from 'react-router';
 
 import { Button, Checkbox, Form, Input, Message, Radio, Select, TextArea } from 'semantic-ui-react';
 
@@ -128,18 +129,51 @@ class EditListing extends Component {
     this.setState({
         author: this.props.user,
     }, function() {
-
-        console.log('this is submitted')
+        console.log('submitted')
         this.props.putActions.putListing(this.state);
-        this.props.editModalClose();
+        browserHistory.push('/profile');
     });
+  }
+
+  cancelEdit() {
+    this.props.putActions.putListing(null);
+    browserHistory.push('/profile');
   }
 
   componentDidMount() {
     this.props.catActions.fetchCategories();
-    console.log(this.props.current_listing);
+    var num_images = this.props.current_listing.images.length;
     this.setState({
-      current_listing : this.props.current_listing
+      category : this.props.current_listing.category,
+      categoryChanged : 1,
+      categoryValid : 1,
+      description : this.props.current_listing.description,
+      descriptionChanged : 1,
+      descriptionTouched : 1,
+      descriptionValid : 1,
+      imagePresent : 1,
+      imageUploadStatus : 2,
+      imageUploadPercent : 0,
+      image_captions : this.props.current_listing.image_captions,
+      image_dimensions : this.props.current_listing.image_dimensions.slice(0,num_images),
+      images : this.props.current_listing.images,
+      price : this.props.current_listing.price,
+      priceChanged : 1,
+      priceTouched : 1,
+      priceValid : 1,
+      price_type : this.props.current_listing.price_type,
+      pricetypeChanged : 1,
+      pricetypeValid : 1,
+      title : this.props.current_listing.title,
+      titleChanged : 1,
+      titleValid : 1,
+      closed : this.props.current_listing.closed,
+      closing_date : this.props.current_listing.closing_date,
+      flags : this.props.current_listing.flags,
+      id : this.props.current_listing.id,
+      listing_date : this.props.current_listing.listing_date,
+      number_of_inquiries : this.props.current_listing.number_of_inquiries,
+      views : this.props.current_listing.views,
     });
   }
 
@@ -407,10 +441,10 @@ class EditListing extends Component {
               {this.titleError()}
               <Form.Group widths='equal'>
                 <Form.Input value={this.state.price} label='Price' name='price' placeholder='$50' onChange={this.handlePriceChange.bind(this)} onSelect={this.onPriceSelect.bind(this)}/>
-                <Form.Field control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' onChange={this.handlePriceTypeChange.bind(this)} onSelect={this.onPriceTypeSelect.bind(this)}/>
+                <Form.Field value={this.state.price_type} control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' onChange={this.handlePriceTypeChange.bind(this)} onSelect={this.onPriceTypeSelect.bind(this)}/>
               </Form.Group>
               {this.priceError()}
-              <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' onChange={this.handleCategoryChange.bind(this)} onSelect={this.onCategorySelect.bind(this)}/>
+              <Form.Field value={this.state.category} control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' onChange={this.handleCategoryChange.bind(this)} onSelect={this.onCategorySelect.bind(this)}/>
               <Form.TextArea value={this.state.description} name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' onChange={this.handleDescriptionChange.bind(this)} onSelect={this.onDescriptionSelect.bind(this)}/>
               {this.descriptionError()}
 
@@ -424,7 +458,15 @@ class EditListing extends Component {
 
               {this.uploadProgress()}
               {this.imageCountText()}
-              <Button fluid compact color='teal' disabled={this.submitActive()} type='submit'>Submit</Button>
+              <Grid columns={2}>
+                <Grid.Column>
+                  <Button fluid compact color='grey' onClick={() => this.cancelEdit()}>Cancel</Button>
+                  </Grid.Column>
+                <Grid.Column>
+                  <Button fluid compact color='blue' disabled={this.submitActive()} type='submit'>Save</Button>
+                </Grid.Column>
+              </Grid>
+
             </Form>
 
           </Grid.Column>

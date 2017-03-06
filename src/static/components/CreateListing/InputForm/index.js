@@ -33,11 +33,16 @@ class InputForm extends Component {
     this.state = {image_dimensions : []};
   }
 
-  storeImageSize(img_width, img_height) {
+  storeImageSize(img_width, img_height, id) {
     if (this.state) {
       var dim_copy = this.state.image_dimensions;
-      dim_copy.push([img_height,img_width])
-      this.setState({image_dimensions : dim_copy}, function() {console.log(this.state) });
+      if (this.state.image_dimensions.length == id) {
+        dim_copy[id] = [img_height, img_width];
+        this.setState({image_dimensions : dim_copy}, function() {console.log(this.state) });
+      } else {
+        console.log("WRONG IMAGE STUFF");
+      }
+
 
     }
   }
@@ -193,6 +198,7 @@ class InputForm extends Component {
   submitActive() {
 
     if (this.state) {
+      console.log(this.state);
       if (this.state.titleValid && this.state.priceValid && this.state.pricetypeValid && this.state.categoryValid && this.state.descriptionValid && this.state.imagePresent && this.state.image_dimensions) {
         return (false);
       } else {

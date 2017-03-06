@@ -1,13 +1,14 @@
 
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Button, Segment, Header, Icon, Table } from 'semantic-ui-react';
+import { Button, Segment, Label, Header, Icon, Table, Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
 import EditListing from '../EditListing';
 import * as actionCreators from '../../actions/userlistings';
 import * as editActionCreators from '../../actions/editlisting';
+import ListingModal from '../ListingModal';
 
 
 class ProfilePage extends React.Component {
@@ -59,33 +60,71 @@ class ProfilePage extends React.Component {
     browserHistory.push('/edit');
   }
 
+  closeListing(id) {
+    console.log('Closing listing number: ');
+    console.log(id);
+  }
+
   renderUserListingRows() {
+    var style1 = {
+        padding: '0px',
+    }
+
     if (this.props.userlistings && this.props.userlistings.listings && this.props.userlistings.listings.length > 0) {
       return (
         this.props.userlistings.listings.map((listing, i) => {
 
           console.log(listing);
+          if (listing.closed == false) {
+            return (
+              <Table.Row>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>{listing.title}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>${listing.price}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>{listing.listing_date}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button basic fluid icon onClick={() => this.editListing(i)}><Icon name='edit' color='blue' /></Button>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button basic fluid icon onClick={() => this.closeListing(i)}><Icon name='checkmark' color='green' /></Button>
+                </Table.Cell>
+              </Table.Row>
 
-          return (
-            <Table.Row>
-              <Table.Cell>{listing.title}</Table.Cell>
-              <Table.Cell>{listing.price}</Table.Cell>
-              <Table.Cell>{listing.category}</Table.Cell>
-              <Table.Cell>
+            );
+          } else {
+            return (
+              <Table.Row disabled>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>{listing.title}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>{listing.price}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>{listing.listing_date}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button basic fluid icon onClick={() => this.editListing(i)}><Icon name='edit' /></Button>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button basic fluid icon onClick={() => this.closeListing(i)}><Icon name='checkmark' /></Button>
+                </Table.Cell>
+              </Table.Row>
 
-                <Button basic size='small' icon='edit' onClick={() => this.editListing(i)}></Button>
+            );
+          }
 
-              </Table.Cell>
-              <Table.Cell><Button basic size='small' icon='delete'></Button></Table.Cell>
-            </Table.Row>
-
-          );
       }));
     } else {
       return (
         <div>
           <Table.Row>
-            <Table.Cell>Help!</Table.Cell>
+            <Table.Cell></Table.Cell>
           </Table.Row>
         </div>
       );
@@ -93,23 +132,47 @@ class ProfilePage extends React.Component {
   }
 
   renderUserListings() {
+    var style1 = {
+        width: '60%',
+    }
+
+    var style2 = {
+        width: '20%',
+    }
+
+    var style3 = {
+        width: '10%',
+    }
+
+
     return (
       <div>
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Title</Table.HeaderCell>
-              <Table.HeaderCell>Price</Table.HeaderCell>
-              <Table.HeaderCell>Category</Table.HeaderCell>
-              <Table.HeaderCell>Edit</Table.HeaderCell>
-              <Table.HeaderCell>Close</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
 
-          <Table.Body>
-            {this.renderUserListingRows()}
-          </Table.Body>
-        </Table>
+        <Grid>
+          <Grid.Column width={3}>
+          </Grid.Column>
+          <Grid.Column width={10}>
+            <Table size='mini' celled selectable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell >Title</Table.HeaderCell>
+                  <Table.HeaderCell>Price</Table.HeaderCell>
+                  <Table.HeaderCell>Listing Date</Table.HeaderCell>
+                  <Table.HeaderCell style={style3}>Edit</Table.HeaderCell>
+                  <Table.HeaderCell style={style3}>Close Listing</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+              <Table.Body>
+                {this.renderUserListingRows()}
+              </Table.Body>
+            </Table>
+
+          </Grid.Column>
+          <Grid.Column width={3}>
+          </Grid.Column>
+
+        </Grid>
       </div>
     )
   }
