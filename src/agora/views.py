@@ -205,12 +205,12 @@ class ListingViewSet(viewsets.ModelViewSet):
         else:
             return Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
 
-    @list_route(permission_classes=(
-            IsAuthenticated,))  # IsAuthenticated should suffice, as you need to be verified to create a listing
+    # IsAuthenticated should suffice, as you need to be verified to create a listing
+    @list_route(permission_classes=(IsAuthenticated,))
     def get_for_user(self, request):
         user = request.user
         # if user.is_authenticated() and user.profile.verified:
-        queryset = Listing.objects.filter(author=user)
+        queryset = Listing.objects.filter(author=user).order_by('-listing_date')  # TODO figure out if asc or desc
         serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
@@ -287,9 +287,9 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
-    def list(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_superuser:
-            return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
-        else:
-            raise ForbiddenException
+    # def list(self, request, *args, **kwargs):
+    #     user = request.user
+    #     if user.is_superuser:
+    #         return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+    #     else:
+    #         raise ForbiddenException

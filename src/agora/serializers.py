@@ -76,7 +76,8 @@ class ListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Listing
         exclude = ('author',)
-        read_only_fields = ('closed', 'closing_date')
+        # read_only_fields = ('closed', 'closing_date')
+        read_only_fields = ('closed', 'closing_date', 'number_of_inquiries', 'views', 'flags')
         # extra_kwargs = {'author': {'write_only': True}, }
 
     def create(self, validated_data):
@@ -139,7 +140,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
             user_profile = Profile(user=user)
             user_email = validated_data['email'].encode('utf-8')
-            salted_email = '%s%s'.encode() % (user_email, ''.join(map(str, sample(range(65, 122), 3))))
+            salted_email = '%s%s' % (user_email, ''.join(map(str, sample(range(65, 122), 2))))
+            salted_email = salted_email.encode()
 
             # TODO salt the user's email - easily guessable right now.
             verification_code = sha256(salted_email).hexdigest()
