@@ -170,7 +170,7 @@ class ListingFilter(django_filters.rest_framework.FilterSet):
 
 class ListingViewSet(viewsets.ModelViewSet):
     # disable listing after 5 flags
-    queryset = Listing.objects.filter(flags__lt=5)
+    queryset = Listing.objects.filter(flags__lt=5, closed=False)
 
     serializer_class = ListingSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
