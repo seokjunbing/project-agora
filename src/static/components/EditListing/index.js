@@ -34,12 +34,17 @@ class EditListing extends Component {
     this.state = {image_dimensions : []};
   }
 
-  storeImageSize(img_width, img_height) {
+
+
+  storeImageSize(img_width, img_height, id) {
     if (this.state) {
       var dim_copy = this.state.image_dimensions;
-      dim_copy.push([img_height,img_width])
-      this.setState({image_dimensions : dim_copy}, function() {console.log(this.state) });
-
+      if (this.state.image_dimensions.length == id) {
+        dim_copy[id] = [img_height, img_width];
+        this.setState({image_dimensions : dim_copy}, function() {console.log(this.state) });
+      } else {
+        console.log("WRONG IMAGE STUFF");
+      }
     }
   }
 
@@ -129,8 +134,21 @@ class EditListing extends Component {
     this.setState({
         author: this.props.user,
     }, function() {
-        console.log('submitted')
-        this.props.putActions.putListing(this.state);
+        var new_state = {
+          price : this.state.price,
+          price_type : this.state.price_type,
+          sale_type : this.state.sale_type,
+          description : this.state.description,
+          title : this.state.title,
+          images : this.state.images,
+          image_dimensions : this.state.image_dimensions,
+          image_captions : this.state.image_captions,
+          new : this.state.new,
+          category : this.state.category,
+        };
+        console.log(new_state);
+        console.log('submitted');
+        this.props.putActions.putListing(new_state, this.state.id);
         browserHistory.push('/profile');
     });
   }
@@ -155,7 +173,7 @@ class EditListing extends Component {
       imageUploadStatus : 2,
       imageUploadPercent : 0,
       image_captions : this.props.current_listing.image_captions,
-      image_dimensions : this.props.current_listing.image_dimensions.slice(0,num_images),
+      image_dimensions : this.props.current_listing.image_dimensions,
       images : this.props.current_listing.images,
       price : this.props.current_listing.price,
       priceChanged : 1,
@@ -173,6 +191,8 @@ class EditListing extends Component {
       id : this.props.current_listing.id,
       listing_date : this.props.current_listing.listing_date,
       number_of_inquiries : this.props.current_listing.number_of_inquiries,
+      new : this.props.current_listing.new,
+      sale_type : this.props.current_listing.sale_type,
       views : this.props.current_listing.views,
     });
   }

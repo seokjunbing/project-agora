@@ -42,8 +42,6 @@ class InputForm extends Component {
       } else {
         console.log("WRONG IMAGE STUFF");
       }
-
-
     }
   }
 
