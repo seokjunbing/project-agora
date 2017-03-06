@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux';
 import EditListing from '../EditListing';
 import * as actionCreators from '../../actions/userlistings';
 import * as editActionCreators from '../../actions/editlisting';
+import * as closeActionCreators from '../../actions/closelisting';
 import ListingModal from '../ListingModal';
 
 
@@ -19,7 +20,8 @@ class ProfilePage extends React.Component {
       this.state = {
         emailAddress: '',
         firstName: '',
-        lastName: ''
+        lastName: '',
+        justClosed : false,
       };
   }
 
@@ -63,6 +65,8 @@ class ProfilePage extends React.Component {
   closeListing(id) {
     console.log('Closing listing number: ');
     console.log(id);
+    this.setState({justClosed : false});
+    this.props.closeActions.closeListing(this.props.userlistings.listings[id].id);
   }
 
   renderUserListingRows() {
@@ -132,6 +136,15 @@ class ProfilePage extends React.Component {
   }
 
   renderUserListings() {
+    if (this.props && this.props.closeListing) {
+      if (this.state) {
+        if (this.props.closeListing.justClosed && this.state.justClosed == false) {
+          this.props.actions.fetchUserListings();
+          this.setState({justClosed : true});
+        }
+      }
+    }
+
     var style1 = {
         width: '60%',
     }
@@ -178,7 +191,7 @@ class ProfilePage extends React.Component {
   }
 
 
-    render() {
+  render() {
 
       var center_style = {
         textAlign: 'center'
@@ -214,7 +227,9 @@ function getUserInfo(id, tok){
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    userlistings : state.userlistings
+    userlistings : state.userlistings,
+    closeListing : state.closeListing,
+
   };
 };
 
@@ -223,6 +238,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch,
       actions: bindActionCreators(actionCreators, dispatch),
       editActions: bindActionCreators(editActionCreators, dispatch),
+      closeActions: bindActionCreators(closeActionCreators, dispatch),
     };
 };
 
