@@ -6,9 +6,12 @@ import categoriesReducer from './categories';
 import listingsReducer from './listings';
 import filtersReducer from './filters';
 import postListingReducer from './postlisting';
+import putListingReducer from './putlisting';
 import signUpPromptReducer from './signUpPromptReducer';
 import logInReducers from './logInReducers';
 import messagingReducer from './messaging';
+import userlistingsReducer from './userlistings';
+import editListingReducer from './editlisting';
 
 export default combineReducers({
     auth: authReducer,
@@ -18,7 +21,10 @@ export default combineReducers({
     listings: listingsReducer,
     filters: filtersReducer,
     postListing: postListingReducer,
+    putListing: putListingReducer,
     verificationPrompt: signUpPromptReducer,
     user: logInReducers,
     messaging: messagingReducer,
+    userlistings: userlistingsReducer,
+    editListing: editListingReducer,
 });

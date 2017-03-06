@@ -6,8 +6,10 @@ import { browserHistory } from 'react-router';
 import { Router } from 'react-router';
 import { SET_FEEDBACK } from '../../constants';
 import * as logInActionCreators from '../../actions/logInActions';
+import * as fetchUserListingsActionCreators from '../../actions/userlistings';
 import signUpPromptReducer from '../../reducers/signUpPromptReducer';
 import { bindActionCreators } from 'redux';
+
 
 
 
@@ -23,7 +25,7 @@ class ProfilePageView extends React.Component {
 
       return (
         <div>
-          { isAuthenticated ? <ProfilePage/> : <ErrorPanel/> }
+          { isAuthenticated ? <ProfilePage fetchUserListings={this.props.fetchUserListingsActions.fetchUserListings}/> : <ErrorPanel/> }
         </div>
       );
   }
@@ -39,7 +41,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         dispatch,
-        logInActions: bindActionCreators(logInActionCreators, dispatch),
+        fetchUserListingsActions: bindActionCreators(fetchUserListingsActionCreators, dispatch),
     };
 };
 
