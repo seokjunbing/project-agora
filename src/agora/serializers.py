@@ -143,7 +143,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             salted_email = '%s%s' % (user_email, ''.join(map(str, sample(range(65, 122), 2))))
             salted_email = salted_email.encode()
 
-            # TODO salt the user's email - easily guessable right now.
             verification_code = sha256(salted_email).hexdigest()
             user_profile.verification_code = verification_code
             user_profile.save()
