@@ -126,11 +126,9 @@ class ProfilePage extends React.Component {
       }));
     } else {
       return (
-        <div>
-          <Table.Row>
-            <Table.Cell></Table.Cell>
-          </Table.Row>
-        </div>
+        <Table.Row>
+          <Table.Cell></Table.Cell>
+        </Table.Row>
       );
     }
   }
@@ -165,7 +163,7 @@ class ProfilePage extends React.Component {
           <Grid.Column width={3}>
           </Grid.Column>
           <Grid.Column width={10}>
-            <Table size='mini' celled selectable>
+            <Table size='small' celled selectable>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell >Title</Table.HeaderCell>

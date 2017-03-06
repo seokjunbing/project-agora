@@ -66,7 +66,7 @@ class ImageTile extends Component {
   }
 
   storeImageSize(img_width, img_height) {
-    this.props.storeImageSize(img_width, img_height);
+    this.props.storeImageSize(img_width, img_height, this.props.id);
     this.setState({correct_size : true});
   }
 

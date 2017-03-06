@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import CategoryDropdown from '../../../CategoryDropdown';
 import ReactS3Uploader from 'react-s3-uploader';
 import ImageSizer from '../../../ImageSizer';
+import ImageDisplay from './ImageDisplay';
 
 import { Button, Checkbox, Form, Input, Message, Radio, Select, TextArea, Container, Dropdown, Modal, Header, Icon } from 'semantic-ui-react';
 

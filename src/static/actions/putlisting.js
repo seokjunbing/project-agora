@@ -23,6 +23,7 @@ export function putListingFailure(error) {
 };
 
 export function putListingRequest(putdata) {
+    console.log(putdata);
     return {
         type: PUT_LISTING_REQUEST,
         payload: {
@@ -31,11 +32,11 @@ export function putListingRequest(putdata) {
     };
 };
 
-export function putListing(putdata) {
+export function putListing(putdata, pk) {
     return (dispatch) => {
         dispatch(putListingRequest(putdata));
         var token = localStorage.getItem("LOCAL_TOKEN");
-        return fetch(`${SERVER_URL}/api/listings/`, {
+        return fetch(`${SERVER_URL}/api/listings/${pk}`, {
             method: 'put',
             headers: {
                 'Accept': 'application/json',
