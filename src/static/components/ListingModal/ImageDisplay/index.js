@@ -23,7 +23,7 @@ class ImageDisplay extends Component {
   render() {
     return (
       <Segment basic style={{padding : 5, border : 0}}>
-        <Image size='small' src={this.props.imageurl}/>
+        <Image size='tiny' src={this.props.imageurl}/>
         <Container fluid ><span>{this.props.caption}</span></Container>
       </Segment>
     )

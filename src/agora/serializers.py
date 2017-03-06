@@ -137,9 +137,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             )
             user.set_password(validated_data['password'])
             user.save()
-
             user_profile = Profile(user=user)
             user_email = validated_data['email'].encode('utf-8')
+
             salted_email = '%s%s' % (user_email, ''.join(map(str, sample(range(65, 122), 2))))
             salted_email = salted_email.encode()
 
