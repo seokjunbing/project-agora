@@ -11,9 +11,9 @@ class ProfilePage extends React.Component {
       super(props);
 
       this.state = {
-        emailAddress: 'N/A',
-        firstName: 'N/A',
-        lastName: 'N/A'
+        emailAddress: '',
+        firstName: '',
+        lastName: ''
       };
   }
 
