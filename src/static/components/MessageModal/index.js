@@ -5,10 +5,6 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/messaging';
 
 class MessageModal extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     updateMessage = (e) => {
         this.setState({
             text: e.target.value,
@@ -19,9 +15,9 @@ class MessageModal extends React.Component {
         e.preventDefault();
         var users = [];
         users.push(this.props.user_id);
-        users.push(this.props.author_id);
+        users.push(this.props.listing.author_pk);
         this.setState({
-            listing: this.props.listingId,
+            listing: this.props.listing.id,
             users: users,
             user: this.props.user_id,
         }, function() {

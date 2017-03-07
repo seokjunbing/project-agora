@@ -45,7 +45,6 @@ class ProfilePage extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-      console.log(nextProps.toggleListing.toggled, nextState.shouldUpdate);
       if(nextProps.toggleListing.toggled && nextState.shouldUpdate) {
           this.props.actions.fetchUserListings();
           this.setState({ shouldUpdate: false });
@@ -104,7 +103,6 @@ class ProfilePage extends React.Component {
         color: 'red',
     }
 
-    if (this.props.userlistings && this.props.userlistings.listings && this.props.userlistings.listings.length > 0) {
       return (
         this.props.userlistings.listings.map((listing, i) => {
             return (
@@ -130,13 +128,6 @@ class ProfilePage extends React.Component {
               </Table.Row>
           );
       }));
-    } else {
-      return (
-        <Table.Row>
-          <Table.Cell></Table.Cell>
-        </Table.Row>
-      );
-    }
   }
 
   renderUserListings() {
@@ -153,10 +144,15 @@ class ProfilePage extends React.Component {
         width: '10%',
     }
 
+    var style4 = {
+        textAlign: 'center',
+        paddingTop: '10px',
+    }
 
     return (
-      <div>
 
+      <div>
+      {(this.props.userlistings && this.props.userlistings.listings && this.props.userlistings.listings.length > 0) &&
         <Grid>
           <Grid.Column width={3}>
           </Grid.Column>
@@ -183,6 +179,8 @@ class ProfilePage extends React.Component {
           </Grid.Column>
 
         </Grid>
+    }
+    {!(this.props.userlistings && this.props.userlistings.listings && this.props.userlistings.listings.length > 0) && <h3 style={style4}>You have not published any listings.</h3>}
       </div>
     )
   }

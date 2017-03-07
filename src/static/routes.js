@@ -9,7 +9,6 @@ export default(
         <IndexRoute component={ListingView}/>
         <Route path="verify" component={VerifyEmailView}/>
         <Route path="createlisting" component={CreateListingView}/>
-        <Route path="listing" component={ListingView}/>
         <Route path="messaging" component={MessagingView}/>
         <Route path="confirmed" component={ConfirmationPageView}/>
         <Route path="about" component={AboutUsView}/>

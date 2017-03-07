@@ -37,7 +37,7 @@ class ListingTile extends React.Component {
                 <Card.Content extra>
                     <Button.Group style={style3}>
                         <Button>${this.props.price}{this.props.extraPriceInfo}</Button>
-                        {(this.props.user_id && (this.props.user_id != this.props.author_id)) && <MessageModal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact' />}/>}
+                        {(this.props.user_id && (this.props.user_id != this.props.author_id)) && <MessageModal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact' />} listing={this.props.listing}/>}
                     </Button.Group>
                 </Card.Content>
               </Card>

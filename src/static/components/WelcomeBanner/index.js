@@ -18,41 +18,48 @@ class WelcomeBanner extends React.Component {
         fontSize: 17,
       }
 
-      var paragraph_style = {
-        //textAlign: 'left',
-      }
-
       var error_color = {
         color: 'Red'
       }
 
+      var header_style = {
+        textAlign: 'center',
+        paddingTop: '10px',
+      }
+
         return (
+
             <div>
               <Grid>
                 <Grid.Column width={3}>
                 </Grid.Column>
                 <Grid.Column width={10}>
-                  <Segment>
+                  <Segment color='teal' style={center_style}>
 
-                    <Header size='huge'>Welcome to Agora!</Header>
+                    <Header size='huge' style={header_style}>Welcome to Agora!</Header>
 
-                    <p>The exclusive online marketplace for Dartmouth students.</p>
+                    <p>The online marketplace exclusively for Dartmouth students.</p>
 
-                    <p>Going on an FSP and not sure what to do with that (gently) used futon<b>?</b></p>
+                    <p>Going on an FSP and not sure what to do with that (gently) used futon?</p>
 
-                    <p>Looking to rent a parking spot at Chi Gam for 17S<b>?</b></p>
+                    <p>Looking to rent a parking spot at Chi Gam for 17S?</p>
 
-                    <p>Tired of blitzing out to campus on behalf of your student business<b>?</b></p>
+                    <p>Tired of blitzing out to campus on behalf of your student business?</p>
+      
+                    <p>Instead of abandoning your beloved AC units, TVs, textbooks
+                    fridges, rent them to another student for the term.</p>
 
-                    <p>Sick of selling back $200 textbooks for 50 cents in town<b>?</b></p>
+                    <Header size='medium' color='teal'> Agora is here to help</Header>
 
-                    <Header size='large' color='teal'> Agora is here to help </Header>
+                    <p>The best thing about it?</p>
 
-                    <p><label style= {paragraph_style}> Instead of abandoning your beloved AC units, TVs, textbooks
-                    fridges, rent them to another student for the term.</label></p>
+                    <Header size='medium' color='teal'>We will protect your privacy</Header>
+
+                    <p>Only authenticated members of the Dartmouth community can contact sellers or list their own items.</p>
 
                     <p>Feel free to explore current listings, but make sure to sign up
-                    with your <b>Dartmouth email </b> in order to buy and sell.</p>
+                    with your Dartmouth email in order to take advantage of the non-creepy
+                    campus marketplace.</p>
 
                   </Segment>
                 </Grid.Column>
