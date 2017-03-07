@@ -190,7 +190,7 @@ class ListingViewSet(viewsets.ModelViewSet):
             raise ForbiddenException
 
     @detail_route()
-    def close_listing(self, request, pk=None):
+    def toggle_listing(self, request, pk=None):
         listing = Listing.objects.get(pk=pk)
         user = request.user
 
@@ -201,9 +201,14 @@ class ListingViewSet(viewsets.ModelViewSet):
                 listing.save()
                 return Response(data={'detail": "Closed listing.'}, status=status.HTTP_202_ACCEPTED)
             else:
-                return Response(data={'detail': 'Listing already closed'}, status=status.HTTP_409_CONFLICT)
+                listing.closed = False
+                listing.closing_date = None
+                listing.save()
+                return Response(data={'detail": "Re-Opened listing.'}, status=status.HTTP_202_ACCEPTED)
         else:
-            return Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
+            raise ForbiddenException
+
+            # return Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
 
     # IsAuthenticated should suffice, as you need to be verified to create a listing. User is gotten from the auth token
     @list_route(permission_classes=(IsAuthenticated,))
