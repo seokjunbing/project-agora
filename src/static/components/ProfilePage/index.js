@@ -1,14 +1,21 @@
-import React from 'react';
-import { Button } from 'semantic-ui-react';
 
+import axios from 'axios';
+import React, { Component } from 'react';
+import { Button, Segment, Label, Header, Icon, Table, Grid } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+import { bindActionCreators } from 'redux';
+import EditListing from '../EditListing';
+import * as actionCreators from '../../actions/userlistings';
+import * as editActionCreators from '../../actions/editlisting';
+import * as closeActionCreators from '../../actions/closelisting';
+import ListingModal from '../ListingModal';
 
 
 class ProfilePage extends React.Component {
 
   constructor(props) {
       super(props);
-<<<<<<< Updated upstream
-=======
 
       this.state = {
         emailAddress: '',
@@ -62,12 +69,6 @@ class ProfilePage extends React.Component {
     this.props.closeActions.closeListing(this.props.userlistings.listings[id].id);
   }
 
-  formatDate(date) {
-      var date = new Date(date);
-      var dateFormat = require('dateformat');
-      return dateFormat(date, "mmmm dS, yyyy");
-  }
-
   renderUserListingRows() {
     var style1 = {
         padding: '0px',
@@ -94,7 +95,7 @@ class ProfilePage extends React.Component {
                   <ListingModal trigger={<Segment style={style1} basic>${listing.price}</Segment>} listing={listing} user_id={this.props.user}/>
                 </Table.Cell>
                 <Table.Cell>
-                  <ListingModal trigger={<Segment style={style1} basic>{this.formatDate(listing.listing_date)}</Segment>} listing={listing} user_id={this.props.user}/>
+                  <ListingModal trigger={<Segment style={style1} basic>{listing.listing_date}</Segment>} listing={listing} user_id={this.props.user}/>
                 </Table.Cell>
                 <Table.Cell>
                   <Button basic fluid icon onClick={() => this.editListing(i)}><Icon name='edit' color='blue' /></Button>
@@ -191,10 +192,10 @@ class ProfilePage extends React.Component {
         </Grid>
       </div>
     )
->>>>>>> Stashed changes
   }
 
-    render() {
+
+  render() {
 
       var center_style = {
         textAlign: 'center'
@@ -205,12 +206,44 @@ class ProfilePage extends React.Component {
         textAlign: 'center'
       }
 
-        return (
-            <div style= {center_style} className="ui raised very padded text container segment">
-              <h2 className="ui header">Test Profile</h2>
-            </div>
-        );
+      return (
+        <Segment raised style={center_style} padded='very' size='big'>
+          <Header as='h2'>{this.state.firstName} {this.state.lastName}</Header>
+          <p>{this.state.emailAddress}</p>
+          {this.renderUserListings()}
+        </Segment>
+      );
     }
 }
 
-export default (ProfilePage);
+// get the user Data
+function getUserInfo(id, tok){
+  return axios.get('/api/users/' + id + '/', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'JWT ' + tok,
+    }
+  });
+}
+
+// get the user
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+    userlistings : state.userlistings,
+    closeListing : state.closeListing,
+
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+      dispatch,
+      actions: bindActionCreators(actionCreators, dispatch),
+      editActions: bindActionCreators(editActionCreators, dispatch),
+      closeActions: bindActionCreators(closeActionCreators, dispatch),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage);
