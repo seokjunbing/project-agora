@@ -7,6 +7,191 @@ class ProfilePage extends React.Component {
 
   constructor(props) {
       super(props);
+<<<<<<< Updated upstream
+=======
+
+      this.state = {
+        emailAddress: '',
+        firstName: '',
+        lastName: '',
+        justClosed : false,
+      };
+  }
+
+  componentWillMount(){
+
+    const { user_id } = this.props.user;
+    const { auth_token } = this.props.user;
+
+    // return the user email, first name and last name
+    var self = this;
+    var promiseObj = getUserInfo(user_id, auth_token);
+    promiseObj.then(function(resp){
+      self.setState({emailAddress : resp.data.email, firstName : resp.data.first_name, lastName : resp.data.last_name}, function() { console.log(this.state);});
+    });
+
+  }
+
+  componentDidMount() {
+      this.props.actions.fetchUserListings();
+      this.setState({editModal : false});
+  }
+
+  editModalOpen = (e) => this.setState({editModal : true});
+  editModalClose = (e) => this.setState({editModal : false});
+
+
+  processUserListings() {
+      if (!this.props.listings) {
+          return ([]);
+      } else {
+          return (this.props.listings);
+      }
+  }
+
+
+  editListing(i) {
+    this.props.editActions.setEditListing(this.props.userlistings.listings[i]);
+    browserHistory.push('/edit');
+  }
+
+  closeListing(id) {
+    console.log('Closing listing number: ');
+    console.log(id);
+    this.setState({justClosed : false});
+    this.props.closeActions.closeListing(this.props.userlistings.listings[id].id);
+  }
+
+  formatDate(date) {
+      var date = new Date(date);
+      var dateFormat = require('dateformat');
+      return dateFormat(date, "mmmm dS, yyyy");
+  }
+
+  renderUserListingRows() {
+    var style1 = {
+        padding: '0px',
+    }
+
+    var style2 = {
+        padding: '0px',
+        cursor: 'pointer',
+        color: '#00B5AD',
+    }
+
+    if (this.props.userlistings && this.props.userlistings.listings && this.props.userlistings.listings.length > 0) {
+      return (
+        this.props.userlistings.listings.map((listing, i) => {
+
+          console.log(listing);
+          if (listing.closed == false) {
+            return (
+              <Table.Row>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style2} basic>{listing.title}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>${listing.price}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>{this.formatDate(listing.listing_date)}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button basic fluid icon onClick={() => this.editListing(i)}><Icon name='edit' color='blue' /></Button>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button basic fluid icon onClick={() => this.closeListing(i)}><Icon name='checkmark' color='green' /></Button>
+                </Table.Cell>
+              </Table.Row>
+
+            );
+          } else {
+            return (
+              <Table.Row disabled>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>{listing.title}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>{listing.price}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <ListingModal trigger={<Segment style={style1} basic>{listing.listing_date}</Segment>} listing={listing} user_id={this.props.user}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button basic fluid icon onClick={() => this.editListing(i)}><Icon name='edit' /></Button>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button basic fluid icon onClick={() => this.closeListing(i)}><Icon name='checkmark' /></Button>
+                </Table.Cell>
+              </Table.Row>
+
+            );
+          }
+
+      }));
+    } else {
+      return (
+        <Table.Row>
+          <Table.Cell></Table.Cell>
+        </Table.Row>
+      );
+    }
+  }
+
+  renderUserListings() {
+    if (this.props && this.props.closeListing) {
+      if (this.state) {
+        if (this.props.closeListing.justClosed && this.state.justClosed == false) {
+          this.props.actions.fetchUserListings();
+          this.setState({justClosed : true});
+        }
+      }
+    }
+
+    var style1 = {
+        width: '60%',
+    }
+
+    var style2 = {
+        width: '20%',
+    }
+
+    var style3 = {
+        width: '10%',
+    }
+
+
+    return (
+      <div>
+
+        <Grid>
+          <Grid.Column width={3}>
+          </Grid.Column>
+          <Grid.Column width={10}>
+            <Table size='small' celled selectable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell >Title</Table.HeaderCell>
+                  <Table.HeaderCell>Price</Table.HeaderCell>
+                  <Table.HeaderCell>Listing Date</Table.HeaderCell>
+                  <Table.HeaderCell style={style3}>Edit</Table.HeaderCell>
+                  <Table.HeaderCell style={style3}>Close Listing</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+              <Table.Body>
+                {this.renderUserListingRows()}
+              </Table.Body>
+            </Table>
+
+          </Grid.Column>
+          <Grid.Column width={3}>
+          </Grid.Column>
+
+        </Grid>
+      </div>
+    )
+>>>>>>> Stashed changes
   }
 
     render() {

@@ -106,6 +106,11 @@ class ListingModal extends React.Component {
        }
      }
    }
+   formatDate(date) {
+       var date = new Date(date);
+       var dateFormat = require('dateformat');
+       return dateFormat(date, "mmmm dS, yyyy");
+   }
     render() {
         var style = {
             display: 'inline-block',
@@ -158,7 +163,7 @@ class ListingModal extends React.Component {
                     </div>
                     <div style={style}>
                         <Header sub>Category</Header>
-                        <span>{this.props.listing.category}</span>
+                        <span>{this.props.listing.category_name}</span>
                     </div>
                     <div style={style}>
                         <Header sub>Seller</Header>
@@ -166,7 +171,7 @@ class ListingModal extends React.Component {
                     </div>
                     <div style={style}>
                         <Header sub>Date Posted</Header>
-                        <span>{this.props.listing.listing_date}</span>
+                        <span>{this.formatDate(this.props.listing.listing_date)}</span>
                     </div>
                     <Divider/>
                     <p>{this.props.listing.description}</p>
