@@ -81,6 +81,10 @@ class ProfilePage extends React.Component {
       return dateFormat(date, "mmmm dS, yyyy");
   }
 
+  closingString(date) {
+      return 'Closed on ' + this.formatDate(date);
+  }
+
   renderUserListingRows() {
     var style1 = {
         padding: '0px',
@@ -118,7 +122,7 @@ class ProfilePage extends React.Component {
                   <Button basic fluid icon onClick={() => this.editListing(i)}><Icon name='edit' color='blue' /></Button>
                 </Table.Cell>
                 <Table.Cell>
-                  <Segment style={style1} basic>{listing.closed ? 'Closed' : 'Open'}</Segment>
+                  <Segment style={style1} basic>{listing.closed ? this.closingString(listing.closing_date) : 'Open'}</Segment>
                 </Table.Cell>
                 <Table.Cell>
                     <Button basic fluid icon onClick={() => this.toggleListing(i)}>{listing.closed ? <p style={style3}>Open</p> : <p style={style4}>Close</p>}</Button>
@@ -164,7 +168,7 @@ class ProfilePage extends React.Component {
                   <Table.HeaderCell>Price</Table.HeaderCell>
                   <Table.HeaderCell>Listing Date</Table.HeaderCell>
                   <Table.HeaderCell style={style3}>Edit</Table.HeaderCell>
-                  <Table.HeaderCell style={style3}>Status</Table.HeaderCell>
+                  <Table.HeaderCell>Status</Table.HeaderCell>
                   <Table.HeaderCell style={style3}>Change Status</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
