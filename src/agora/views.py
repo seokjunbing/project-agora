@@ -170,7 +170,7 @@ class ListingFilter(django_filters.rest_framework.FilterSet):
 
 class ListingViewSet(viewsets.ModelViewSet):
     # disable listing after 5 flags
-    queryset = Listing.objects.filter(flags__lt=5, closed=False)
+    queryset = Listing.objects.all()
 
     serializer_class = ListingSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -188,6 +188,13 @@ class ListingViewSet(viewsets.ModelViewSet):
             serializer.save()
         else:
             raise ForbiddenException
+
+    @list_route()
+    def homepage(self, request):
+        queryset = Listing.objects.filter(flags__lt=5, closed=False)
+        serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
+
 
     @detail_route()
     def toggle_listing(self, request, pk=None):
@@ -276,9 +283,9 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
-    # def list(self, request, *args, **kwargs):
-    #     user = request.user
-    #     if user.is_superuser:
-    #         return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
-    #     else:
-    #         raise ForbiddenException
+        # def list(self, request, *args, **kwargs):
+        #     user = request.user
+        #     if user.is_superuser:
+        #         return viewsets.ModelViewSet.list(self, request, *args, **kwargs)
+        #     else:
+        #         raise ForbiddenException
