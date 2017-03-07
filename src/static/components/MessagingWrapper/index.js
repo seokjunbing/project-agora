@@ -9,7 +9,11 @@ import ConversationTab from '../ConversationTab';
 import MessageList from '../MessageList';
 
 class MessagingWrapper extends React.Component {
+
     componentWillUpdate(nextProps, nextState) {
+        if(nextProps.conversations && nextProps.conversations.length > 0 && window.location.hash) {
+            this.props.actions.setSelectedConversation(parseInt(window.location.hash.substring(1)));
+        }
         var submit = document.getElementById('messageSubmit');
         if(nextState && nextState.text != '') {
             submit.disabled = false;

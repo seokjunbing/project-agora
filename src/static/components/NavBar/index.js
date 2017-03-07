@@ -18,7 +18,7 @@ class NavBar extends React.Component {
             if(!self.props.isFetching && self.props.user.user_id) {
                 self.props.messagingActions.fetchConversations('/api/conversations/get_for_user/?user=' + self.props.user.user_id.toString());
             }
-        }, 1000);
+        }, 5000);
     }
 
     // logout
@@ -26,6 +26,10 @@ class NavBar extends React.Component {
       e.preventDefault();
       this.props.logInActions.logout();
       window.location = '/';
+    }
+
+    genConvoHash(id) {
+        return '/messaging#' + id.toString();
     }
 
     render() {
@@ -48,32 +52,30 @@ class NavBar extends React.Component {
         const userLinks = (
 
           <Menu.Menu position='right'>
-              <Menu.Item>
-                  <Popup
-                    trigger={ <div><Icon name='mail' />Messages {this.props.numUnread > 0 && <Label color='red' horizontal>{this.props.numUnread}</Label>}</div>}
-                    content={<div>
-                        <List verticalAlign='middle'>
-                                {this.props.conversations != null && this.props.conversations.map((conversation, index) => {
-                                    if(index <= 4) {
-                                        return <List.Item key={conversation.id}>
-                                                  <Image avatar src={conversation.related_listing.images[0]} />
-                                                  <List.Content>
-                                                    <List.Header>{conversation.related_listing.title}</List.Header>
-                                                    <List.Description style={conversation.read_by.indexOf(this.props.user.user_id) != -1 ? style2 : style3}>{conversation.all_messages[conversation.all_messages.length-1] && conversation.all_messages[conversation.all_messages.length-1].text}</List.Description>
-                                                  </List.Content>
-                                                </List.Item>
-                                    }
-                                })}
-                                <List.Item>
-                                  {this.props.conversations && <Button href='/messaging' basic color='black'>See all conversations</Button>}
-                                  {!this.props.conversations && <p>No conversations.</p>}
-                                </List.Item>
-                                 </List>
-                                </div>}
-                    on='click'
-                    positioning='bottom left'
-                  />
-              </Menu.Item>
+              <Popup
+                trigger={ <Menu.Item><Icon name='mail' />Messages {this.props.numUnread > 0 && <Label color='red' horizontal>{this.props.numUnread}</Label>}</Menu.Item>}
+                content={<div>
+                    <List selection divided verticalAlign='middle'>
+                            {this.props.conversations != null && this.props.conversations.map((conversation, index) => {
+                                if(index <= 4) {
+                                    return <List.Item key={conversation.id} href={this.genConvoHash(index)}>
+                                              <Image avatar src={conversation.related_listing.images[0]} />
+                                              <List.Content>
+                                                <List.Header>{conversation.related_listing.title}</List.Header>
+                                                <List.Description style={conversation.read_by.indexOf(this.props.user.user_id) != -1 ? style2 : style3}>{conversation.all_messages[conversation.all_messages.length-1] && conversation.all_messages[conversation.all_messages.length-1].text}</List.Description>
+                                              </List.Content>
+                                            </List.Item>
+                                }
+                            })}
+                            <List.Item>
+                              {this.props.conversations && <Button href='/messaging' basic color='black'>See all conversations</Button>}
+                              {!this.props.conversations && <p>No conversations.</p>}
+                            </List.Item>
+                             </List>
+                            </div>}
+                on='click'
+                positioning='bottom left'
+              />
               <Menu.Item href="/profile"><Icon name='user icon' />Profile</Menu.Item>
               <Menu.Item>
                 <Button onClick={this.onLogOut.bind(this)} color='teal'>Log Out</Button>
