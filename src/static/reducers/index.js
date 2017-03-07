@@ -12,7 +12,7 @@ import logInReducers from './logInReducers';
 import messagingReducer from './messaging';
 import userlistingsReducer from './userlistings';
 import editListingReducer from './editlisting';
-import closeListingReducer from './closelisting';
+import toggleListingReducer from './toggleListing';
 
 export default combineReducers({
     auth: authReducer,
@@ -28,5 +28,5 @@ export default combineReducers({
     messaging: messagingReducer,
     userlistings: userlistingsReducer,
     editListing: editListingReducer,
-    closeListing: closeListingReducer,
+    toggleListing: toggleListingReducer,
 });

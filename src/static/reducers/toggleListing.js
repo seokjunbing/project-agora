@@ -1,35 +1,31 @@
 import { createReducer } from '../utils';
 import {
-    CLOSE_LISTING_REQUEST,
-    CLOSE_LISTING_SUCCESS,
-    CLOSE_LISTING_FAILURE
+    TOGGLE_LISTING_REQUEST,
+    TOGGLE_LISTING_SUCCESS,
+    TOGGLE_LISTING_FAILURE
 } from '../constants';
 
 const initialState = {
-    isClosing : false,
-    justClosed : false,
+    toggled : false,
     statusText : ''
 };
 
 export default createReducer(initialState, {
-    [CLOSE_LISTING_REQUEST]: (state, payload) => {
+    [TOGGLE_LISTING_REQUEST]: (state, payload) => {
         return Object.assign({}, state, {
-            isClosing: true,
-            justClosed: false,
+            toggled: false,
             statusText: null
         });
     },
-    [CLOSE_LISTING_SUCCESS]: (state, payload) => {
+    [TOGGLE_LISTING_SUCCESS]: (state, payload) => {
         return Object.assign({}, state, {
-            isClosing: false,
-            justClosed: true,
+            toggled: true,
             statusText: 'Successfully closed listing.'
         });
     },
-    [CLOSE_LISTING_FAILURE]: (state, payload) => {
+    [TOGGLE_LISTING_FAILURE]: (state, payload) => {
         return Object.assign({}, state, {
-            isClosing: false,
-            justClosed: false,
+            toggled: false,
             statusText: `Close Listing Error: ${payload.statusText}`
         });
     }
