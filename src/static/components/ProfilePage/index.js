@@ -69,6 +69,12 @@ class ProfilePage extends React.Component {
     this.props.closeActions.closeListing(this.props.userlistings.listings[id].id);
   }
 
+  formatDate(date) {
+      var date = new Date(date);
+      var dateFormat = require('dateformat');
+      return dateFormat(date, "mmmm dS, yyyy");
+  }
+
   renderUserListingRows() {
     var style1 = {
         padding: '0px',
@@ -87,7 +93,7 @@ class ProfilePage extends React.Component {
           console.log(listing);
           if (listing.closed == false) {
             return (
-              <Table.Row>
+              <Table.Row key={i}>
                 <Table.Cell>
                   <ListingModal trigger={<Segment style={style2} basic>{listing.title}</Segment>} listing={listing} user_id={this.props.user}/>
                 </Table.Cell>
@@ -95,7 +101,7 @@ class ProfilePage extends React.Component {
                   <ListingModal trigger={<Segment style={style1} basic>${listing.price}</Segment>} listing={listing} user_id={this.props.user}/>
                 </Table.Cell>
                 <Table.Cell>
-                  <ListingModal trigger={<Segment style={style1} basic>{listing.listing_date}</Segment>} listing={listing} user_id={this.props.user}/>
+                  <ListingModal trigger={<Segment style={style1} basic>{this.formatDate(listing.listing_date)}</Segment>} listing={listing} user_id={this.props.user}/>
                 </Table.Cell>
                 <Table.Cell>
                   <Button basic fluid icon onClick={() => this.editListing(i)}><Icon name='edit' color='blue' /></Button>
@@ -108,7 +114,7 @@ class ProfilePage extends React.Component {
             );
           } else {
             return (
-              <Table.Row disabled>
+              <Table.Row disabled key={i}>
                 <Table.Cell>
                   <ListingModal trigger={<Segment style={style1} basic>{listing.title}</Segment>} listing={listing} user_id={this.props.user}/>
                 </Table.Cell>
@@ -116,7 +122,7 @@ class ProfilePage extends React.Component {
                   <ListingModal trigger={<Segment style={style1} basic>{listing.price}</Segment>} listing={listing} user_id={this.props.user}/>
                 </Table.Cell>
                 <Table.Cell>
-                  <ListingModal trigger={<Segment style={style1} basic>{listing.listing_date}</Segment>} listing={listing} user_id={this.props.user}/>
+                  <ListingModal trigger={<Segment style={style1} basic>{this.formatDate(listing.listing_date)}</Segment>} listing={listing} user_id={this.props.user}/>
                 </Table.Cell>
                 <Table.Cell>
                   <Button basic fluid icon onClick={() => this.editListing(i)}><Icon name='edit' /></Button>
