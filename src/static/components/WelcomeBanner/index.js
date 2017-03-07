@@ -42,7 +42,7 @@ class WelcomeBanner extends React.Component {
 
                     <p>Looking to rent a parking spot at Chi Gam for 17S<b>?</b></p>
 
-                    <p>Tired of blitzing out to campus on behalf of yo17sur student business<b>?</b></p>
+                    <p>Tired of blitzing out to campus on behalf of your student business<b>?</b></p>
 
                     <p>Sick of selling back $200 textbooks for 50 cents in town<b>?</b></p>
 
@@ -53,8 +53,6 @@ class WelcomeBanner extends React.Component {
 
                     <p>Feel free to explore current listings, but make sure to sign up
                     with your <b>Dartmouth email </b> in order to buy and sell.</p>
-
-                    <label style= {error_color}>{this.props.promptMessage}</label>
 
                   </Segment>
                 </Grid.Column>

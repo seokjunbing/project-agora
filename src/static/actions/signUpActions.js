@@ -18,7 +18,7 @@ export function userSignupRequest(userData){
       dispatch({type: SET_FEEDBACK, payload: "We sent a verification email to you!"});
 
       // take the person to the main page
-      browserHistory.push('/about');
+      browserHistory.push('/response');
     })
     .catch(error => {
 
@@ -26,7 +26,7 @@ export function userSignupRequest(userData){
       dispatch({type: SET_FEEDBACK, payload: "Oooops! Something went wrong, try again!"});
 
       // take the person to the main page
-      browserHistory.push('/about');
+      browserHistory.push('/response');
 
 
     });
