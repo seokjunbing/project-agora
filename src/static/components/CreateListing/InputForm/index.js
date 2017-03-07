@@ -91,19 +91,23 @@ class InputForm extends Component {
 
   handleTitleChange = (e) => {
       e.preventDefault();
-      if (e.target.value.length < title_length) {
-        this.setState({ title : e.target.value,  titleValid : 1, titleChanged : 1});
+      if (e.target.value.length < title_length && e.target.value.length > 0) {
+        this.setState({ title : e.target.value,  titleValid : 1, titleChanged : 1, titlePresent : 1});
+      } else if (e.target.value.length > 0) {
+        this.setState({ titlePresent : 1, titleValid : 0, titleChanged : 1});
       } else {
-        this.setState({ titleValid : 0, titleChanged : 1});
+        this.setState({ title : e.target.value, titlePresent : 0, titleValid : 0, titleChanged : 1});
       }
   }
 
   handlePriceChange = (e) => {
       e.preventDefault();
-      if (isNaN(e.target.value) == false && (e.target.value < max_price) && ((e.target.value*100 % 1) == 0)) {
-        this.setState({ price : e.target.value, priceValid : 1, priceChanged : 1});
+      if (isNaN(e.target.value) == false && (e.target.value < max_price) && ((e.target.value*100 % 1) == 0) && e.target.value.length > 0) {
+        this.setState({ price : e.target.value, priceValid : 1, priceChanged : 1, pricePresent : 1});
+      } else if (e.target.value.length > 0) {
+        this.setState({ pricePresent : 1, priceValid : 0, priceChanged : 1});
       } else {
-        this.setState({ priceValid : 0, priceChanged : 1});
+        this.setState({ price : e.target.value, pricePresent : 0, priceValid : 0, priceChanged : 1});
       }
   }
 
@@ -119,10 +123,12 @@ class InputForm extends Component {
 
   handleDescriptionChange = (e) => {
       e.preventDefault();
-      if (e.target.value.length < description_length) {
-        this.setState({ description : e.target.value, descriptionValid : 1, descriptionChanged : 1});
+      if (e.target.value.length < description_length && e.target.value.length > 0) {
+        this.setState({ descriptionPresent : 1, description : e.target.value, descriptionValid : 1, descriptionChanged : 1});
+      } else if (e.target.value.length > 0){
+        this.setState({ descriptionPresent : 1, descriptionValid : 0, descriptionChanged : 1});
       } else {
-        this.setState({ descriptionValid : 0, descriptionChanged : 1});
+        this.setState({ descriptionPresent : 0, descriptionValid : 0, descriptionChanged : 1, description : e.target.value});
       }
   }
 
@@ -161,8 +167,20 @@ class InputForm extends Component {
       if (this.state.titleValid) {
         return (true);
 
-      } else if (this.state.titleChanged) {
+      } else if (this.state.titleChanged && this.state.titlePresent) {
         return (<Label basic color='red' pointing>Please enter a shorter title!</Label>);
+      }
+    } else {
+      return (true);
+    }
+  }
+
+  titleMissing() {
+    if (this.state) {
+      if (this.state.titlePresent) {
+        return (true);
+      } else if (this.state.titleChanged) {
+        return (<Label basic color='red' pointing>Please enter a title!</Label>);
       }
     } else {
       return (true);
@@ -173,8 +191,20 @@ class InputForm extends Component {
     if (this.state) {
       if (this.state.priceValid) {
         return (true);
-      } else if (this.state.priceChanged) {
+      } else if (this.state.priceChanged && this.state.pricePresent) {
         return (<Label basic color='red' pointing>Please enter a valid price!</Label>);
+      }
+    } else {
+      return (true);
+    }
+  }
+
+  priceMissing() {
+    if (this.state) {
+      if (this.state.pricePresent) {
+        return (true);
+      } else if (this.state.priceChanged) {
+        return (<Label basic color='red' pointing>Please enter a price!</Label>);
       }
     } else {
       return (true);
@@ -185,8 +215,20 @@ class InputForm extends Component {
     if (this.state) {
       if (this.state.descriptionValid) {
         return (true);
-      } else if (this.state.descriptionChanged) {
+      } else if (this.state.descriptionChanged && this.state.descriptionPresent) {
         return (<Label basic color='red' pointing>Please enter a shorter description!</Label>);
+      }
+    } else {
+      return (true);
+    }
+  }
+
+  descriptionMissing() {
+    if (this.state) {
+      if (this.state.descriptionPresent) {
+        return (true);
+      } else if (this.state.descriptionChanged) {
+        return (<Label basic color='red' pointing>Please enter a description!</Label>);
       }
     } else {
       return (true);
@@ -405,14 +447,17 @@ class InputForm extends Component {
             <Form onSubmit={this.handleSubmit.bind(this)}>
               <Form.Input label='Title' name='title' placeholder='e.g. 42 inch LG TV' onChange={this.handleTitleChange.bind(this)} onSelect={this.onTitleSelect.bind(this)}/>
               {this.titleError()}
+              {this.titleMissing()}
               <Form.Group widths='equal'>
                 <Form.Input label='Price' name='price' placeholder='$50' onChange={this.handlePriceChange.bind(this)} onSelect={this.onPriceSelect.bind(this)}/>
                 <Form.Field control={Select} label='Price Type' name='price_type' options={price_units} placeholder='fixed' onChange={this.handlePriceTypeChange.bind(this)} onSelect={this.onPriceTypeSelect.bind(this)}/>
               </Form.Group>
               {this.priceError()}
+              {this.priceMissing()}
               <Form.Field control={Select} label='Category' name='category' options={this.processCategories()} placeholder='select' onChange={this.handleCategoryChange.bind(this)} onSelect={this.onCategorySelect.bind(this)}/>
               <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' onChange={this.handleDescriptionChange.bind(this)} onSelect={this.onDescriptionSelect.bind(this)}/>
               {this.descriptionError()}
+              {this.descriptionMissing()}
 
               <ReactS3Uploader
                   signingUrl="/api/get_s3_url"
