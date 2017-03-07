@@ -9,10 +9,19 @@ import ConversationTab from '../ConversationTab';
 import MessageList from '../MessageList';
 
 class MessagingWrapper extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            hashDone: false,
+        }
+    }
 
     componentWillUpdate(nextProps, nextState) {
-        if(nextProps.conversations && nextProps.conversations.length > 0 && window.location.hash) {
+        if(nextProps.conversations && nextProps.conversations.length > 0 && window.location.hash && nextState.hashDone == false) {
             this.props.actions.setSelectedConversation(parseInt(window.location.hash.substring(1)));
+            this.setState({
+                hashDone: true,
+            });
         }
         var submit = document.getElementById('messageSubmit');
         if(nextState && nextState.text != '') {
