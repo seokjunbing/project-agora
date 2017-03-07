@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import EditListing from '../EditListing';
 import * as actionCreators from '../../actions/userlistings';
 import * as editActionCreators from '../../actions/editlisting';
-import * as closeActionCreators from '../../actions/closelisting';
+import * as closeActionCreators from '../../actions/toggleListing';
 import ListingModal from '../ListingModal';
 
 
@@ -21,7 +21,7 @@ class ProfilePage extends React.Component {
         emailAddress: '',
         firstName: '',
         lastName: '',
-        justClosed : false,
+        shouldUpdate: false,
       };
   }
 
@@ -44,6 +44,14 @@ class ProfilePage extends React.Component {
       this.setState({editModal : false});
   }
 
+  componentWillUpdate(nextProps, nextState) {
+      console.log(nextProps.toggleListing.toggled, nextState.shouldUpdate);
+      if(nextProps.toggleListing.toggled && nextState.shouldUpdate) {
+          this.props.actions.fetchUserListings();
+          this.setState({ shouldUpdate: false });
+      }
+  }
+
   editModalOpen = (e) => this.setState({editModal : true});
   editModalClose = (e) => this.setState({editModal : false});
 
@@ -62,11 +70,9 @@ class ProfilePage extends React.Component {
     browserHistory.push('/edit');
   }
 
-  closeListing(id) {
-    console.log('Closing listing number: ');
-    console.log(id);
-    this.setState({justClosed : false});
-    this.props.closeActions.closeListing(this.props.userlistings.listings[id].id);
+  toggleListing(id) {
+      this.setState({ shouldUpdate: true});
+    this.props.closeActions.toggleListing(this.props.userlistings.listings[id].id);
   }
 
   formatDate(date) {
@@ -86,55 +92,39 @@ class ProfilePage extends React.Component {
         color: '#00B5AD',
     }
 
+    var style3 = {
+        color: 'green',
+    }
+
+    var style4 = {
+        color: 'red',
+    }
+
     if (this.props.userlistings && this.props.userlistings.listings && this.props.userlistings.listings.length > 0) {
       return (
         this.props.userlistings.listings.map((listing, i) => {
-
-          console.log(listing);
-          if (listing.closed == false) {
             return (
               <Table.Row key={i}>
                 <Table.Cell>
                   <ListingModal trigger={<Segment style={style2} basic>{listing.title}</Segment>} listing={listing} user_id={this.props.user}/>
                 </Table.Cell>
                 <Table.Cell>
-                  <ListingModal trigger={<Segment style={style1} basic>${listing.price}</Segment>} listing={listing} user_id={this.props.user}/>
+                  <Segment style={style1} basic>${listing.price}</Segment>
                 </Table.Cell>
                 <Table.Cell>
-                  <ListingModal trigger={<Segment style={style1} basic>{this.formatDate(listing.listing_date)}</Segment>} listing={listing} user_id={this.props.user}/>
+                  <Segment style={style1} basic>{this.formatDate(listing.listing_date)}</Segment>
                 </Table.Cell>
                 <Table.Cell>
                   <Button basic fluid icon onClick={() => this.editListing(i)}><Icon name='edit' color='blue' /></Button>
                 </Table.Cell>
                 <Table.Cell>
-                  <Button basic fluid icon onClick={() => this.closeListing(i)}><Icon name='checkmark' color='green' /></Button>
+                  <Segment style={style1} basic>{listing.closed ? 'Closed' : 'Open'}</Segment>
+                </Table.Cell>
+                <Table.Cell>
+                    <Button basic fluid icon onClick={() => this.toggleListing(i)}>{listing.closed ? <p style={style3}>Open</p> : <p style={style4}>Close</p>}</Button>
                 </Table.Cell>
               </Table.Row>
-
-            );
-          } else {
-            return (
-              <Table.Row disabled key={i}>
-                <Table.Cell>
-                  <ListingModal trigger={<Segment style={style1} basic>{listing.title}</Segment>} listing={listing} user_id={this.props.user}/>
-                </Table.Cell>
-                <Table.Cell>
-                  <ListingModal trigger={<Segment style={style1} basic>{listing.price}</Segment>} listing={listing} user_id={this.props.user}/>
-                </Table.Cell>
-                <Table.Cell>
-                  <ListingModal trigger={<Segment style={style1} basic>{this.formatDate(listing.listing_date)}</Segment>} listing={listing} user_id={this.props.user}/>
-                </Table.Cell>
-                <Table.Cell>
-                  <Button basic fluid icon onClick={() => this.editListing(i)}><Icon name='edit' /></Button>
-                </Table.Cell>
-                <Table.Cell>
-                  <Button basic fluid icon onClick={() => this.closeListing(i)}><Icon name='checkmark' /></Button>
-                </Table.Cell>
-              </Table.Row>
-
-            );
-          }
-
+          );
       }));
     } else {
       return (
@@ -146,14 +136,6 @@ class ProfilePage extends React.Component {
   }
 
   renderUserListings() {
-    if (this.props && this.props.closeListing) {
-      if (this.state) {
-        if (this.props.closeListing.justClosed && this.state.justClosed == false) {
-          this.props.actions.fetchUserListings();
-          this.setState({justClosed : true});
-        }
-      }
-    }
 
     var style1 = {
         width: '60%',
@@ -182,7 +164,8 @@ class ProfilePage extends React.Component {
                   <Table.HeaderCell>Price</Table.HeaderCell>
                   <Table.HeaderCell>Listing Date</Table.HeaderCell>
                   <Table.HeaderCell style={style3}>Edit</Table.HeaderCell>
-                  <Table.HeaderCell style={style3}>Close Listing</Table.HeaderCell>
+                  <Table.HeaderCell style={style3}>Status</Table.HeaderCell>
+                  <Table.HeaderCell style={style3}>Change Status</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
 
@@ -238,8 +221,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
     userlistings : state.userlistings,
-    closeListing : state.closeListing,
-
+    toggleListing : state.toggleListing,
   };
 };
 

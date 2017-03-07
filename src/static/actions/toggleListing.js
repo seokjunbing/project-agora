@@ -1,20 +1,20 @@
 import fetch from 'isomorphic-fetch';
 import { SERVER_URL } from '../utils/config';
 import { checkHttpStatus, parseJSON } from '../utils';
-import { CLOSE_LISTING_REQUEST, CLOSE_LISTING_SUCCESS, CLOSE_LISTING_FAILURE } from '../constants';
+import { TOGGLE_LISTING_REQUEST, TOGGLE_LISTING_SUCCESS, TOGGLE_LISTING_FAILURE } from '../constants';
 
-export function closeListingSuccess(response) {
+export function toggleListingSuccess(response) {
     return {
-        type: CLOSE_LISTING_SUCCESS,
+        type: TOGGLE_LISTING_SUCCESS,
         payload: {
             response: response,
         }
     };
 }
 
-export function closeListingFailure(error) {
+export function toggleListingFailure(error) {
     return {
-        type: CLOSE_LISTING_FAILURE,
+        type: TOGGLE_LISTING_FAILURE,
         payload: {
             status: error.response.status,
             statusText: error.response.statusText
@@ -22,21 +22,21 @@ export function closeListingFailure(error) {
     };
 }
 
-export function closeListingRequest() {
+export function toggleListingRequest() {
     return {
-        type: CLOSE_LISTING_REQUEST
+        type: TOGGLE_LISTING_REQUEST
     };
 }
 
-export function closeListing(pk) {
+export function toggleListing(pk) {
     return (dispatch) => {
-        dispatch(closeListingRequest());
+        dispatch(toggleListingRequest());
         var token = localStorage.getItem("LOCAL_TOKEN");
         var auth = '';
         if(token != null) {
             auth = 'JWT ' + token;
         }
-        return fetch(`${SERVER_URL}/api/listings/${pk}/close_listing/`, {
+        return fetch(`${SERVER_URL}/api/listings/${pk}/toggle_listing/`, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
@@ -48,11 +48,11 @@ export function closeListing(pk) {
             .then(parseJSON)
             .then(response => {
                 if(typeof response !== 'undefined' && response.length > 0){
-                    dispatch(closeListingSuccess(response));
+                    dispatch(toggleListingSuccess(response));
                 }
             })
             .catch(error => {
-                dispatch(closeListingFailure(error));
+                dispatch(toggleListingFailure(error));
             });
     };
 }
