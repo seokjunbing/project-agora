@@ -193,6 +193,12 @@ class ListingViewSet(viewsets.ModelViewSet):
     def homepage(self, request):
         queryset = Listing.objects.filter(flags__lt=5, closed=False)
         serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        permission_classes = (ListingOwnerCanEdit,)
+        filter_class = ListingFilter
+        ordering_filter = OrderingFilter()
+        ordering_fields = ('price', 'views')
+        search_fields = ('title', 'description')
         return Response(serializer.data)
 
 

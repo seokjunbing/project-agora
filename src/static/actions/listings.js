@@ -55,8 +55,8 @@ export function fetchListings(url) {
             .then(checkHttpStatus)
             .then(parseJSON)
             .then(response => {
-                if(typeof response.results !== 'undefined' && response.results.length > 0){
-                    dispatch(fetchListingsSuccess(response.results));
+                if(typeof response !== 'undefined' && response.length > 0){
+                    dispatch(fetchListingsSuccess(response));
                 }
                 else { dispatch(fetchListingsSuccess(null)); }
             })
