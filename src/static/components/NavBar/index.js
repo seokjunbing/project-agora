@@ -86,7 +86,7 @@ class NavBar extends React.Component {
 
           <Menu.Menu position='right'>
               <Menu.Item>
-                <Button href="/verify" color='teal'>Log In/Sign Up</Button>
+                <Button href="/verify" color='teal'>Log In / Sign Up</Button>
               </Menu.Item>
           </Menu.Menu>
 
