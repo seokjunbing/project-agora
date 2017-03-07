@@ -414,13 +414,13 @@ class InputForm extends Component {
               <Form.TextArea name='description' label='Description' name='description' placeholder='Anything else we should know?' rows='3' onChange={this.handleDescriptionChange.bind(this)} onSelect={this.onDescriptionSelect.bind(this)}/>
               {this.descriptionError()}
 
-              <ReactS3Uploader
-                  signingUrl="/api/get_s3_url"
-                  accept="image/*"
-                  preprocess={this.onUploadStart.bind(this)}
-                  onProgress={this.onProgress.bind(this)}
-                  onError={this.onImageUploadError.bind(this)}
-                  onFinish={this.onUploadFinish.bind(this)}/>
+              {(this.state && (!this.state.images || (this.state.images && this.state.images.length < 5))) && <ReactS3Uploader
+                                                  signingUrl="/api/get_s3_url"
+                                                  accept="image/*"
+                                                  preprocess={this.onUploadStart.bind(this)}
+                                                  onProgress={this.onProgress.bind(this)}
+                                                  onError={this.onImageUploadError.bind(this)}
+                                                  onFinish={this.onUploadFinish.bind(this)}/>}
 
               {this.uploadProgress()}
               {this.imageCountText()}
