@@ -34,7 +34,7 @@ class ProfilePage extends React.Component {
     var self = this;
     var promiseObj = getUserInfo(user_id, auth_token);
     promiseObj.then(function(resp){
-      self.setState({emailAddress : resp.data.email, firstName : resp.data.first_name, lastName : resp.data.last_name});
+      self.setState({emailAddress : resp.data.email, firstName : resp.data.first_name, lastName : resp.data.last_name}, function() { console.log(this.state);});
     });
 
   }
@@ -74,6 +74,12 @@ class ProfilePage extends React.Component {
         padding: '0px',
     }
 
+    var style2 = {
+        padding: '0px',
+        cursor: 'pointer',
+        color: '#00B5AD',
+    }
+
     if (this.props.userlistings && this.props.userlistings.listings && this.props.userlistings.listings.length > 0) {
       return (
         this.props.userlistings.listings.map((listing, i) => {
@@ -83,7 +89,7 @@ class ProfilePage extends React.Component {
             return (
               <Table.Row>
                 <Table.Cell>
-                  <ListingModal trigger={<Segment style={style1} basic>{listing.title}</Segment>} listing={listing} user_id={this.props.user}/>
+                  <ListingModal trigger={<Segment style={style2} basic>{listing.title}</Segment>} listing={listing} user_id={this.props.user}/>
                 </Table.Cell>
                 <Table.Cell>
                   <ListingModal trigger={<Segment style={style1} basic>${listing.price}</Segment>} listing={listing} user_id={this.props.user}/>

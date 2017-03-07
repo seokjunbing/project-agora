@@ -228,13 +228,13 @@ Listing.__str__ = listing_str
 Conversation.__str__ = conversation_str
 
 # Caching
-post_save.connect(invalidate_cache, sender=Listing)
-post_delete.connect(invalidate_cache, sender=Listing)
-post_save.connect(invalidate_cache, sender=Category)
-post_delete.connect(invalidate_cache, sender=Category)
-post_save.connect(invalidate_cache, sender=Message)
-post_delete.connect(invalidate_cache, sender=Message)
-post_save.connect(invalidate_cache, sender=User)
-post_delete.connect(invalidate_cache, sender=User)
-post_save.connect(invalidate_cache, sender=Conversation)
-post_delete.connect(invalidate_cache, sender=Conversation)
+#post_save.connect(invalidate_cache, sender=Listing)
+#post_delete.connect(invalidate_cache, sender=Listing)
+#post_save.connect(invalidate_cache, sender=Category)
+#post_delete.connect(invalidate_cache, sender=Category)
+#post_save.connect(invalidate_cache, sender=Message)
+#post_delete.connect(invalidate_cache, sender=Message)
+#post_save.connect(invalidate_cache, sender=User)
+#post_delete.connect(invalidate_cache, sender=User)
+#post_save.connect(invalidate_cache, sender=Conversation)
+#post_delete.connect(invalidate_cache, sender=Conversation)

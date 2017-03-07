@@ -233,22 +233,6 @@ class MessageViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('conversation',)
 
-    # TODO do this. How do you check the object, though?
-    # def perform_create(self, serializer):
-    #     user = self.request.user
-    # # can I check Message(serializer.data).conversation?
-    #     if user.is_authenticated() and user.profile.verified :
-    #         serializer.save()
-    #     else:
-    #         raise ForbiddenException
-
-    # def list(self, request, *args, **kwargs):
-    #     user = request.user
-    #     if user.is_superuser:
-    #         viewsets.ModelViewSet.list(self, request, *args, **kwargs)
-    #     else:
-    #         return Response({"detail": "You cannot see this."}, status=status.HTTP_403_FORBIDDEN)
-
 
 class ConversationViewSet(viewsets.ModelViewSet):
     # TODO figure out permissions
