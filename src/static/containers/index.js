@@ -12,3 +12,4 @@ export AboutUsView from './AboutUs/index';
 export VerifyEmailView from './VerifyEmail/index';
 export MessagingView from './Messaging/index';
 export EditListingView from './EditListing/index';
+export ErrorPageView from './ErrorPage/index';

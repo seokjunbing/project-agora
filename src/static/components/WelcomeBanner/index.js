@@ -45,11 +45,11 @@ class WelcomeBanner extends React.Component {
                     <p>Looking to rent a parking spot at Chi Gam for 17S?</p>
 
                     <p>Tired of blitzing out to campus on behalf of your student business?</p>
-
-                    <Header size='medium' color='teal'> Agora is here to help</Header>
-
+      
                     <p>Instead of abandoning your beloved AC units, TVs, textbooks
                     fridges, rent them to another student for the term.</p>
+
+                    <Header size='medium' color='teal'> Agora is here to help</Header>
 
                     <p>The best thing about it?</p>
 
@@ -60,8 +60,6 @@ class WelcomeBanner extends React.Component {
                     <p>Feel free to explore current listings, but make sure to sign up
                     with your Dartmouth email in order to take advantage of the non-creepy
                     campus marketplace.</p>
-
-                    <label style= {error_color}>{this.props.promptMessage}</label>
 
                   </Segment>
                 </Grid.Column>
