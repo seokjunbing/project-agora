@@ -16,9 +16,7 @@ Use setup instructions found on [django-react-redux-jwt-base boilerplate project
 In addition, make sure to install postrges and jpeg in your virtualenv:
 
 ```
-brew install jpeg
-brew install postgres
-brew install memcached
+brew install jpeg postgres memcached
 ```
 
 
@@ -76,13 +74,18 @@ some backwards compatibility, but this is not guaranteed.
 `http://[ site_url ]/api/listings/`
 
 Lists the listings made by users on the site. *Deleting* a listing can only be done by its author. 
+
 Unauthenticated requests and requests coming from unverified users will not receive the `author` of a Listing so
  as to preserve anonymity and trust of users within the Dartmouth community.
+ 
+###### Accepted methods
+`GET`, `POST`
 
 ##### Listing detail
 `http://[ site_url ]/api/listings/[ pk ]`
+
 ###### Accepted methods
-`GET`, `POST`, `PUT`, `DELETE`
+`GET`. Protected: `PUT`, `DELETE` , `PATCH`
 
 ##### Getting all of a user's listings
 `http://[ site_url ]/api/listings/get_for_user/`
@@ -101,7 +104,7 @@ You can filter listings by the following fields: `price_type`, `sale_type`,
  To do so, include the field(s) in the querystring, e.g., `http://[ site_url ]/api/listings/?min_price=100&max_price=200`. 
  
 ##### Closing a listing
-`http://[ site_url ]/api/listings/[ pk ]/close_listing/`<br>
+`http://[ site_url ]/api/listings/[ pk ]/toggle_closed/`<br>
 Close a listing by calling this api end point with the pk of the listing that is being closed. You must be the owner of
 listing to be able to close it.
 
@@ -143,37 +146,55 @@ in the form of the created `User` object or a response with a 4XX status code sp
 `GET`, `POST`, `PUT`, `PATCH`
 
 ##### Creating users
+Make a request with the following fields: `email`, `password`, `first_name`, `last_name`.
 
-Make a POST request with the following fields: `email`, `password`, `first_name`, `last_name`.
+###### Accepted methods
+`POST`
+
 ##### Retrieving users
 
-Make a GET request. You will receive the following fields: `id`, `username`, `email`, `first_name`, `last_name`. 
+You will receive the following fields: `id`, `username`, `email`, `first_name`, `last_name`. 
 You will also receive a nested object, `profile`, containing a sole field, `verified`, specifying whether a user
- has verified their email. 
+has verified their email.
+  
+###### Accepted methods
+`GET`
 
 #### Authentication token
 
 `http://[ site_url ]/api/auth-token/`
 
-**Accepts POST requests only**. Send a POST request containing the following fields: `username` and `password` to try to
+Send a request containing the following fields: `username` and `password` to try to
 authenticate a user. If the user is successfully authenticated, you will receive a `token`, which you can use to 
 authenticate a user. See **AUTH** section for more details on this.
+
+###### Accepted methods
+`POST`
 
 #### Refreshing an authentication token
 
 `http://[ site_url ]/api/token-refresh/`
 
-**Accepts POST requests only**. Send a POST request containing the field `token`, which must be an **unexpired** user token.
+Send a request containing the field `token`, which must be an **unexpired** user token.
 You will receive a newer `token` in return.
+
+###### Accepted methods
+`POST`
 
 #### Verifying user emails
 
 `http://[ site_url ]/api/verify/`
 
-In order to verify a user, a GET request should be made with the queries `email` and `code`, containing the user's email
- and verification code. A link of the form `http://[ site_url ]/api/verify/?email=<email>&code=<code>` is sent to the
- email specified by users at signup. If the `code` matches the verification code stored for a `user`, the user is then
-  marked as verified and allowed to access the full features of the site.
+In order to verify a user, a make a request with the queries `email` and `code`, containing the user's email
+and verification code. A link is sent to the email specified by users at signup that looks like
+
+`http://[ site_url ]/api/verify/?email=[ email ]&code=[ code ]`
+
+If the `code` matches the verification code stored for a `user`, the user is then
+marked as verified and allowed to access all the features of the site.
+
+###### Accepted methods
+`GET`
 
 ## Caching
 Implemented using Memcached. Memcached helps to speed up dynamic websites by caching data and objects to RAM.
