@@ -74,18 +74,7 @@ class NavBar extends React.Component {
                     positioning='bottom left'
                   />
               </Menu.Item>
-              <Menu.Item>
-                  <Popup
-                    trigger={ <div><Icon name='user icon' />Profile</div>}
-                    content={<div>
-                          <List.Item>
-                            <Button href='/profile' basic color='black'>View or edit profile</Button>
-                          </List.Item>
-                          </div>}
-                    on='click'
-                    positioning='bottom right'
-                  />
-              </Menu.Item>
+              <Menu.Item href="/profile"><Icon name='user icon' />Profile</Menu.Item>
               <Menu.Item>
                 <Button onClick={this.onLogOut.bind(this)} color='teal'>Log Out</Button>
               </Menu.Item>

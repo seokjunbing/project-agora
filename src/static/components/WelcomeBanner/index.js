@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Segment, Image, Grid, Label, Progress, Header } from 'semantic-ui-react';
 import signUpPromptReducer from '../../reducers/signUpPromptReducer';
 import logInReducers from '../../reducers/logInReducers';
 
@@ -14,22 +15,11 @@ class WelcomeBanner extends React.Component {
 
       var center_style = {
         textAlign: 'center',
-        fontSize: 19,
-      }
-
-      var agora_help_style = {
-        color: 'teal',
-        fontWeight: 'bold',
-        fontSize: 22,
-      }
-
-      var testing_style = {
-        color: 'teal',
-        fontWeight: 'bold',
+        fontSize: 17,
       }
 
       var paragraph_style = {
-        textAlign: 'left',
+        //textAlign: 'left',
       }
 
       var error_color = {
@@ -37,31 +27,40 @@ class WelcomeBanner extends React.Component {
       }
 
         return (
-            <div style= {center_style} className="ui raised padded text container segment">
-              <h0 className="ui header">Welcome to Agora!</h0>
-              <p> </p>
+            <div>
+              <Grid>
+                <Grid.Column width={3}>
+                </Grid.Column>
+                <Grid.Column width={10}>
+                  <Segment>
 
-              <p>The <label style= {testing_style}>exclusive </label>
-              marketplace for Dartmouth students.</p>
+                    <Header size='huge'>Welcome to Agora!</Header>
 
-              <p>Going on an FSP and not sure what to do with that (gently) used futon<b>?</b></p>
+                    <p>The exclusive online marketplace for Dartmouth students.</p>
 
-              <p>Looking to rent a parking spot at Chi Gam for 17S<b>?</b></p>
+                    <p>Going on an FSP and not sure what to do with that (gently) used futon<b>?</b></p>
 
-              <p>Tired of blitzing out to campus on behalf of your student business<b>?</b></p>
+                    <p>Looking to rent a parking spot at Chi Gam for 17S<b>?</b></p>
 
-              <p>Sick of selling back $200 textbooks for 50 cents in town<b>?</b></p>
+                    <p>Tired of blitzing out to campus on behalf of yo17sur student business<b>?</b></p>
 
-              <p><label style= {agora_help_style}> Agora is here to help </label></p>
+                    <p>Sick of selling back $200 textbooks for 50 cents in town<b>?</b></p>
 
-              <p><label style= {paragraph_style}> Instead of abandoning your beloved AC units, TVs, textbooks
-              fridges, rent them to another student for the term.</label></p>
+                    <Header size='large' color='teal'> Agora is here to help </Header>
 
-              <p>Feel free to explore current listings, but make sure to sign up
-              with your <label style= {testing_style}><b>Dartmouth email </b></label>
-              in order to buy and sell.</p>
+                    <p><label style= {paragraph_style}> Instead of abandoning your beloved AC units, TVs, textbooks
+                    fridges, rent them to another student for the term.</label></p>
 
-              <label style= {error_color}>{this.props.promptMessage}</label>
+                    <p>Feel free to explore current listings, but make sure to sign up
+                    with your <b>Dartmouth email </b> in order to buy and sell.</p>
+
+                    <label style= {error_color}>{this.props.promptMessage}</label>
+
+                  </Segment>
+                </Grid.Column>
+                <Grid.Column width={3}>
+                </Grid.Column>
+              </Grid>
             </div>
         );
     }
