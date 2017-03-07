@@ -103,8 +103,9 @@ You can filter listings by the following fields: `price_type`, `sale_type`,
  
  To do so, include the field(s) in the querystring, e.g., `http://[ site_url ]/api/listings/?min_price=100&max_price=200`. 
  
-##### Closing a listing
-`http://[ site_url ]/api/listings/[ pk ]/toggle_closed/`<br>
+##### Closing and re-opening a listing
+`http://[ site_url ]/api/listings/[ pk ]/toggle_closed/`
+
 Close a listing by calling this api end point with the pk of the listing that is being closed. You must be the owner of
 listing to be able to close it.
 
