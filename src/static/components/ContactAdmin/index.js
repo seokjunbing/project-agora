@@ -159,7 +159,7 @@ class ContactAdmin extends React.Component {
                 <Form.Field>
                   <label style={vertical_offset}>Personal Email</label>
                   <Input style= {style_block}>
-                    <input style={box_size} type='text' onChange={this.onChangeUserEmail.bind(this)} name= 'userEmail' placeholder='e.g. dead.pikachu2002@hotmail.com'/>
+                    <input style={box_size} type='text' onChange={this.onChangeUserEmail.bind(this)} name= 'userEmail' placeholder='e.g. John.Doe1995@hotmail.com'/>
                   </Input>
                   <label style={label_color}>{this.state.emailErrorText}</label>
                 </Form.Field>
