@@ -158,7 +158,7 @@ class ListingModal extends React.Component {
                   </Modal.Description>
                 </Modal.Content>
                 <Modal.Actions>
-                    {(this.props.user_id && this.props.listing && this.props.listing.author_pk && (this.props.user_id != this.props.listing.author_pk)) && <MessageModal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact Seller' listing={this.props.listing}/>}/>}
+                    {(this.props.user_id && this.props.listing && this.props.listing.author_pk && (this.props.user_id != this.props.listing.author_pk)) && <MessageModal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact Seller'/>} listing={this.props.listing}/>}
                   </Modal.Actions>
               </Modal>
         );
