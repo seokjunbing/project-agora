@@ -16,6 +16,7 @@ class WelcomeBanner extends React.Component {
       var center_style = {
         textAlign: 'center',
         fontSize: 17,
+        paddingBottom: '10px',
       }
 
       var error_color = {
@@ -25,6 +26,12 @@ class WelcomeBanner extends React.Component {
       var header_style = {
         textAlign: 'center',
         paddingTop: '10px',
+      }
+
+      var emphasis_style = {
+        textAlign: 'center',
+        fontSize: 25,
+        color: 'teal',
       }
 
         return (
@@ -45,13 +52,13 @@ class WelcomeBanner extends React.Component {
                     <p>Looking to rent a parking spot at Chi Gam for 17S?</p>
 
                     <p>Tired of blitzing out to campus on behalf of your student business?</p>
-      
+
                     <p>Instead of abandoning your beloved AC units, TVs, textbooks
                     fridges, rent them to another student for the term.</p>
 
                     <Header size='medium' color='teal'> Agora is here to help</Header>
 
-                    <p>The best thing about it?</p>
+                    <Header size='small'>The best thing about it?</Header>
 
                     <Header size='medium' color='teal'>We will protect your privacy</Header>
 
