@@ -92,10 +92,10 @@ class ListingTile extends React.Component {
                     <Button.Group style={style3}>
                         <Button>${this.props.price}{this.props.extraPriceInfo}</Button>
                         {(this.props.user_id && (this.props.user_id != this.props.author_id)) && <MessageModal trigger={<Button color='teal' content='Contact' />} listing={this.props.listing}/>}
-                        <Popup
-                          trigger={<Button onClick={this.flagListing.bind(this)} icon><Icon color={(this.state && this.state.flagged) ? 'red' : 'grey'} name='flag'/></Button>}
-                          content='Flag as inappropriate'
-                        />
+                        {this.props.user_id && <Popup
+                                                  trigger={<Button onClick={this.flagListing.bind(this)} icon><Icon color={(this.state && this.state.flagged) ? 'red' : 'grey'} name='flag'/></Button>}
+                                                  content='Flag as inappropriate'
+                                                />}
                     </Button.Group>
                 </Card.Content>
               </Card>
