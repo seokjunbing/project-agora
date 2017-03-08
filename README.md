@@ -112,6 +112,14 @@ listing to be able to close it.
 ###### Accepted methods
 `GET`
 
+##### Flagging a listing
+`http://[ site_url ]/api/listings/[ pk ]/flag_listing/`
+
+Flag a listing by calling this api endpoint. The user in the request must be verified.
+
+###### Accepted methods
+`GET`
+
 #### Categories
 `http://[ site_url ]/api/categories/`
 
