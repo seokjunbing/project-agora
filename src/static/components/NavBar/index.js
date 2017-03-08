@@ -18,7 +18,7 @@ class NavBar extends React.Component {
             if(!self.props.isFetching && self.props.user.user_id) {
                 self.props.messagingActions.fetchConversations('/api/conversations/get_for_user/?user=' + self.props.user.user_id.toString());
             }
-        }, 5000);
+        }, 1000);
     }
 
     // logout
