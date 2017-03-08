@@ -90,8 +90,6 @@ class ListingTile extends React.Component {
             cursor: 'pointer',
         }
 
-        console.log(this.props);
-
         return (
 
             <Card style={style1}>

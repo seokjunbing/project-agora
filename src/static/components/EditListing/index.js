@@ -41,7 +41,7 @@ class EditListing extends Component {
       var dim_copy = this.state.image_dimensions;
       if (this.state.image_dimensions.length == id) {
         dim_copy[id] = [img_height, img_width];
-        this.setState({image_dimensions : dim_copy}, function() {console.log(this.state) });
+        this.setState({image_dimensions : dim_copy}, function() { });
       }
     }
   }
