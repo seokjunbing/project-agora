@@ -68,6 +68,7 @@ class ListingTile extends React.Component {
             maxHeight: '300px',
             backgroundImage: "url(" + this.props.listing.images[0] +")",
             backgroundSize: 'cover',
+            cursor: 'pointer',
         }
 
         var style6 = {
@@ -77,6 +78,7 @@ class ListingTile extends React.Component {
             minHeight: '50px',
             verticalAleign: 'middle',
             lineHeight: '2',
+            cursor: 'pointer',
         }
 
         console.log(this.props);
