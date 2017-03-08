@@ -1,14 +1,32 @@
 import React from 'react';
-import { Card, Modal, Button, Header, Image, Divider, Form } from 'semantic-ui-react';
+import { Card, Modal, Button, Header, Image, Divider, Form, Icon, Popup } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actionCreators from '../../actions/messaging';
+import * as actionCreators from '../../actions/putlisting';
 import ListingModal from '../ListingModal';
 import MessageModal from '../MessageModal';
 
 class ListingTile extends React.Component {
     constructor(props) {
       super(props);
+      this.state = {
+          flagged : false,
+      }
+    }
+
+    flagListing(e) {
+        e.preventDefault();
+        if(this.state && !this.state.flagged) {
+            var listing = this.props.listing;
+            listing.flags++;
+            this.props.actions.putListing(listing, this.props.listingId);
+            this.setState({ flagged: true });
+        } else {
+            var listing = this.props.listing;
+            listing.flags--;
+            this.props.actions.putListing(listing, this.props.listingId);
+            this.setState({ flagged: false });
+        }
     }
 
     render() {
@@ -37,7 +55,11 @@ class ListingTile extends React.Component {
                 <Card.Content extra>
                     <Button.Group style={style3}>
                         <Button>${this.props.price}{this.props.extraPriceInfo}</Button>
-                        {(this.props.user_id && (this.props.user_id != this.props.author_id)) && <MessageModal trigger={<Button color='teal' icon='mail outline' labelPosition='right' content='Contact' />} listing={this.props.listing}/>}
+                        {(this.props.user_id && (this.props.user_id != this.props.author_id)) && <MessageModal trigger={<Button color='teal' content='Contact' />} listing={this.props.listing}/>}
+                        <Popup
+                          trigger={<Button onClick={this.flagListing.bind(this)} icon><Icon color={(this.state && this.state.flagged) ? 'red' : 'grey'} name='flag'/></Button>}
+                          content='Flag as inappropriate'
+                        />
                     </Button.Group>
                 </Card.Content>
               </Card>

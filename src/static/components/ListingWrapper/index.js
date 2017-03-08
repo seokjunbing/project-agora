@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Card } from 'semantic-ui-react';
 import ListingTile from '../ListingTile';
 
 class ListingWrapper extends React.Component {
@@ -27,15 +27,18 @@ class ListingWrapper extends React.Component {
     }
 
     render() {
+        var style1 = {
+            justifyContent: 'center',
+        }
         return (
             <div>
-                <div className="ui link cards">
+                <Card.Group style={style1}>
                     {
                         this.props.listings.map(listing => {
                             return <ListingTile key={listing.id} listing={listing} listingId={listing.id} author_id={listing.author_pk} author={listing.author_str} title={listing.title} category={listing.category_name} description={listing.description} price={listing.price} date={listing.listing_date} extraPriceInfo={this.extraPriceInfo(listing.price_type)} images={listing.images} image_dimensions={listing.image_dimensions}/>;
                         })
                     }
-                </div>
+                </Card.Group>
             </div>
         );
     }
