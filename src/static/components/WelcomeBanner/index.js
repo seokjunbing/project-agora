@@ -54,7 +54,7 @@ class WelcomeBanner extends React.Component {
                     <p>Tired of blitzing out to campus on behalf of your student business?</p>
 
                     <p>Instead of abandoning your beloved AC units, TVs, textbooks
-                    fridges, rent them to another student for the term.</p>
+                    fridges, sell them or rent them to another student for the term.</p>
 
                     <Header size='medium' color='teal'> Agora is here to help</Header>
 
@@ -67,6 +67,20 @@ class WelcomeBanner extends React.Component {
                     <p>Feel free to explore current listings, but make sure to sign up
                     with your Dartmouth email in order to take advantage of the non-creepy
                     campus marketplace.</p>
+                    <Grid>
+                      <Grid.Column width={3}>
+                      </Grid.Column>
+                      <Grid.Column width={10}>
+
+                      <Segment basic padded='very'>
+                        <Image src="https://agoradartmouth.s3.amazonaws.com:443/images/team_image.jpeg" fluid />
+                      </Segment>
+
+                      </Grid.Column>
+                      <Grid.Column width={3}>
+                      </Grid.Column>
+                    </Grid>
+
 
                   </Segment>
                 </Grid.Column>

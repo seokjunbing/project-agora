@@ -70,6 +70,17 @@ At this moment, the following API endpoints are accepting either GET or POST req
 state and are likely to change somewhat. We strive to not rename fields in our responses as to maintain
 some backwards compatibility, but this is not guaranteed.
 
+#### Homepage
+
+`http://[ site_url ]/api/homepage/`
+
+This endpoint is set up to easily retrieve all listings that should be shown up in the homepage (filtering by flags, 
+closed, etc.). This is done to avoid using a filtered queryset in the root `Listings` endpoint. **Read-only**. See `Listings`
+ for more details.
+
+###### Accepted methods
+`GET`
+
 #### Listings
 `http://[ site_url ]/api/listings/`
 
@@ -94,7 +105,8 @@ Lists all the listings created by a user. The user must be authenticated and is 
  Do **NOT** simply filter the main listing endpoint by `author` or `author_pk`,
  as this may give you inaccurate or no results at all due to these fields not 
  being static in order to accomplish anonymityfor the listing's author.
- 
+
+
 ##### Filtering listings
 
 You can filter listings by the following fields: `price_type`, `sale_type`,
@@ -108,6 +120,14 @@ You can filter listings by the following fields: `price_type`, `sale_type`,
 
 Close a listing by calling this api end point with the pk of the listing that is being closed. You must be the owner of
 listing to be able to close it.
+
+###### Accepted methods
+`GET`
+
+##### Flagging a listing
+`http://[ site_url ]/api/listings/[ pk ]/flag_listing/`
+
+Flag a listing by calling this api endpoint. The user in the request must be verified.
 
 ###### Accepted methods
 `GET`
@@ -222,16 +242,10 @@ Include the user token in your header for every request you make; for instance, 
     curl -H "Authorization: JWT <token>" http://localhost:8000/api/listings/
 
 
-
-
 ### TODO
 
 - Messaging (conversation style about listings)
-- Image upload (multiple images)
 - Wishlist Feature
-- Anonymity of Home Page (frontend)
-- User profile page
-- Ability to edit a listing
 
 ## Troubleshooting
 
@@ -240,3 +254,8 @@ Include the user token in your header for every request you make; for instance, 
 1. Update your python packages: run `pip install -r requirements.txt` in the repository's root folder.
 2. You _might_ have to migrate: `python manage.py makemigrations && python manage.py migrate`.
 If that doesn't work, run `python manage.py makemigrations agora` and `python manage.py migrate agora`.
+
+### Django does not detect Agora migrations
+
+If `python manage.py makemigrations && python manage.py migrate` does not migrate Agora models, only django ones 
+(User, auth, etc.), run `python manage.py makemigrations agora && python manage.py migrate agora`.

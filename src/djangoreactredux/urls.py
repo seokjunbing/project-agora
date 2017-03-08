@@ -3,7 +3,7 @@ from django.conf.urls import include, url
 from django.views.decorators.cache import cache_page
 from django.contrib import admin
 from agora.views import IndexView, CategoryViewSet, ListingViewSet, MessageViewSet, ConversationViewSet, UserViewSet, \
-    sign_s3_upload, ProfileViewSet, verify_user, start_conversation, send_contact_admin_email
+    ListingHomepageViewSet, sign_s3_upload, ProfileViewSet, verify_user, start_conversation, send_contact_admin_email
 
 from rest_framework import routers
 from rest_framework.authtoken import views
@@ -16,6 +16,7 @@ router.register(r'categories', CategoryViewSet)
 router.register(r'messages', MessageViewSet)
 router.register(r'conversations', ConversationViewSet)
 router.register(r'users', UserViewSet)
+router.register(r'homepage', ListingViewSet)
 # router.register(r'token', include('oauth2_provider.urls', namespace='oauth2_provider'))
 # router.register(r'token-auth', verify_user, base_name='Token')
 
