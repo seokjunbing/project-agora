@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Button } from 'semantic-ui-react';
+import { Menu, Button, Popup } from 'semantic-ui-react';
 import CategoryDropdown from '../CategoryDropdown';
 import SaleTypeDropdown from '../SaleTypeDropdown';
 import PriceInput from '../PriceInput';
@@ -28,31 +28,41 @@ class FilterBar extends React.Component {
 
     render() {
         var style1 = { marginBottom: '20px', };
+        var style2 = {
+            margin: 'auto',
+            display: 'block',
+            width: '20%',
+        }
         return (
             <div style={style1}>
-                <Menu stackable fluid widths={6}>
-                    <Menu.Item>
-                        <CategoryDropdown/>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <SaleTypeDropdown/>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <PriceInput placeholder='Min Price' filterName='min_price'/>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <PriceInput placeholder='Max Price' filterName='max_price'/>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <SearchBar placeholder='Search listings...'/>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <Button.Group>
-                            <Button onClick={this.updateListings.bind(this)} primary>Update</Button>
-                            <Button onClick={this.clearFilters.bind(this)}>Clear Filters</Button>
-                        </Button.Group>
-                    </Menu.Item>
-                </Menu>
+            <Popup
+                trigger={<Button color='black' style={style2} content='Show filters' basic/>}
+                content={<Menu vertical fluid>
+                            <Menu.Item>
+                                <CategoryDropdown/>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <SaleTypeDropdown/>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <PriceInput placeholder='Min Price' filterName='min_price'/>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <PriceInput placeholder='Max Price' filterName='max_price'/>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <SearchBar placeholder='Search listings...'/>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <Button.Group>
+                                    <Button onClick={this.updateListings.bind(this)} primary>Update</Button>
+                                    <Button onClick={this.clearFilters.bind(this)}>Clear Filters</Button>
+                                </Button.Group>
+                            </Menu.Item>
+                        </Menu>}
+                on='click'
+              />
+
             </div>
         );
     }
