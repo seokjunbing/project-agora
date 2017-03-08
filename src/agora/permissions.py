@@ -49,3 +49,13 @@ class ListingOwnerCanEdit(BasePermission):
             return user.is_authenticated and user.profile.verified
         else:
             return user.profile.verified and obj.author == user
+
+
+class IsVerified(BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+        return user.is_authenticated and user.profile.verified
+
+    def has_object_permission(self, request, view, obj):
+        user = request.user
+        return user.is_authenticated and user.profile.verified
