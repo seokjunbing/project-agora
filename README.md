@@ -234,16 +234,10 @@ Include the user token in your header for every request you make; for instance, 
     curl -H "Authorization: JWT <token>" http://localhost:8000/api/listings/
 
 
-
-
 ### TODO
 
 - Messaging (conversation style about listings)
-- Image upload (multiple images)
 - Wishlist Feature
-- Anonymity of Home Page (frontend)
-- User profile page
-- Ability to edit a listing
 
 ## Troubleshooting
 
@@ -252,3 +246,8 @@ Include the user token in your header for every request you make; for instance, 
 1. Update your python packages: run `pip install -r requirements.txt` in the repository's root folder.
 2. You _might_ have to migrate: `python manage.py makemigrations && python manage.py migrate`.
 If that doesn't work, run `python manage.py makemigrations agora` and `python manage.py migrate agora`.
+
+### Django does not detect Agora migrations
+
+If `python manage.py makemigrations && python manage.py migrate` does not migrate Agora models, only django ones 
+(User, auth, etc.), run `python manage.py makemigrations agora && python manage.py migrate agora`.
