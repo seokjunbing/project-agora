@@ -18,8 +18,8 @@ const price_units = [
   { text: '/term', value: 'PT' },
 ];
 
-const title_length = 20;
-const description_length = 40;
+const title_length = 100;
+const description_length = 1000;
 const max_price = 9999.99;
 
 class InputForm extends Component {
@@ -135,7 +135,7 @@ class InputForm extends Component {
         author: this.props.user,
     }, function() {
         this.props.postActions.postListing(this.state);
-        window.location = '/listing';
+        window.location = '/';
     });
   }
 
@@ -233,8 +233,12 @@ class InputForm extends Component {
   submitActive() {
 
     if (this.state) {
-      if (this.state.titleValid && this.state.priceValid && this.state.pricetypeValid && this.state.categoryValid && this.state.descriptionValid && this.state.image_dimensions && this.state.images.length > 0) {
-        return (false);
+      if (this.state.titleValid && this.state.priceValid && this.state.pricetypeValid && this.state.categoryValid && this.state.descriptionValid && this.state.image_dimensions) {
+        if (this.state.images && this.state.images.length > 0) {
+          return (false);
+        } else {
+          return (true);
+        }
       } else {
 
         return (true);

@@ -19,8 +19,8 @@ const price_units = [
   { text: '/term', value: 'PT' },
 ];
 
-const title_length = 20;
-const description_length = 40;
+const title_length = 100;
+const description_length = 1000;
 const max_price = 9999.99;
 
 class EditListing extends Component {

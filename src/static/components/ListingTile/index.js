@@ -6,6 +6,8 @@ import * as actionCreators from '../../actions/putlisting';
 import ListingModal from '../ListingModal';
 import MessageModal from '../MessageModal';
 
+var url = require('url');
+
 class ListingTile extends React.Component {
     constructor(props) {
       super(props);
@@ -29,7 +31,22 @@ class ListingTile extends React.Component {
         }
     }
 
+    listingTitle() {
+      if (this.props && this.props.title) {
+        if (this.props.title.length > 20) {
+          return (
+            this.props.title.substring(0,20) + "..."
+          );
+        } else {
+          return (
+            this.props.title
+          );
+        }
+      }
+    }
+
     render() {
+
         var style1 = {
             marginLeft: '15px',
         }
@@ -46,10 +63,29 @@ class ListingTile extends React.Component {
             maxHeight: '200px',
         }
 
+        var style5 = {
+            minHeight: '300px',
+            maxHeight: '300px',
+            backgroundImage: "url(" + this.props.listing.images[0] +")",
+            backgroundSize: 'cover',
+        }
+
+        var style6 = {
+            textAlign: 'center',
+            backgroundColor: '#f7f7f7',
+            color: 'black',
+            minHeight: '50px',
+            verticalAleign: 'middle',
+            lineHeight: '2',
+        }
+
+        console.log(this.props);
+
         return (
+
             <Card style={style1}>
-                <Image style={style4} src={this.props.images ? this.props.images[0] : ''}/>
-                <ListingModal trigger={<Button><h2>{this.props.title}</h2></Button>}
+
+                <ListingModal trigger={<div style={style5}><Header as='h2' style={style6}>{this.listingTitle()}</Header></div>}
                             listing={this.props.listing} user_id={this.props.user_id}
                     />
                 <Card.Content extra>
