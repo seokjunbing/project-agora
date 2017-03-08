@@ -112,6 +112,8 @@ class Listing(models.Model):
 
     flags = models.PositiveIntegerField(default=0)
 
+    # flagged_by = ArrayField(models.IntegerField)
+
     new = models.BooleanField(default=True)
 
     # date of creation
@@ -228,13 +230,13 @@ Listing.__str__ = listing_str
 Conversation.__str__ = conversation_str
 
 # Caching
-#post_save.connect(invalidate_cache, sender=Listing)
-#post_delete.connect(invalidate_cache, sender=Listing)
-#post_save.connect(invalidate_cache, sender=Category)
-#post_delete.connect(invalidate_cache, sender=Category)
-#post_save.connect(invalidate_cache, sender=Message)
-#post_delete.connect(invalidate_cache, sender=Message)
-#post_save.connect(invalidate_cache, sender=User)
-#post_delete.connect(invalidate_cache, sender=User)
-#post_save.connect(invalidate_cache, sender=Conversation)
-#post_delete.connect(invalidate_cache, sender=Conversation)
+# post_save.connect(invalidate_cache, sender=Listing)
+# post_delete.connect(invalidate_cache, sender=Listing)
+# post_save.connect(invalidate_cache, sender=Category)
+# post_delete.connect(invalidate_cache, sender=Category)
+# post_save.connect(invalidate_cache, sender=Message)
+# post_delete.connect(invalidate_cache, sender=Message)
+# post_save.connect(invalidate_cache, sender=User)
+# post_delete.connect(invalidate_cache, sender=User)
+# post_save.connect(invalidate_cache, sender=Conversation)
+# post_delete.connect(invalidate_cache, sender=Conversation)
