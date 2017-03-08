@@ -1,92 +1,95 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Segment, Image, Grid, Label, Progress, Header } from 'semantic-ui-react';
+import {connect} from 'react-redux';
+import {Segment, Image, Grid, Label, Progress, Header} from 'semantic-ui-react';
 import signUpPromptReducer from '../../reducers/signUpPromptReducer';
 import logInReducers from '../../reducers/logInReducers';
 
 
 class WelcomeBanner extends React.Component {
 
-  constructor(props) {
-      super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
 
     render() {
 
-      var center_style = {
-        textAlign: 'center',
-        fontSize: 17,
-        paddingBottom: '10px',
-      }
+        var center_style = {
+            textAlign: 'center',
+            fontSize: 17,
+            paddingBottom: '10px',
+        }
 
-      var error_color = {
-        color: 'Red'
-      }
+        var error_color = {
+            color: 'Red'
+        }
 
-      var header_style = {
-        textAlign: 'center',
-        paddingTop: '10px',
-      }
+        var header_style = {
+            textAlign: 'center',
+            paddingTop: '10px',
+        }
 
-      var emphasis_style = {
-        textAlign: 'center',
-        fontSize: 25,
-        color: 'teal',
-      }
+        var emphasis_style = {
+            textAlign: 'center',
+            fontSize: 25,
+            color: 'teal',
+        }
 
         return (
 
             <div>
-              <Grid>
-                <Grid.Column width={3}>
-                </Grid.Column>
-                <Grid.Column width={10}>
-                  <Segment color='teal' style={center_style}>
+                <Grid>
+                    <Grid.Column width={3}>
+                    </Grid.Column>
+                    <Grid.Column width={10}>
+                        <Segment color='teal' style={center_style}>
 
-                    <Header size='huge' style={header_style}>Welcome to Agora!</Header>
+                            <Header size='huge' style={header_style}>Welcome to Agora!</Header>
 
-                    <p>The online marketplace exclusively for Dartmouth students.</p>
+                            <p>The online marketplace exclusively for Dartmouth students.</p>
 
-                    <p>Going on an FSP and not sure what to do with that (gently) used futon?</p>
+                            <p>Going on an FSP and not sure what to do with that (gently) used futon?</p>
 
-                    <p>Looking to rent a parking spot at Chi Gam for 17S?</p>
+                            <p>Looking to rent a parking spot at Chi Gam for 17S?</p>
 
-                    <p>Tired of blitzing out to campus on behalf of your student business?</p>
+                            <p>Tired of blitzing out to campus on behalf of your student business?</p>
 
-                    <p>Instead of abandoning your beloved AC units, TVs, textbooks
-                    fridges, sell them or rent them to another student for the term.</p>
+                            <p>Instead of abandoning your beloved AC units, TVs, textbooks
+                                fridges, sell them or rent them to another student for the term.</p>
 
-                    <Header size='medium' color='teal'> Agora is here to help</Header>
+                            <Header size='medium' color='teal'> Agora is here to help</Header>
 
-                    <Header size='small'>The best thing about it?</Header>
+                            <Header size='small'>The best thing about it?</Header>
 
-                    <Header size='medium' color='teal'>We will protect your privacy</Header>
+                            <Header size='medium' color='teal'>We will protect your privacy</Header>
 
-                    <p>Only authenticated members of the Dartmouth community can contact sellers or list their own items.</p>
+                            <p>Only authenticated members of the Dartmouth community can contact sellers or list their
+                                own items.</p>
 
-                    <p>Feel free to explore current listings, but make sure to sign up
-                    with your Dartmouth email in order to take advantage of the non-creepy
-                    campus marketplace.</p>
-                    <Grid>
-                      <Grid.Column width={3}>
-                      </Grid.Column>
-                      <Grid.Column width={10}>
+                            <p>
+                                Feel free to explore current listings, but make sure to sign up
+                                with your Dartmouth email in order to take advantage of your trusted
+                                campus marketplace.</p>
+                            <Grid>
+                                <Grid.Column width={3}>
+                                </Grid.Column>
+                                <Grid.Column width={10}>
 
-                      <Segment basic padded='very'>
-                        <Image src="https://agoradartmouth.s3.amazonaws.com:443/images/team_image.jpeg" fluid />
-                      </Segment>
+                                    <Segment basic padded='very'>
+                                        <Image src="https://agoradartmouth.s3.amazonaws.com:443/images/team_image.jpeg"
+                                               fluid/>
+                                    </Segment>
 
-                      </Grid.Column>
-                      <Grid.Column width={3}>
-                      </Grid.Column>
-                    </Grid>
+                                </Grid.Column>
+                                <Grid.Column width={3}>
+                                </Grid.Column>
+                            </Grid>
 
 
-                  </Segment>
-                </Grid.Column>
-                <Grid.Column width={3}>
-                </Grid.Column>
-              </Grid>
+                        </Segment>
+                    </Grid.Column>
+                    <Grid.Column width={3}>
+                    </Grid.Column>
+                </Grid>
             </div>
         );
     }
@@ -95,7 +98,7 @@ class WelcomeBanner extends React.Component {
 // token saved as prop
 const mapStateToProps = (state) => {
     return {
-        promptMessage : state.verificationPrompt.promptMessage,
+        promptMessage: state.verificationPrompt.promptMessage,
         sessionToken: state.user.auth_token,
     };
 };
