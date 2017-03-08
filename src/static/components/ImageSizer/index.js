@@ -10,8 +10,6 @@ class ImageSizer  extends Component {
 
     onImgLoad({target:img}) {
         this.props.storeImageSize(img.naturalHeight, img.naturalWidth, this.props.id);
-        console.log(img.naturalHeight);
-        console.log(img.naturalWidth);
     }
 
     render(){

@@ -38,9 +38,7 @@ class InputForm extends Component {
       var dim_copy = this.state.image_dimensions;
       if (this.state.image_dimensions.length == id) {
         dim_copy[id] = [img_height, img_width];
-        this.setState({image_dimensions : dim_copy}, function() {console.log(this.state) });
-      } else {
-        console.log("WRONG IMAGE STUFF");
+        this.setState({image_dimensions : dim_copy});
       }
     }
   }
@@ -86,7 +84,6 @@ class InputForm extends Component {
     var image_captions_copy = this.state.image_captions.slice();
     image_captions_copy[id] = text;
     this.setState({ image_captions : image_captions_copy});
-    console.log(this.state.image_captions);
   }
 
   handleTitleChange = (e) => {
@@ -137,8 +134,6 @@ class InputForm extends Component {
     this.setState({
         author: this.props.user,
     }, function() {
-
-        console.log('this is submitted')
         this.props.postActions.postListing(this.state);
         window.location = '/listing';
     });
@@ -238,8 +233,7 @@ class InputForm extends Component {
   submitActive() {
 
     if (this.state) {
-      console.log(this.state);
-      if (this.state.titleValid && this.state.priceValid && this.state.pricetypeValid && this.state.categoryValid && this.state.descriptionValid && this.state.imagePresent && this.state.image_dimensions) {
+      if (this.state.titleValid && this.state.priceValid && this.state.pricetypeValid && this.state.categoryValid && this.state.descriptionValid && this.state.image_dimensions && this.state.images.length > 0) {
         return (false);
       } else {
 
@@ -292,7 +286,7 @@ class InputForm extends Component {
           return (
             this.state.images.map((image, i) => {
             return (
-              <ImageTile imageurl={image} imagetitle={this.state.image_captions[i]} id={i} deleteImage={this.deleteImage} onTitleChange={this.onTitleChange} makePrimary={this.makePrimary} storeImageSize={this.storeImageSize} caption={this.state.image_captions[i]}/>
+              <ImageTile imageurl={image} imagetitle={this.state.image_captions[i]} id={i} deleteImage={this.deleteImage} onTitleChange={this.onTitleChange} makePrimary={this.makePrimary} storeImageSize={this.storeImageSize} caption={this.state.image_captions[i]} dimensions={this.state.image_dimensions[i]}/>
             );
           }));
         } else {
@@ -326,9 +320,6 @@ class InputForm extends Component {
 
 
   onUploadStart(file, next) {
-    console.log(file);
-    console.log('this was the file');
-
     this.setState({imageUploadStatus : 1});
     next(file);
   }

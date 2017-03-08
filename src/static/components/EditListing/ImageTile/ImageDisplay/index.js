@@ -28,7 +28,7 @@ class ImageDisplay extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.resizeImage(nextProps.width, nextProps.height );
+    this.resizeImage(nextProps.width, nextProps.height);
   }
 
   resizeImage(img_width, img_height) {

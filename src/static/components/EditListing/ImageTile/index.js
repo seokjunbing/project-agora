@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import CategoryDropdown from '../../CategoryDropdown';
 import ReactS3Uploader from 'react-s3-uploader';
 import ImageSizer from '../../ImageSizer';
+import ImageDisplay from './ImageDisplay';
 
 import { Button, Checkbox, Form, Input, Message, Radio, Select, TextArea, Container, Dropdown, Modal, Header, Icon } from 'semantic-ui-react';
 
@@ -38,7 +39,6 @@ class ImageTile extends Component {
 
   makePrimaryModalClose2 = (e) => {
     this.props.makePrimary(this.props.id);
-    console.log('closing');
     this.makePrimaryModalClose();
   }
 
@@ -67,18 +67,16 @@ class ImageTile extends Component {
 
   storeImageSize(img_width, img_height) {
     this.props.storeImageSize(img_width, img_height, this.props.id);
-    this.setState({correct_size : true});
+    this.setState({correct_size : true, width : img_width, height : img_height});
   }
 
   displayImage() {
     if (this.state) {
       if (this.state.correct_size == false) {
-        console.log('preview');
         return (<ImageSizer image={this.props.imageurl} storeImageSize={this.storeImageSize} id={this.props.id}/>);
       } else {
-        console.log('real');
         return (
-          <Image src={this.props.imageurl} fluid />
+          <ImageDisplay imageurl={this.props.imageurl} width={this.state.width} height={this.state.height} width={this.props.dimensions[1]} height={this.props.dimensions[0]}/>
         );
       }
     }
@@ -138,7 +136,7 @@ class ImageTile extends Component {
 
         {this.displayImage()}
 
-        <Input fluid value={this.props.caption} placeholder='Image description' name='image_title' onChange={this.onImageTitleChange.bind(this)}/>
+        <Input id='target55' fluid value={this.props.caption} placeholder='Image description' name='image_title' onChange={this.onImageTitleChange.bind(this)}/>
       </Segment>
     )
   }
