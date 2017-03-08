@@ -11,7 +11,7 @@ import ImageDisplay from './ImageDisplay';
 
 import { Button, Checkbox, Form, Input, Message, Radio, Select, TextArea, Container, Dropdown, Modal, Header, Icon } from 'semantic-ui-react';
 
-const image_title_length = 100;
+const image_title_length = 20;
 
 class ImageTile extends Component {
 
