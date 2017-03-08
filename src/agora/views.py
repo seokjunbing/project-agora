@@ -101,15 +101,11 @@ def start_conversation(request):
             for user in req['users']:
                 u = User.objects.get(pk=user)
                 users.append(u)
-            c = Conversation.objects.filter(listing=l, users__in=users).distinct()  # check if convo exists
-            if not c:
-                c = Conversation(listing=l)
-                c.save()
-                for user in req['users']:
-                    u = User.objects.get(pk=user)
-                    c.users.add(u)
-            else:
-                c = c[0]
+            c = Conversation(listing=l)
+            c.save()
+            for user in req['users']:
+                u = User.objects.get(pk=user)
+                c.users.add(u)
             u = User.objects.get(pk=req['user'])
             m = Message(text=req['text'], user=u, conversation=c)
             m.save()
