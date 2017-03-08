@@ -147,7 +147,7 @@ class ListingModal extends React.Component {
                     </div>
                     <div style={style}>
                         <Header sub>Seller</Header>
-                        <span>{this.props.listing.author ? this.props.listing.author : 'Anonymous'}</span>
+                        <span>{this.props.listing.author_name ? this.props.listing.author_name : 'Anonymous'}</span>
                     </div>
                     <div style={style}>
                         <Header sub>Date Posted</Header>
