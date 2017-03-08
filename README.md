@@ -70,6 +70,17 @@ At this moment, the following API endpoints are accepting either GET or POST req
 state and are likely to change somewhat. We strive to not rename fields in our responses as to maintain
 some backwards compatibility, but this is not guaranteed.
 
+#### Homepage
+
+`http://[ site_url ]/api/homepage/`
+
+This endpoint is set up to easily retrieve all listings that should be shown up in the homepage (filtering by flags, 
+closed, etc.). This is done to avoid using a filtered queryset in the root `Listings` endpoint. **Read-only**. See `Listings`
+ for more details.
+
+###### Accepted methods
+`GET`
+
 #### Listings
 `http://[ site_url ]/api/listings/`
 
@@ -94,7 +105,8 @@ Lists all the listings created by a user. The user must be authenticated and is 
  Do **NOT** simply filter the main listing endpoint by `author` or `author_pk`,
  as this may give you inaccurate or no results at all due to these fields not 
  being static in order to accomplish anonymityfor the listing's author.
- 
+
+
 ##### Filtering listings
 
 You can filter listings by the following fields: `price_type`, `sale_type`,
