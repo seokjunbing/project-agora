@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/putlisting';
 import ListingModal from '../ListingModal';
 import MessageModal from '../MessageModal';
+import axios from 'axios';
 
 var url = require('url');
 
@@ -19,14 +20,22 @@ class ListingTile extends React.Component {
     flagListing(e) {
         e.preventDefault();
         if(this.state && !this.state.flagged) {
-            var listing = this.props.listing;
-            listing.flags++;
-            this.props.actions.putListing(listing, this.props.listingId);
+            axios.get('/api/listings/' + this.props.listing.id + '/flag_listing/', {
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'JWT ' + this.props.user.auth_token,
+              }
+            });
             this.setState({ flagged: true });
         } else {
-            var listing = this.props.listing;
-            listing.flags--;
-            this.props.actions.putListing(listing, this.props.listingId);
+            axios.get('/api/listings/' + this.props.listing.id + '/flag_listing/', {
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'JWT ' + this.props.user.auth_token,
+              }
+            });
             this.setState({ flagged: false });
         }
     }
@@ -108,6 +117,7 @@ class ListingTile extends React.Component {
 const mapStateToProps = (state) => {
     return {
         user_id : state.user.user_id,
+        user: state.user,
     };
 };
 
