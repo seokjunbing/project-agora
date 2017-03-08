@@ -224,13 +224,12 @@ class ListingViewSet(viewsets.ModelViewSet):
 
             # return Response(data={"detail": "Invalid input."}, status=status.HTTP_403_FORBIDDEN)
 
-    @detail_route(permission_classes=(IsAuthenticated,))
+    @detail_route(permission_classes=(IsVerified,))
     def flag_listing(self, request, pk=None):
         listing = Listing.objects.get(pk=pk)
         listing.flags += 1
         listing.save()
         return Response(data={'detail': 'Listing flagged'})
-
 
     # IsAuthenticated should suffice, as you need to be verified to create a listing. User is gotten from the auth token
     @list_route(permission_classes=(IsAuthenticated,))
