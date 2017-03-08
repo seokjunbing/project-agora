@@ -189,21 +189,19 @@ class ListingViewSet(viewsets.ModelViewSet):
         else:
             raise ForbiddenException
 
-    @list_route()
-    def homepage(self, request):
-        queryset = Listing.objects.filter(flags__lt=5, closed=False)
-        for field in request.GET:
-            print(field)
-
-        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        permission_classes = (ListingOwnerCanEdit,)
-        filter_class = ListingFilter
-        ordering_filter = OrderingFilter()
-        ordering_fields = ('price', 'views')
-        search_fields = ('title', 'description')
-
-        serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
-        return Response(serializer.data)
+    # @list_route()
+    # def homepage(self, request):
+    #     queryset = Listing.objects.filter(flags__lt=5, closed=False)
+    #
+    #     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    #     permission_classes = (ListingOwnerCanEdit,)
+    #     filter_class = ListingFilter
+    #     ordering_filter = OrderingFilter()
+    #     ordering_fields = ('price', 'views')
+    #     search_fields = ('title', 'description')
+    #
+    #     serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
+    #     return Response(serializer.data)
 
     @detail_route()
     def toggle_listing(self, request, pk=None):
