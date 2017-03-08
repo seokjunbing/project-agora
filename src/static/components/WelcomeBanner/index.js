@@ -54,7 +54,7 @@ class WelcomeBanner extends React.Component {
                     <p>Tired of blitzing out to campus on behalf of your student business?</p>
 
                     <p>Instead of abandoning your beloved AC units, TVs, textbooks
-                    fridges, rent them to another student for the term.</p>
+                    fridges, sell them or rent them to another student for the term.</p>
 
                     <Header size='medium' color='teal'> Agora is here to help</Header>
 

@@ -189,18 +189,19 @@ class ListingViewSet(viewsets.ModelViewSet):
         else:
             raise ForbiddenException
 
-    @list_route()
-    def homepage(self, request):
-        queryset = Listing.objects.filter(flags__lt=5, closed=False)
-        serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
-        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        permission_classes = (ListingOwnerCanEdit,)
-        filter_class = ListingFilter
-        ordering_filter = OrderingFilter()
-        ordering_fields = ('price', 'views')
-        search_fields = ('title', 'description')
-        return Response(serializer.data)
-
+    # @list_route()
+    # def homepage(self, request):
+    #     queryset = Listing.objects.filter(flags__lt=5, closed=False)
+    #
+    #     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    #     permission_classes = (ListingOwnerCanEdit,)
+    #     filter_class = ListingFilter
+    #     ordering_filter = OrderingFilter()
+    #     ordering_fields = ('price', 'views')
+    #     search_fields = ('title', 'description')
+    #
+    #     serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
+    #     return Response(serializer.data)
 
     @detail_route()
     def toggle_listing(self, request, pk=None):
@@ -231,6 +232,19 @@ class ListingViewSet(viewsets.ModelViewSet):
         queryset = Listing.objects.filter(author=user).order_by('-listing_date')  # TODO figure out if asc or desc
         serializer = ListingSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
+
+
+class ListingHomepageViewSet(viewsets.ReadOnlyModelViewSet):
+    # disable listing after 5 flags
+    queryset = Listing.objects.filter(flags__lt=5, closed=False)
+
+    serializer_class = ListingSerializer
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    permission_classes = (ListingOwnerCanEdit,)
+    filter_class = ListingFilter
+    ordering_filter = OrderingFilter()
+    ordering_fields = ('price', 'views')
+    search_fields = ('title', 'description')
 
 
 class MessagePagination(PageNumberPagination):
