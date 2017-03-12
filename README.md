@@ -33,11 +33,11 @@ heroku config:set DJANGO_SETTINGS_MODULE=djangoreactredux.settings.prod
 ```
 Upon completion of the above, run the following:
 
- Frontend
+### Frontend
 
 ```npm install```
 
- Backend
+### Backend
 
 ```pip install -r requirements.txt```
 
