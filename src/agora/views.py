@@ -29,7 +29,6 @@ from django.utils.cache import get_cache_key
 from django.core.cache import cache
 from django.http import HttpRequest
 
-from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 from django.shortcuts import redirect
 
 
@@ -94,6 +93,7 @@ def send_contact_admin_email(request):
 def start_conversation(request):
     req = request.body.decode('unicode-escape')
     req = json.loads(req)
+    print(req)
     if req['listing'] and req['users'] and req['user'] and req['text']:
         try:
             l = Listing.objects.get(pk=req['listing'])
