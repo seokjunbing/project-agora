@@ -212,6 +212,7 @@ Listing.__str__ = listing_str
 Conversation.__str__ = conversation_str
 
 # Caching
+# uncomment to enable caching
 # post_save.connect(invalidate_cache, sender=Listing)
 # post_delete.connect(invalidate_cache, sender=Listing)
 # post_save.connect(invalidate_cache, sender=Category)
