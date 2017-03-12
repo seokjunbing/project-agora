@@ -11,8 +11,6 @@ from allauth.account.signals import user_signed_up
 """
 messaging imports
 """
-# from django.contrib.contenttypes import generic
-from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 
 """
@@ -33,8 +31,6 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     verified = models.BooleanField(default=False)
     verification_code = models.CharField(max_length=200, null=True)
-
-    # messages = models.ManyToOneRel(Message)
 
     class Meta:
         verbose_name_plural = "user profiles"
@@ -64,7 +60,6 @@ class Subcategory(models.Model):
 class Listing(models.Model):
     def create(self, validated_data):
         return Listing.objects.create(**validated_data)
-        # return Listing(**validated_data)
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
