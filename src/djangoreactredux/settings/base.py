@@ -164,11 +164,6 @@ REST_FRAMEWORK = {
     )
 }
 
-# ########### OAUTH ##############
-OAUTH2_PROVIDER = {
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
-}
-
 # ########## AUTHENTICATION
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
