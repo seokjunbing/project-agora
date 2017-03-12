@@ -43,17 +43,16 @@ Upon completion of the above, run the following:
 
 ## Deployment
 
-Frontend
+### Frontend
 
 ```npm install```
 
-
 ```npm run dev```
 
-Backend
+### Backend
 
-```python manage.py runserver```
-
+1. ```python src/manage.py makemigrations && python src/manage.py migrate```
+2. ```python manage.py runserver```
 
 ## Authors
 Seok Jun Bing, Jasper Bingham, Elizabeth Brissie, Audyn Curless, Odon Orzsik, Juan Torres
