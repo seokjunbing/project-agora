@@ -21,12 +21,6 @@ from django.core.cache import cache
 from django.http import HttpRequest
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     verified = models.BooleanField(default=False)
@@ -200,14 +194,7 @@ def invalidate_cache(sender, instance, **kwargs):
     expire_page(instance)
 
 
-# Signals
-@receiver(user_signed_up, dispatch_uid='some.unique.string.for.allauth.user_signed_up')
-def user_signed_up(request, user, **kwargs):
-    print('User signed up. Sending verification now.')
-
-
 # String representations
-
 def user_str(self):
     return "%s %s %s" % (self.first_name, self.last_name, self.email)
 
